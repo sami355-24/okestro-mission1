@@ -1,4 +1,5 @@
-FROM ubuntu:latest
-LABEL authors="okestro"
+FROM mariadb:11.3.2
 
-ENTRYPOINT ["top", "-b"]
+ENV MYSQL_ROOT_PASSWORD=okestro1
+
+EXPOSE 3306
