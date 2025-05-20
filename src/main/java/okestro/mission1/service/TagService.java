@@ -36,6 +36,10 @@ public class TagService {
         return null;
     }
 
+    public void updateTagFrom(int existingTagId, String existingTitle) {
+
+    }
+
     public Void createTagFrom(String tagTitle) {
         validateTagTitle(tagTitle);
         tagRepository.save(Tag.builder().title(tagTitle).build());
@@ -43,16 +47,16 @@ public class TagService {
     }
 
     private void validateTagTitle(String tagTitle) {
-        checkBlank(tagTitle);
-        checkDuplicate(tagTitle);
+        checkBlankTagTitle(tagTitle);
+        checkDuplicateTagTitle(tagTitle);
     }
 
-    private void checkBlank(String tagTitle) {
+    private void checkBlankTagTitle(String tagTitle) {
         if(tagTitle.isBlank())
             throw new BlankException(BLANK_TAG_MESSAGE);
     }
 
-    private void checkDuplicate(String tagTitle) {
+    private void checkDuplicateTagTitle(String tagTitle) {
         if(Boolean.TRUE.equals(tagRepository.existsByTitle(tagTitle)))
             throw new DuplicateException(DUPLICATE_TAG_MESSAGE);
     }
