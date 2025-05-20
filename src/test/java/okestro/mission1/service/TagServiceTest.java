@@ -2,6 +2,7 @@ package okestro.mission1.service;
 
 import okestro.mission1.entity.Tag;
 import okestro.mission1.exception.custom.BlankException;
+import okestro.mission1.exception.custom.DuplicateException;
 import okestro.mission1.exception.custom.NotExistException;
 import okestro.mission1.initializer.InitTag;
 import okestro.mission1.repository.TagRepository;
@@ -46,7 +47,7 @@ class TagServiceTest {
     }
 
     @Test
-    void 사용자는_가상머신에_붙일_태그를_조회할_수_있다() {
+    void 태그를_조회할_수_있다() {
         //when
         List<Tag> tags = tagService.findAll();
 
@@ -112,6 +113,44 @@ class TagServiceTest {
 
             //when & then
             Assertions.assertThatThrownBy(() -> tagService.deleteTagFrom(notExistingTagId)).isInstanceOf(NotExistException.class);
+        }
+    }
+
+    @Nested
+    class 태그명을_수정시도시 {
+        //given
+        int existingTagId = tagRepository.findByTitle("DEV")
+                .map(Tag::getId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 태그명입니다."));
+
+        @Test
+        void 중복된_태그_명이_주어진다면_수정에_실패한다() {
+            //given
+            String existingTitle = "PROD";
+
+            //when & then
+            Assertions.assertThatThrownBy(() -> tagService.updateTagFrom(existingTagId, existingTitle)).isInstanceOf(DuplicateException.class);
+        }
+
+        @Test
+        void 공백으로_태그_명이_주어진다면_수정에_실패한다() {
+            //given
+            String blankTitle = " ";
+
+            //when & then
+            Assertions.assertThatThrownBy(() -> tagService.updateTagFrom(existingTagId, blankTitle)).isInstanceOf(BlankException.class);
+        }
+
+        @Test
+        void 중복되지_않으며_공백이_아닌_태그_명이_주어진다면_수정에_성공한다() {
+            //given
+            String newTitle = "NEW_TITLE";
+
+            //when
+            tagService.updateTagFrom(existingTagId,newTitle);
+
+            //then
+            Assertions.assertThat(tagRepository.findByTitle(newTitle)).isPresent();
         }
     }
 }
