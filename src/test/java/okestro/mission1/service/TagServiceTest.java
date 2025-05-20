@@ -55,64 +55,63 @@ class TagServiceTest {
     }
 
     @Nested
-    class 중복된_태그명이_주어질_때 {
-        //given
-        String existingTitle = "EXISTING";
-
+    class 태그를_생성시도시 {
         @Test
-        void 태그_생성시_태그_생성에_실패한다() {
+        void 중복된_태그명일경우_태그_생성시_태그_생성에_실패한다() {
+            //given
+            String existingTitle = "EXISTING";
+
             //when & then
             assertThatThrownBy(() -> tagService.createTagFrom(existingTitle)).isInstanceOf(DataIntegrityViolationException.class);
         }
 
-    }
+        @Test
+        void 공백일경우_태그_생성에_실패한다() {
+            //given
+            String blankTitle = " ";
 
-    @Nested
-    class 중복되지_않는_태그명이_주어질_때 {
-        //given
-        String originTitle = "ORIGIN";
-        String blankTitle = " ";
+            //when & then
+            assertThatThrownBy(() -> tagService.createTagFrom(blankTitle)).isInstanceOf(BlankException.class);
+        }
 
         @Test
-        void 태그명이_고유할_경우_아니라면_태그가_생성에_성공한다() {
+        void 고유한_태그명일경우_태그가_생성에_성공한다() {
+            //given
+            String originTitle = "ORIGIN";
+
             //when
             tagService.createTagFrom(originTitle);
 
             //then
             assertThat(tagRepository.findByTitle(originTitle)).isPresent();
         }
+    }
 
+
+    @Nested
+    class 태그를_삭제시도시 {
         @Test
-        void 태그명에_공백일경우_태그_생성에_실패한다(){
-            //when & then
-            assertThatThrownBy(() -> tagService.createTagFrom(blankTitle)).isInstanceOf(BlankException.class);
+        void 존재하는_태그_Id가_주어진다면_삭제에_성공한다() {
+            //given
+            int existingTagId = tagRepository.findByTitle("DEV")
+                    .map(Tag::getId)
+                    .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 태그명입니다."));
+
+            //when
+            tagService.deleteTagFrom(existingTagId);
+
+            //then
+            assertThat(tagRepository.findById(existingTagId)).isEmpty();
         }
 
+
+        @Test
+        void 존재하지_않는_태그_Id가_주어진다면_삭제에_실패한다() {
+            //given
+            int notExistingTagId = -1;
+
+            //when & then
+            Assertions.assertThatThrownBy(() -> tagService.deleteTagFrom(notExistingTagId)).isInstanceOf(NotExistException.class);
+        }
     }
-
-    @Test
-    void 존재하는_태그_Id가_주어진다면_삭제에_성공한다() {
-        //given
-        int existingTagId = tagRepository.findByTitle("DEV")
-                .map(Tag::getId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 태그명입니다."));
-
-        //when
-        tagService.deleteTagFrom(existingTagId);
-
-        //then
-        assertThat(tagRepository.findById(existingTagId)).isEmpty();
-    }
-
-
-    @Test
-    void 존재하지_않는_태그_Id가_주어진다면_삭제에_실패한다() {
-        //given
-        int notExistingTagId = -1;
-
-        //when & then
-        Assertions.assertThatThrownBy(()->tagService.deleteTagFrom(notExistingTagId)).isInstanceOf(NotExistException.class);
-    }
-
-
 }
