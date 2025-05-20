@@ -16,4 +16,12 @@ public class MetaData {
     public static MetaData ofSuccess() {
         return new MetaData(200, "Success");
     }
+
+    public static MetaData ofClientFailure(String message) {
+        return new MetaData(400, message);
+    }
+
+    public static MetaData ofServerFailure(String message) {
+        return new MetaData(500, message);
+    }
 }

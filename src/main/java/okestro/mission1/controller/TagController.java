@@ -8,10 +8,7 @@ import okestro.mission1.dto.response.template.MetaData;
 import okestro.mission1.dto.response.template.ResponseTemplate;
 import okestro.mission1.service.TagService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/tag")
@@ -26,6 +23,14 @@ public class TagController {
         return ResponseEntity.ok(ResponseTemplate.<FindAllTagResponse>builder()
                 .metaData(MetaData.ofSuccess())
                 .result(new FindAllTagResponse(tagService.findAll()))
+                .build());
+    }
+
+    @PostMapping
+    public ResponseEntity<ResponseTemplate<Void>> createTag(@RequestParam String title) {
+        return ResponseEntity.ok(ResponseTemplate.<Void>builder()
+                .metaData(MetaData.ofSuccess())
+                .result(tagService.createTagFrom(title))
                 .build());
     }
 

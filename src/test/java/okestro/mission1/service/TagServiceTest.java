@@ -1,6 +1,7 @@
 package okestro.mission1.service;
 
 import okestro.mission1.entity.Tag;
+import okestro.mission1.exception.custom.DuplicateTagTitleException;
 import okestro.mission1.initializer.InitTag;
 import okestro.mission1.repository.TagRepository;
 import org.assertj.core.api.Assertions;
@@ -62,7 +63,7 @@ class TagServiceTest {
         @Test
         void 태그_생성시_태그_생성에_실패한다() {
             //when & then
-            Assertions.assertThatThrownBy(DuplicateTagTitileException.class ,()-> tagService.createTag(duplicateTitle));
+            Assertions.assertThatThrownBy(()-> tagService.createTagFrom(duplicateTitle)).isInstanceOf(DuplicateTagTitleException.class);
         }
     }
 
@@ -74,10 +75,10 @@ class TagServiceTest {
         @Test
         void 태그_생성시_태그가_생성에_성공한다() {
             //when
-            tagService.createTag(originTitle);
+            tagService.createTagFrom(originTitle);
 
             //then
-            Assertions.assertThat(tagRepository.findByTitle(originTitle).isPresent()).isTrue();
+            Assertions.assertThat(tagRepository.findByTitle(originTitle)).isPresent();
         }
     }
 
