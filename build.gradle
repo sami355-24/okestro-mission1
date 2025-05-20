@@ -24,18 +24,29 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    //Web
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    //Validation
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    //Lombok
     compileOnly("org.projectlombok:lombok:1.18.24")
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
     annotationProcessor 'org.projectlombok:lombok'
+    //DB
+    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+    testImplementation 'com.h2database:h2'
+    //JPA
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    //Testing
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     testImplementation(platform("org.junit:junit-bom:5.10.2"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    //DevTools
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+
 }
 
 tasks.named('test') {
