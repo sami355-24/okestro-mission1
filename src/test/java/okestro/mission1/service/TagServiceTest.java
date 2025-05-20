@@ -1,5 +1,7 @@
 package okestro.mission1.service;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import okestro.mission1.entity.Tag;
 import okestro.mission1.exception.custom.BlankException;
 import okestro.mission1.exception.custom.DuplicateException;
@@ -13,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -20,6 +23,7 @@ import static org.assertj.core.api.Assertions.*;
 
 
 @SpringBootTest
+@Transactional
 @ActiveProfiles("test")
 class TagServiceTest {
 
@@ -31,6 +35,7 @@ class TagServiceTest {
 
     @MockBean
     private InitTag initTag;
+
 
     @BeforeEach
     void setUp() {
@@ -117,37 +122,35 @@ class TagServiceTest {
     }
 
     @Nested
-    class 태그명을_수정시도시 {
-        //given
-        int existingTagId = tagRepository.findByTitle("DEV")
-                .map(Tag::getId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 태그명입니다."));
-
+    class 태그명을_수정_시도시 {
         @Test
         void 중복된_태그_명이_주어진다면_수정에_실패한다() {
             //given
+            Tag findTag = tagRepository.findByTitle("PROD").orElseThrow(() -> new IllegalArgumentException("테스트 인자가 잘못되었습니다."));
             String existingTitle = "PROD";
 
             //when & then
-            Assertions.assertThatThrownBy(() -> tagService.updateTagFrom(existingTagId, existingTitle)).isInstanceOf(DuplicateException.class);
+            Assertions.assertThatThrownBy(() -> tagService.updateTagFrom(findTag.getId(), existingTitle)).isInstanceOf(DuplicateException.class);
         }
 
         @Test
         void 공백으로_태그_명이_주어진다면_수정에_실패한다() {
             //given
+            Tag findTag = tagRepository.findByTitle("PROD").orElseThrow(() -> new IllegalArgumentException("테스트 인자가 잘못되었습니다."));
             String blankTitle = " ";
 
             //when & then
-            Assertions.assertThatThrownBy(() -> tagService.updateTagFrom(existingTagId, blankTitle)).isInstanceOf(BlankException.class);
+            Assertions.assertThatThrownBy(() -> tagService.updateTagFrom(findTag.getId(), blankTitle)).isInstanceOf(BlankException.class);
         }
 
         @Test
         void 중복되지_않으며_공백이_아닌_태그_명이_주어진다면_수정에_성공한다() {
             //given
+            Tag findTag = tagRepository.findByTitle("EXISTING").orElseThrow(() -> new IllegalArgumentException("테스트 인자가 잘못되었습니다."));
             String newTitle = "NEW_TITLE";
 
             //when
-            tagService.updateTagFrom(existingTagId,newTitle);
+            tagService.updateTagFrom(findTag.getId(), newTitle);
 
             //then
             Assertions.assertThat(tagRepository.findByTitle(newTitle)).isPresent();
