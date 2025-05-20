@@ -1,6 +1,7 @@
 package okestro.mission1.service;
 
 import okestro.mission1.entity.Tag;
+import okestro.mission1.initializer.InitTag;
 import okestro.mission1.repository.TagRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -9,6 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 
@@ -17,6 +20,7 @@ import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@ActiveProfiles("test")
 class TagServiceTest {
 
     @Autowired
@@ -25,6 +29,8 @@ class TagServiceTest {
     @Autowired
     private TagService tagService;
 
+    @MockBean
+    private InitTag initTag;
 
     @BeforeAll
     void setUp() {
@@ -45,7 +51,7 @@ class TagServiceTest {
         List<Tag> tags = tagService.findAll();
 
         //then
-        assertThat(tags).hasSize(4);
+        assertThat(tags).hasSize(5);
     }
 
     @Nested
@@ -54,27 +60,27 @@ class TagServiceTest {
         String duplicateTitle = "DUPLICATE";
 
         @Test
-        void 중복_검사시_false_가_반환된다() {
+        void 중복_검사시_true_가_반환된다() {
             //when
-            boolean result = tagService.checkTitle(duplicateTitle);
+            boolean result = tagService.isDuplicate(duplicateTitle);
 
             //then
-            Assertions.assertThat(result).isFalse();
+            Assertions.assertThat(result).isTrue();
         }
     }
 
     @Nested
     class 중복되지_않는_태그명이_주어질_때 {
         //given
-        String originTitle = "DUPLICATE";
+        String originTitle = "ORIGIN";
 
         @Test
         void 중복_검사시_false_가_반환된다() {
             //when
-            boolean result = tagService.checkTitle(originTitle);
+            boolean result = tagService.isDuplicate(originTitle);
 
             //then
-            Assertions.assertThat(result).isTrue();
+            Assertions.assertThat(result).isFalse();
         }
     }
 }

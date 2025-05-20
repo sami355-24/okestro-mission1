@@ -10,6 +10,7 @@ import okestro.mission1.service.TagService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -23,8 +24,16 @@ public class TagController {
     @GetMapping
     public ResponseEntity<ResponseTemplate<FindAllTagResponse>> findAllTag() {
         return ResponseEntity.ok(ResponseTemplate.<FindAllTagResponse>builder()
-                .metaData(new MetaData(200, "Success"))
+                .metaData(MetaData.ofSuccess())
                 .result(new FindAllTagResponse(tagService.findAll()))
+                .build());
+    }
+
+    @GetMapping("/check-name")
+    public ResponseEntity<ResponseTemplate<Boolean>> isDuplicateTitle(@RequestParam String title) {
+        return ResponseEntity.ok(ResponseTemplate.<Boolean>builder()
+                .metaData(MetaData.ofSuccess())
+                .result(tagService.isDuplicate(title))
                 .build());
     }
 }

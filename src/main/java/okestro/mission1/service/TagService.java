@@ -20,4 +20,8 @@ public class TagService {
     public List<Tag> findAll() {
         return tagRepository.findAll();
     }
+
+    public boolean isDuplicate(String tagTitle) {
+        return tagRepository.existsByTitle(tagTitle);
+    }
 }
