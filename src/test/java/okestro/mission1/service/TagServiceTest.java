@@ -4,11 +4,7 @@ import okestro.mission1.entity.Tag;
 import okestro.mission1.exception.custom.DuplicateTagTitleException;
 import okestro.mission1.initializer.InitTag;
 import okestro.mission1.repository.TagRepository;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -20,7 +16,6 @@ import static org.assertj.core.api.Assertions.*;
 
 
 @SpringBootTest
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @ActiveProfiles("test")
 class TagServiceTest {
 
@@ -33,7 +28,7 @@ class TagServiceTest {
     @MockBean
     private InitTag initTag;
 
-    @BeforeAll
+    @BeforeEach
     void setUp() {
         tagRepository.saveAll(
                 List.of(
@@ -63,7 +58,16 @@ class TagServiceTest {
         @Test
         void 태그_생성시_태그_생성에_실패한다() {
             //when & then
-            Assertions.assertThatThrownBy(()-> tagService.createTagFrom(duplicateTitle)).isInstanceOf(DuplicateTagTitleException.class);
+            assertThatThrownBy(() -> tagService.createTagFrom(duplicateTitle)).isInstanceOf(DuplicateTagTitleException.class);
+        }
+
+        @Test
+        void 태그_삭제시_성공한다() {
+            //when
+            tagService.deleteTagFrom(duplicateTitle);
+
+            //then
+            assertThat(tagRepository.findByTitle(duplicateTitle)).isEmpty();
         }
     }
 
@@ -78,7 +82,13 @@ class TagServiceTest {
             tagService.createTagFrom(originTitle);
 
             //then
-            Assertions.assertThat(tagRepository.findByTitle(originTitle)).isPresent();
+            assertThat(tagRepository.findByTitle(originTitle)).isPresent();
+        }
+
+        @Test
+        void 태그_삭제시_예외가_발생한다() {
+            //when & then
+            assertThatThrownBy(() -> tagService.deleteTagFrom(originTitle)).isInstanceOf(NotExistException.class);
         }
     }
 
