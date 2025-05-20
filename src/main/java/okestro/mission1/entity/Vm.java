@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.FieldDefaults;
 
 import static jakarta.persistence.EnumType.*;
 import static jakarta.persistence.GenerationType.*;
@@ -13,35 +14,36 @@ import static lombok.AccessLevel.*;
 @Table(name = "vm")
 @NoArgsConstructor(access = PROTECTED)
 @Getter
+@FieldDefaults(level = PRIVATE)
 public class Vm extends TimestampEntity{
 
     @Id
     @GeneratedValue(strategy = AUTO)
-    private int vmId;
+    int vmId;
 
     @NotBlank(message = "상태는 비어있으면 안됩니다.")
     @Enumerated(value = ORDINAL)
-    private Status status;
+    Status status;
 
     @NotBlank(message = "VM 이름을 지어주세요.")
-    private String title;
+    String title;
 
-    private String description;
+    String description;
 
     @NotBlank(message = "사용하실 cpu 수를 입력해주세요.")
     @Column(name = "vcpu")
-    private int vCpu;
+    int vCpu;
 
     @NotBlank(message = "사용하실 memory 크기를 입력해주세요.")
-    private int memory;
+    int memory;
 
     @NotBlank(message = "사용하실 storage 크기를 입력해주세요.")
-    private int storage;
+    int storage;
 
     @Column(name = "private_ip")
-    private String privateIp;
+    String privateIp;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
-    private Member member;
+    Member member;
 }

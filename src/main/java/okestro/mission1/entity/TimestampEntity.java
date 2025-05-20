@@ -5,20 +5,26 @@ import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
 
+import static lombok.AccessLevel.*;
+
 @MappedSuperclass
 @Getter
+@FieldDefaults(level = PRIVATE)
 public class TimestampEntity {
 
     @Column(name = "create_at", updatable = false)
-    @NotBlank
-    private LocalDateTime createAt;
+    @NotNull
+    LocalDateTime createAt;
 
     @Column(name = "update_at")
-    private LocalDateTime updateAt;
+    LocalDateTime updateAt;
 
     @PrePersist
     private void setCreateAt() {
