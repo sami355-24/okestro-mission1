@@ -1,13 +1,15 @@
 package okestro.mission1.service;
 
 import okestro.mission1.entity.Tag;
-import okestro.mission1.exception.custom.DuplicateTagTitleException;
+import okestro.mission1.exception.custom.NotExistException;
 import okestro.mission1.initializer.InitTag;
 import okestro.mission1.repository.TagRepository;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
@@ -30,13 +32,14 @@ class TagServiceTest {
 
     @BeforeEach
     void setUp() {
+        tagRepository.deleteAll();
         tagRepository.saveAll(
                 List.of(
                         Tag.builder().title("DEV").build(),
                         Tag.builder().title("TEST").build(),
                         Tag.builder().title("BUILD").build(),
                         Tag.builder().title("PROD").build(),
-                        Tag.builder().title("DUPLICATE").build()
+                        Tag.builder().title("EXISTING").build()
                 )
         );
     }
@@ -53,22 +56,14 @@ class TagServiceTest {
     @Nested
     class 중복된_태그명이_주어질_때 {
         //given
-        String duplicateTitle = "DUPLICATE";
+        String existingTitle = "EXISTING";
 
         @Test
         void 태그_생성시_태그_생성에_실패한다() {
             //when & then
-            assertThatThrownBy(() -> tagService.createTagFrom(duplicateTitle)).isInstanceOf(DuplicateTagTitleException.class);
+            assertThatThrownBy(() -> tagService.createTagFrom(existingTitle)).isInstanceOf(DataIntegrityViolationException.class);
         }
 
-        @Test
-        void 태그_삭제시_성공한다() {
-            //when
-            tagService.deleteTagFrom(duplicateTitle);
-
-            //then
-            assertThat(tagRepository.findByTitle(duplicateTitle)).isEmpty();
-        }
     }
 
     @Nested
@@ -85,11 +80,29 @@ class TagServiceTest {
             assertThat(tagRepository.findByTitle(originTitle)).isPresent();
         }
 
-        @Test
-        void 태그_삭제시_예외가_발생한다() {
-            //when & then
-            assertThatThrownBy(() -> tagService.deleteTagFrom(originTitle)).isInstanceOf(NotExistException.class);
-        }
     }
 
+    @Test
+    void 존재하는_태그_Id가_주어진다면_삭제에_성공한다() {
+        //given
+        int existingTagId = tagRepository.findByTitle("DEV")
+                .map(Tag::getId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 태그명입니다."));
+
+        //when
+        tagService.deleteTagFrom(existingTagId);
+
+        //then
+        assertThat(tagRepository.findById(existingTagId)).isEmpty();
+    }
+
+
+    @Test
+    void 존재하지_않는_태그_Id가_주어진다면_삭제에_실패한다() {
+        //given
+        int notExistingTagId = -1;
+
+        //when & then
+        Assertions.assertThatThrownBy(()->tagService.deleteTagFrom(notExistingTagId)).isInstanceOf(NotExistException.class);
+    }
 }
