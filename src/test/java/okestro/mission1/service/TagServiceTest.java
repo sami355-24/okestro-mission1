@@ -60,12 +60,9 @@ class TagServiceTest {
         String duplicateTitle = "DUPLICATE";
 
         @Test
-        void 중복_검사시_true_가_반환된다() {
-            //when
-            boolean result = tagService.isDuplicate(duplicateTitle);
-
-            //then
-            Assertions.assertThat(result).isTrue();
+        void 태그_생성시_태그_생성에_실패한다() {
+            //when & then
+            Assertions.assertThatThrownBy(DuplicateTagTitileException.class ,()-> tagService.createTag(duplicateTitle));
         }
     }
 
@@ -75,12 +72,13 @@ class TagServiceTest {
         String originTitle = "ORIGIN";
 
         @Test
-        void 중복_검사시_false_가_반환된다() {
+        void 태그_생성시_태그가_생성에_성공한다() {
             //when
-            boolean result = tagService.isDuplicate(originTitle);
+            tagService.createTag(originTitle);
 
             //then
-            Assertions.assertThat(result).isFalse();
+            Assertions.assertThat(tagRepository.findByTitle(originTitle).isPresent()).isTrue();
         }
     }
+
 }

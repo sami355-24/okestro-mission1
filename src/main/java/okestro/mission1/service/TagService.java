@@ -21,7 +21,7 @@ public class TagService {
         return tagRepository.findAll();
     }
 
-    public boolean isDuplicate(String tagTitle) {
+    private boolean isDuplicate(String tagTitle) {
         return tagRepository.existsByTitle(tagTitle);
     }
 }

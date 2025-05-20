@@ -29,11 +29,4 @@ public class TagController {
                 .build());
     }
 
-    @GetMapping("/check-name")
-    public ResponseEntity<ResponseTemplate<Boolean>> isDuplicateTitle(@RequestParam String title) {
-        return ResponseEntity.ok(ResponseTemplate.<Boolean>builder()
-                .metaData(MetaData.ofSuccess())
-                .result(tagService.isDuplicate(title))
-                .build());
-    }
 }
