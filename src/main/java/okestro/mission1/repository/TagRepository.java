@@ -7,5 +7,4 @@ import java.util.List;
 
 public interface TagRepository extends JpaRepository<Tag, Integer> {
 
-    void saveAll(List<Tag> tags);
 }

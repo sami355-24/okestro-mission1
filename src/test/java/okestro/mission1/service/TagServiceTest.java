@@ -2,9 +2,9 @@ package okestro.mission1.service;
 
 import okestro.mission1.entity.Tag;
 import okestro.mission1.repository.TagRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -14,16 +14,18 @@ import static org.assertj.core.api.Assertions.*;
 
 
 @SpringBootTest
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class TagServiceTest {
 
     @Autowired
-    private static TagRepository tagRepository;
+    private TagRepository tagRepository;
 
     @Autowired
     private TagService tagService;
 
+
     @BeforeAll
-    static void setUp() {
+    void setUp() {
         tagRepository.saveAll(
                 List.of(
                         Tag.builder().title("DEV").build(),
