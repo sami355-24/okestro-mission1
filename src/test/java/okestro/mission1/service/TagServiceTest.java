@@ -1,6 +1,7 @@
 package okestro.mission1.service;
 
 import okestro.mission1.entity.Tag;
+import okestro.mission1.exception.custom.BlankException;
 import okestro.mission1.exception.custom.NotExistException;
 import okestro.mission1.initializer.InitTag;
 import okestro.mission1.repository.TagRepository;
@@ -70,14 +71,21 @@ class TagServiceTest {
     class 중복되지_않는_태그명이_주어질_때 {
         //given
         String originTitle = "ORIGIN";
+        String blankTitle = " ";
 
         @Test
-        void 태그_생성시_태그가_생성에_성공한다() {
+        void 태그명이_고유할_경우_아니라면_태그가_생성에_성공한다() {
             //when
             tagService.createTagFrom(originTitle);
 
             //then
             assertThat(tagRepository.findByTitle(originTitle)).isPresent();
+        }
+
+        @Test
+        void 태그명에_공백일경우_태그_생성에_실패한다(){
+            //when & then
+            assertThatThrownBy(() -> tagService.createTagFrom(blankTitle)).isInstanceOf(BlankException.class);
         }
 
     }
@@ -105,4 +113,6 @@ class TagServiceTest {
         //when & then
         Assertions.assertThatThrownBy(()->tagService.deleteTagFrom(notExistingTagId)).isInstanceOf(NotExistException.class);
     }
+
+
 }

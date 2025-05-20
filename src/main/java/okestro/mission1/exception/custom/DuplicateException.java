@@ -2,9 +2,9 @@ package okestro.mission1.exception.custom;
 
 import org.springframework.dao.DuplicateKeyException;
 
-public class DuplicateTagTitleException extends DuplicateKeyException {
+public class DuplicateException extends DuplicateKeyException {
 
-    public DuplicateTagTitleException(String msg) {
+    public DuplicateException(String msg) {
         super(msg);
     }
 
