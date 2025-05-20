@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   mariadb:
     build:
@@ -11,4 +9,4 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=okestro1
     volumes:
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - /Users/okestro/IdeaProjects/mission1/init.sql:/docker-entrypoint-initdb.d/init.sql
