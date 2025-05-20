@@ -45,4 +45,12 @@ public class TagController {
                 .result(tagService.deleteTagFrom(tagId))
                 .build());
     }
+
+    @PutMapping("/{tagId}")
+    public ResponseEntity<ResponseTemplate<Void>> updateTag(@PathVariable Integer tagId, @RequestParam @NotBlank(message = "태그 명은 공백일 수 없습니다.") String tagTitle) {
+        return ResponseEntity.ok(ResponseTemplate.<Void>builder()
+                .metaData(MetaData.ofSuccess())
+                .result(tagService.updateTagFrom(tagId, tagTitle))
+                .build());
+    }
 }

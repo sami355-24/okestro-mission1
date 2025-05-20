@@ -1,7 +1,5 @@
 package okestro.mission1.service;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import okestro.mission1.entity.Tag;
 import okestro.mission1.exception.custom.BlankException;
 import okestro.mission1.exception.custom.DuplicateException;

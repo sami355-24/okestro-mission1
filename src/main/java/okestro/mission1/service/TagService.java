@@ -38,10 +38,11 @@ public class TagService {
     }
 
     @Transactional
-    public void updateTagFrom(int existingTagId, String newTitle) {
+    public Void updateTagFrom(int existingTagId, String newTitle) {
         Tag findTag = tagRepository.findById(existingTagId).orElseThrow(() -> new NotExistException(NOT_EXIST_TAG_ID_MESSAGE));
         validateTagTitle(newTitle);
         findTag.setTitle(newTitle);
+        return null;
     }
 
     @Transactional
