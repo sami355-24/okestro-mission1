@@ -46,10 +46,9 @@ public class TagService {
     }
 
     @Transactional
-    public Void createTagFrom(String tagTitle) {
+    public Integer createTagFrom(String tagTitle) {
         validateTagTitle(tagTitle);
-        tagRepository.save(Tag.builder().title(tagTitle).build());
-        return null;
+        return tagRepository.save(Tag.builder().title(tagTitle).build()).getId();
     }
 
     private void validateTagTitle(String tagTitle) {

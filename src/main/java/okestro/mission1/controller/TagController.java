@@ -31,8 +31,8 @@ public class TagController {
     }
 
     @PostMapping
-    public ResponseEntity<ResponseTemplate<Void>> createTag(@RequestParam @NotBlank(message = "태그 명은 공백일 수 없습니다.") String title) {
-        return ResponseEntity.ok(ResponseTemplate.<Void>builder()
+    public ResponseEntity<ResponseTemplate<Integer>> createTag(@RequestParam @NotBlank(message = "태그 명은 공백일 수 없습니다.") String title) {
+        return ResponseEntity.ok(ResponseTemplate.<Integer>builder()
                 .metaData(MetaData.ofSuccess())
                 .result(tagService.createTagFrom(title))
                 .build());
