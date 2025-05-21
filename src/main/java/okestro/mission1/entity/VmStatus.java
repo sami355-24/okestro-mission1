@@ -1,5 +1,5 @@
 package okestro.mission1.entity;
 
-public enum Status {
+public enum VmStatus {
     STARTING, RUNNING, PENDING, REBOOTING, TERMINATING, TERMINATED
 }

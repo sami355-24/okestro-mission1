@@ -5,20 +5,23 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static jakarta.persistence.GenerationType.*;
 import static lombok.AccessLevel.*;
 
 @Entity
 @Table(name = "tag")
 @NoArgsConstructor(access = PROTECTED)
-@AllArgsConstructor
+@AllArgsConstructor(access = PROTECTED)
 @Builder
 @Getter
 @FieldDefaults(level = PRIVATE)
 public class Tag extends TimestampEntity {
 
     @Id
-    @GeneratedValue(strategy = AUTO)
+    @GeneratedValue(strategy = IDENTITY)
     @Column(name = "tag_id")
     int id;
 
@@ -27,4 +30,6 @@ public class Tag extends TimestampEntity {
     @Setter(PUBLIC)
     String title;
 
+    @OneToMany(mappedBy = "tag", cascade = CascadeType.ALL, orphanRemoval = true)
+    List<VmTag> vmTags = new ArrayList<>();
 }

@@ -2,6 +2,9 @@ package okestro.mission1.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -13,6 +16,8 @@ import static lombok.AccessLevel.*;
 @Entity
 @Table(name = "vm")
 @NoArgsConstructor(access = PROTECTED)
+@AllArgsConstructor(access = PROTECTED)
+@Builder
 @Getter
 @FieldDefaults(level = PRIVATE)
 public class Vm extends TimestampEntity{
@@ -21,24 +26,24 @@ public class Vm extends TimestampEntity{
     @GeneratedValue(strategy = AUTO)
     int vmId;
 
-    @NotBlank(message = "상태는 비어있으면 안됩니다.")
-    @Enumerated(value = ORDINAL)
-    Status status;
+    @NotNull
+    @Enumerated(value = STRING)
+    VmStatus vmStatus;
 
     @NotBlank(message = "VM 이름을 지어주세요.")
     String title;
 
     String description;
 
-    @NotBlank(message = "사용하실 cpu 수를 입력해주세요.")
+    @NotNull(message = "사용하실 cpu 수를 입력해주세요.")
     @Column(name = "vcpu")
-    int vCpu;
+    Integer vCpu;
 
-    @NotBlank(message = "사용하실 memory 크기를 입력해주세요.")
-    int memory;
+    @NotNull(message = "사용하실 memory 크기를 입력해주세요.")
+    Integer memory;
 
-    @NotBlank(message = "사용하실 storage 크기를 입력해주세요.")
-    int storage;
+    @NotNull(message = "사용하실 storage 크기를 입력해주세요.")
+    Integer storage;
 
     @Column(name = "private_ip")
     String privateIp;
