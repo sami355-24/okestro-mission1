@@ -15,7 +15,6 @@ import static lombok.AccessLevel.*;
 @Table(name = "member")
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor(access = PROTECTED)
-
 @Builder
 @Getter
 @FieldDefaults(level = PRIVATE)

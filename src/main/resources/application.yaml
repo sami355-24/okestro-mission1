@@ -21,3 +21,7 @@ spring:
 
   application:
     name: mission1
+
+  jackson:
+    time-zone: Asia/Seoul
+    date-format: yyyy-MM-dd HH:mm:ss

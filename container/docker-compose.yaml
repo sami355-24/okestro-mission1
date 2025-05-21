@@ -1,12 +1,12 @@
+version: '3'
+
 services:
   mariadb:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: mariadb:latest
     container_name: mariadb
     ports:
       - "127.0.0.1:3306:3306"
     environment:
-      - MYSQL_ROOT_PASSWORD=okestro1
+      MYSQL_ROOT_PASSWORD: okestro1
     volumes:
       - /Users/okestro/IdeaProjects/mission1/init.sql:/docker-entrypoint-initdb.d/init.sql
