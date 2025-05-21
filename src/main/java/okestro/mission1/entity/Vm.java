@@ -8,6 +8,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
+import org.hibernate.annotations.Where;
 
 import static jakarta.persistence.EnumType.*;
 import static jakarta.persistence.GenerationType.*;
@@ -20,7 +23,12 @@ import static lombok.AccessLevel.*;
 @Builder
 @Getter
 @FieldDefaults(level = PRIVATE)
+@SQLDelete(sql = "UPDATE Vm SET deleted = true WHERE id = ?")
+@SQLRestriction("deleted = false")
 public class Vm extends TimestampEntity{
+    /**
+     * 주의! 영속성 컨텍스트를 통해서 로직수행할때만 @SQLRestriction, @SQLDelete 동작 -> JPQL로 바로 변환될 경우 동작x
+     * */
 
     @Id
     @GeneratedValue(strategy = AUTO)
@@ -51,4 +59,8 @@ public class Vm extends TimestampEntity{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     Member member;
+
+    @Builder.Default
+    @Column(nullable = false)
+    boolean deleted = false;
 }
