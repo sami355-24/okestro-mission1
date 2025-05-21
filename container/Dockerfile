@@ -1,5 +1,0 @@
-FROM mariadb:11.3.2
-
-ENV MYSQL_ROOT_PASSWORD=okestro1
-
-EXPOSE 3306
