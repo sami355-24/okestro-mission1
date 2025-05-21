@@ -15,7 +15,7 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 @RestControllerAdvice
 @Slf4j
-public class TagHandler {
+public class CustomHandler {
 
     @ExceptionHandler(DuplicateException.class)
     private ResponseEntity<ResponseTemplate<Void>> duplicateTagTitleExceptionHandler(DuplicateException e) {
@@ -52,6 +52,15 @@ public class TagHandler {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseTemplate.<Void>builder()
                 .metaData(MetaData.ofClientFailure("URI를 확인해주세요."))
+                .build());
+    }
+
+    @ExceptionHandler(Exception.class)
+    private ResponseEntity<ResponseTemplate<Void>> exceptionHandler(Exception e) {
+        log.error(e.getMessage());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseTemplate.<Void>builder()
+                .metaData(MetaData.ofServerFailure("서버 내부 로직에 문제가 발생하였습니다."))
                 .build());
     }
 }
