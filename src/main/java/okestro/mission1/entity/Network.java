@@ -1,9 +1,7 @@
 package okestro.mission1.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,19 +19,24 @@ import static lombok.AccessLevel.PROTECTED;
 @Builder
 @Getter
 @FieldDefaults(level = PRIVATE)
-public class Network extends TimestampEntity{
+public class Network extends TimestampEntity {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    @Column(name = "tag_id")
-    int tagId;
+    @Column(name = "network_id")
+    int networkId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "vm_id")
+    private Vm vm;
 
     @NotBlank
     String title;
 
-    @Pattern(regexp = "^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$\n")
+    @Pattern(regexp = "^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$")
     String openIp;
 
-    @Size(min = 1, max = 65535)
+    @Min(0)
+    @Max(65535)
     int openPort;
 }

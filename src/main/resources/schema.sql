@@ -36,7 +36,6 @@ CREATE TABLE vm (
                     update_at TIMESTAMP(6),
                     description VARCHAR(255),
                     private_ip VARCHAR(255),
-                    network_id INTEGER NOT NULL ,
                     title VARCHAR(255),
                     vm_status ENUM ('PENDING','REBOOTING','RUNNING','STARTING','TERMINATED','TERMINATING') NOT NULL,
                     PRIMARY KEY (vm_id)
@@ -53,6 +52,7 @@ CREATE TABLE vm_tag (
 
 CREATE TABLE network (
                         network_id INTEGER NOT NULL AUTO_INCREMENT,
+                        vm_id INTEGER NOT NULL,
                         title VARCHAR(255),
                         open_ip VARCHAR(255),
                         open_port int(255),
@@ -61,13 +61,14 @@ CREATE TABLE network (
                         PRIMARY KEY (network_id)
 ) ENGINE=InnoDB;
 
+
 ALTER TABLE vm
     ADD CONSTRAINT fk_vm_member_id
         FOREIGN KEY (member_id) REFERENCES member (member_id);
 
-ALTER TABLE vm
-    ADD CONSTRAINT fk_vm_network_id
-        FOREIGN KEY (network_id) references network (network_id);
+ALTER TABLE network
+    ADD CONSTRAINT fk_network_vm_id
+        FOREIGN KEY (vm_id) references vm (vm_id);
 
 ALTER TABLE vm_tag
     ADD CONSTRAINT fk_vm_tag_tag_id
