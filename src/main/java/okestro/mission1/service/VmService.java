@@ -2,6 +2,9 @@ package okestro.mission1.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import okestro.mission1.entity.Vm;
+import okestro.mission1.exception.custom.NotExistException;
+import okestro.mission1.repository.VmRepository;
 import org.springframework.stereotype.Service;
 
 import static lombok.AccessLevel.PROTECTED;
@@ -11,5 +14,9 @@ import static lombok.AccessLevel.PROTECTED;
 @FieldDefaults(level = PROTECTED, makeFinal = true)
 public class VmService {
 
+    VmRepository vmRepository;
 
+    public Vm findVm(int vmId) {
+        return vmRepository.findById(vmId).orElseThrow(() -> new NotExistException("존재하지 않는 VM id입니다."));
+    }
 }

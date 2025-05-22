@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
+import java.util.Arrays;
+
 @RestControllerAdvice
 @Slf4j
 public class CustomHandler {
@@ -58,7 +60,7 @@ public class CustomHandler {
     @ExceptionHandler(Exception.class)
     private ResponseEntity<ResponseTemplate<Void>> exceptionHandler(Exception e) {
         log.error(e.getMessage());
-
+        log.error(Arrays.toString(e.getStackTrace()));
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseTemplate.<Void>builder()
                 .metaData(MetaData.ofServerFailure("서버 내부 로직에 문제가 발생하였습니다."))
                 .build());

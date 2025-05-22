@@ -38,6 +38,7 @@ CREATE TABLE vm (
                     private_ip VARCHAR(255),
                     title VARCHAR(255),
                     vm_status ENUM ('PENDING','REBOOTING','RUNNING','STARTING','TERMINATED','TERMINATING') NOT NULL,
+                    deleted INTEGER,
                     PRIMARY KEY (vm_id)
 ) ENGINE=InnoDB;
 

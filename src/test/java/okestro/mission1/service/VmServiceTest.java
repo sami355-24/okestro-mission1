@@ -111,12 +111,27 @@ class VmServiceTest {
     @Nested
     class 가상머신_id가_주어지고 {
         @Test
-        void DB에_존재하지_않는다면_예외를_발생시킨다() {
+        void id가_DB에_존재하지_않는다면_예외를_발생시킨다() {
             //given
             int notExistingVmId = -1;
 
             //when & then
-            Assertions.assertThatThrownBy(()-> vmService.findVm(notExistingVmId)).isInstanceOf(NotExistException.class);
+            Assertions.assertThatThrownBy(() -> vmService.findVm(notExistingVmId)).isInstanceOf(NotExistException.class);
+        }
+
+        @Test
+        void id가_DB에_존재한다면_VM을_반환한다() {
+            //given
+            int existVmId = vmRepository.findAll().stream().findFirst()
+                    .orElseThrow(() -> new NotExistException("인자가 잘못되었습니다."))
+                    .getVmId();
+
+            //when
+            Vm findVm = vmService.findVm(existVmId);
+
+            //then
+            Assertions.assertThat(findVm).isNotNull();
+
         }
     }
 

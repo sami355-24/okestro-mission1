@@ -1,17 +1,18 @@
 package okestro.mission1.controller;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import okestro.mission1.dto.response.FindAllTagResponse;
+import okestro.mission1.dto.response.FindTagResponse;
 import okestro.mission1.dto.response.template.MetaData;
 import okestro.mission1.dto.response.template.ResponseTemplate;
 import okestro.mission1.service.TagService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/tag")
@@ -23,10 +24,10 @@ public class TagController {
     TagService tagService;
 
     @GetMapping
-    public ResponseEntity<ResponseTemplate<FindAllTagResponse>> findAllTag() {
-        return ResponseEntity.ok(ResponseTemplate.<FindAllTagResponse>builder()
+    public ResponseEntity<ResponseTemplate<List<FindTagResponse>>> findAllTag() {
+        return ResponseEntity.ok(ResponseTemplate.<List<FindTagResponse>>builder()
                 .metaData(MetaData.ofSuccess())
-                .result(new FindAllTagResponse(tagService.findAll()))
+                .result(tagService.findAll().stream().map(tag -> new FindTagResponse(tag.getId(), tag.getTitle())).toList())
                 .build());
     }
 
