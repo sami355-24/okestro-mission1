@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import okestro.mission1.dto.request.CreateVmRequest;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
@@ -72,4 +73,20 @@ public class Vm extends TimestampEntity {
     @Builder.Default
     @Column(nullable = false)
     boolean deleted = false;
+
+    public Vm(CreateVmRequest requestDto, String privateIp) {
+        this.vmStatus = VmStatus.STARTING;
+        this.name = requestDto.name();
+        this.description = requestDto.description();
+        this.vCpu = requestDto.vCpu();
+        this.memory = requestDto.memory();
+        this.storage = requestDto.storage();
+        this.privateIp = privateIp;
+        this.network = requestDto.networkIds().stream()
+                .map(networkId -> Network.builder()
+                        .networkId(networkId)
+                        .vm(this)
+                        .build())
+                .toList();
+    }
 }

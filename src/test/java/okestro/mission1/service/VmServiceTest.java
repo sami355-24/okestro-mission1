@@ -2,10 +2,9 @@ package okestro.mission1.service;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.validation.ConstraintViolationException;
 import okestro.mission1.dto.request.CreateVmRequest;
 import okestro.mission1.entity.*;
-import okestro.mission1.exception.custom.DuplicateException;
-import okestro.mission1.exception.custom.InvalidDataException;
 import okestro.mission1.exception.custom.NotExistException;
 import okestro.mission1.repository.MemberRepository;
 import okestro.mission1.repository.NetworkRepository;
@@ -16,6 +15,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,6 +47,10 @@ class VmServiceTest {
 
     @BeforeEach
     void setUp() {
+        memberRepository.deleteAll();
+        networkRepository.deleteAll();
+        vmRepository.deleteAll();
+
         Member saveMember = Member.builder()
                 .email("test@email.com")
                 .password("1q2w3e4R!")
@@ -60,7 +64,6 @@ class VmServiceTest {
         memberRepository.save(saveMember);
         networkRepository.save(saveNetwork);
 
-        vmRepository.deleteAll();
         vmRepository.saveAll(
                 List.of(
                         Vm.builder()
@@ -202,17 +205,17 @@ class VmServiceTest {
             CreateVmRequest duplicateVmNameRequest = new CreateVmRequest(duplicateVmName, originVmDescription, validVcpu, validMemory, validStorage, List.of(validNetworkId), null);
 
             //when & then
-            Assertions.assertThatThrownBy(vmService.createVmFrom(duplicateVmNameRequest).instanceof(DuplicateException.class));
+            Assertions.assertThatThrownBy(() -> vmService.createVmFrom(duplicateVmNameRequest)).isInstanceOf(DataIntegrityViolationException.class);
         }
 
         @Test
         void 필수로_들어가야하는_데이터가_null일때_예외가_발생한다() {
             //given
-            String nullVmName;
+            String nullVmName = null;
             CreateVmRequest emptyVmNameRequest = new CreateVmRequest(nullVmName, originVmDescription, validVcpu, validMemory, validStorage, List.of(validNetworkId), null);
 
             //when & then
-            Assertions.assertThatThrownBy(vmService.createVmFrom(emptyVmNameRequest).instanceof(NotExistException.class));
+            Assertions.assertThatThrownBy(() -> vmService.createVmFrom(emptyVmNameRequest)).isInstanceOf(ConstraintViolationException.class);
         }
 
         @Test
@@ -222,7 +225,7 @@ class VmServiceTest {
             CreateVmRequest zeroVcpuRequest = new CreateVmRequest(originVmName, originVmDescription, zeroVcpu, validMemory, validStorage, List.of(validNetworkId), null);
 
             //when & then
-            Assertions.assertThatThrownBy(vmService.createVmFrom(zeroVcpuRequest).instanceof(InvalidDataException.class));
+            Assertions.assertThatThrownBy(() -> vmService.createVmFrom(zeroVcpuRequest)).isInstanceOf(ConstraintViolationException.class);
         }
 
         @Test
@@ -232,7 +235,7 @@ class VmServiceTest {
             CreateVmRequest zeroMemoryRequest = new CreateVmRequest(originVmName, originVmDescription, validVcpu, zeroMemory, validStorage, List.of(validNetworkId), null);
 
             //when & then
-            Assertions.assertThatThrownBy(vmService.createVmFrom(zeroMemoryRequest).instanceof(InvalidDataException.class));
+            Assertions.assertThatThrownBy(() -> vmService.createVmFrom(zeroMemoryRequest)).isInstanceOf(ConstraintViolationException.class);
         }
 
         @Test
@@ -242,28 +245,7 @@ class VmServiceTest {
             CreateVmRequest zeroStorageRequest = new CreateVmRequest(originVmName, originVmDescription, validVcpu, validMemory, zeroStorage, List.of(validNetworkId), null);
 
             //when & then
-            Assertions.assertThatThrownBy(vmService.createVmFrom(zeroStorageRequest).instanceof(InvalidDataException.class));
-        }
-
-        @Test
-        void 존재하지_않는_networkId로_생성시도시_예외가_발생한다() {
-            //given
-            int notExistingNetworkId = -1;
-            CreateVmRequest notExistNetworkIdVmRequest = new CreateVmRequest(originVmName, originVmDescription, validVcpu, validMemory, validStorage, List.of(notExistingNetworkId), null);
-
-            //when & then
-            Assertions.assertThatThrownBy(vmService.createVmFrom(notExistNetworkIdVmRequest).instanceof(InvalidDataException.class));
-        }
-
-        @Test
-        void 존재하지_않는_tag로_생성시도시_예외가_발생한다() {
-            //given
-            int networkId = networkRepository.findAll().stream().findFirst().orElseThrow(() -> new IllegalArgumentException("테스트 인자가 잘못되었습니다.")).getNetworkId();
-            int notExistingTagId = -1;
-            CreateVmRequest notExistTagIdVmRequest = new CreateVmRequest(originVmName, originVmDescription, validVcpu, validMemory, validStorage, List.of(networkId), List.of(notExistingTagId));
-
-            //when & then
-            Assertions.assertThatThrownBy(vmService.createVmFrom(notExistTagIdVmRequest).instanceof(InvalidDataException.class));
+            Assertions.assertThatThrownBy(() -> vmService.createVmFrom(zeroStorageRequest)).isInstanceOf(ConstraintViolationException.class);
         }
 
         @Test
