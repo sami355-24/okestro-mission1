@@ -29,9 +29,13 @@ public class TagService {
         return tagRepository.findAll();
     }
 
+    public List<Tag> findAllByTagIds(List<Integer> tagIds) {
+        return tagRepository.findAllById(tagIds);
+    }
+
     @Transactional
     public Void deleteTagFrom(int tagId) {
-        if(tagRepository.findById(tagId).isEmpty())
+        if (tagRepository.findById(tagId).isEmpty())
             throw new NotExistException(NOT_EXIST_TAG_NAME_MESSAGE);
         tagRepository.deleteById(tagId);
         return null;
@@ -40,29 +44,35 @@ public class TagService {
     @Transactional
     public Void updateTagFrom(int existingTagId, String newTitle) {
         Tag findTag = tagRepository.findById(existingTagId).orElseThrow(() -> new NotExistException(NOT_EXIST_TAG_ID_MESSAGE));
-        validateTagTitle(newTitle);
+        validateTagName(newTitle);
         findTag.setName(newTitle);
         return null;
     }
 
+    public void validateTagIds(List<Integer> ids) {
+        int existsAllTagsWithIds = tagRepository.existsAllTagsWithIds(ids);
+        if (existsAllTagsWithIds == ids.size()) return;
+        throw new NotExistException(NOT_EXIST_TAG_ID_MESSAGE);
+    }
+
     @Transactional
     public Integer createTagFrom(String tagName) {
-        validateTagTitle(tagName);
+        validateTagName(tagName);
         return tagRepository.save(Tag.builder().name(tagName).build()).getId();
     }
 
-    private void validateTagTitle(String tagName) {
-        checkBlankTagTitle(tagName);
-        checkDuplicateTagTitle(tagName);
+    private void validateTagName(String tagName) {
+        checkBlankTagName(tagName);
+        checkDuplicateTagName(tagName);
     }
 
-    private void checkBlankTagTitle(String tagName) {
-        if(tagName.isBlank())
+    private void checkBlankTagName(String tagName) {
+        if (tagName.isBlank())
             throw new BlankException(BLANK_TAG_NAME_MESSAGE);
     }
 
-    private void checkDuplicateTagTitle(String tagName) {
-        if(Boolean.TRUE.equals(tagRepository.existsByName(tagName)))
+    private void checkDuplicateTagName(String tagName) {
+        if (Boolean.TRUE.equals(tagRepository.existsByName(tagName)))
             throw new DuplicateException(DUPLICATE_TAG_NAME_MESSAGE);
     }
 }

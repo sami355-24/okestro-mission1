@@ -3,7 +3,9 @@ package okestro.mission1.service;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import okestro.mission1.dto.request.CreateVmRequest;
+import okestro.mission1.entity.Member;
 import okestro.mission1.entity.Vm;
+import okestro.mission1.exception.custom.DuplicateException;
 import okestro.mission1.exception.custom.NotExistException;
 import okestro.mission1.repository.VmRepository;
 import org.springframework.stereotype.Service;
@@ -27,8 +29,10 @@ public class VmService {
         return vmRepository.existsByName(vmName);
     }
 
-    public int createVmFrom(CreateVmRequest vmRequest) {
-        return vmRepository.save(new Vm(vmRequest, generateRandomIPv4())).getVmId();
+    public Vm createVmFrom(CreateVmRequest vmRequest, Member requestMember) {
+        if(isDuplicate(vmRequest.name()))
+            throw new DuplicateException("이미 존재한는 VM이름입니다.");
+        return vmRepository.save(new Vm(vmRequest, generateRandomIPv4(), requestMember));
     }
 
     private String generateRandomIPv4() {

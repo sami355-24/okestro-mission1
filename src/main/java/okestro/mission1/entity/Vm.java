@@ -10,14 +10,17 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import okestro.mission1.dto.request.CreateVmRequest;
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static jakarta.persistence.EnumType.*;
 import static jakarta.persistence.GenerationType.*;
 import static lombok.AccessLevel.*;
+import static org.hibernate.annotations.CascadeType.*;
 
 @Entity
 @Table(name = "vm")
@@ -68,13 +71,17 @@ public class Vm extends TimestampEntity {
     Member member;
 
     @OneToMany(mappedBy = "vm", fetch = FetchType.LAZY)
-    List<Network> network;
+    List<Network> networks;
+
+    @OneToMany(mappedBy = "vm", fetch = FetchType.LAZY)
+    @Cascade(PERSIST)
+    List<VmTag> vmTags;
 
     @Builder.Default
     @Column(nullable = false)
     boolean deleted = false;
 
-    public Vm(CreateVmRequest requestDto, String privateIp) {
+    public Vm(CreateVmRequest requestDto, String privateIp, Member member) {
         this.vmStatus = VmStatus.STARTING;
         this.name = requestDto.name();
         this.description = requestDto.description();
@@ -82,11 +89,22 @@ public class Vm extends TimestampEntity {
         this.memory = requestDto.memory();
         this.storage = requestDto.storage();
         this.privateIp = privateIp;
-        this.network = requestDto.networkIds().stream()
-                .map(networkId -> Network.builder()
-                        .networkId(networkId)
-                        .vm(this)
-                        .build())
-                .toList();
+        this.vmTags = new ArrayList<>();
+        this.member = member;
+    }
+
+    public void setNetworks(List<Network> networks) {
+        this.networks = networks;
+        networks.forEach(network -> network.setVm(this));
+    }
+
+    public void setTags(List<Tag> tags) {
+        tags.forEach(
+                tag -> {
+                    VmTag newVmTag = new VmTag(this, tag);
+                    this.vmTags.add(newVmTag);
+                    newVmTag.setVm(this);
+                }
+        );
     }
 }

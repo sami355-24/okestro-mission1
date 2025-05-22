@@ -36,7 +36,7 @@ public record FindVmResponse(
                 generateRandomValue(),
                 generateRandomValue(),
                 vm.getStorage(),
-                generateNetworkList(vm.getNetwork()),
+                generateNetworkList(vm.getNetworks()),
                 vm.getCreateAt(),
                 vm.getUpdateAt(),
                 vm.getPrivateIp()

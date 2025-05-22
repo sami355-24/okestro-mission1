@@ -45,6 +45,8 @@ class VmServiceTest {
     @PersistenceContext
     EntityManager em;
 
+    Member saveMember;
+
     @BeforeEach
     void setUp() {
         memberRepository.deleteAll();
@@ -61,6 +63,8 @@ class VmServiceTest {
                 .openIp("1.1.1.2")
                 .openPort(10000).build();
 
+        this.saveMember = saveMember;
+
         memberRepository.save(saveMember);
         networkRepository.save(saveNetwork);
 
@@ -76,7 +80,7 @@ class VmServiceTest {
                                 .storage(4)
                                 .member(saveMember)
                                 .privateIp("1.1.1.1")
-                                .network(List.of(saveNetwork))
+                                .networks(List.of(saveNetwork))
                                 .deleted(false)
                                 .build(),
                         Vm.builder()
@@ -89,7 +93,7 @@ class VmServiceTest {
                                 .storage(8)
                                 .member(saveMember)
                                 .privateIp("2.2.2.2")
-                                .network(List.of(saveNetwork))
+                                .networks(List.of(saveNetwork))
                                 .deleted(false)
                                 .build(),
                         Vm.builder()
@@ -102,7 +106,7 @@ class VmServiceTest {
                                 .storage(20)
                                 .member(saveMember)
                                 .privateIp("3.3.3.3")
-                                .network(List.of(saveNetwork))
+                                .networks(List.of(saveNetwork))
                                 .deleted(false)
                                 .build(),
                         Vm.builder()
@@ -115,7 +119,7 @@ class VmServiceTest {
                                 .storage(20)
                                 .member(saveMember)
                                 .privateIp("4.4.4.4")
-                                .network(List.of(saveNetwork))
+                                .networks(List.of(saveNetwork))
                                 .deleted(false)
                                 .build(),
                         Vm.builder()
@@ -128,7 +132,7 @@ class VmServiceTest {
                                 .storage(20)
                                 .member(saveMember)
                                 .privateIp("5.5.5.5")
-                                .network(List.of(saveNetwork))
+                                .networks(List.of(saveNetwork))
                                 .deleted(false)
                                 .build()
                 )
@@ -198,6 +202,7 @@ class VmServiceTest {
         int validStorage = 4;
         int validNetworkId;
 
+
         @Test
         void 중복된_이름으로_생성_시도시_예외가_발생한다() {
             //given
@@ -205,7 +210,7 @@ class VmServiceTest {
             CreateVmRequest duplicateVmNameRequest = new CreateVmRequest(duplicateVmName, originVmDescription, validVcpu, validMemory, validStorage, List.of(validNetworkId), null);
 
             //when & then
-            Assertions.assertThatThrownBy(() -> vmService.createVmFrom(duplicateVmNameRequest)).isInstanceOf(DataIntegrityViolationException.class);
+            Assertions.assertThatThrownBy(() -> vmService.createVmFrom(duplicateVmNameRequest, saveMember)).isInstanceOf(DataIntegrityViolationException.class);
         }
 
         @Test
@@ -215,7 +220,7 @@ class VmServiceTest {
             CreateVmRequest emptyVmNameRequest = new CreateVmRequest(nullVmName, originVmDescription, validVcpu, validMemory, validStorage, List.of(validNetworkId), null);
 
             //when & then
-            Assertions.assertThatThrownBy(() -> vmService.createVmFrom(emptyVmNameRequest)).isInstanceOf(ConstraintViolationException.class);
+            Assertions.assertThatThrownBy(() -> vmService.createVmFrom(emptyVmNameRequest, saveMember)).isInstanceOf(ConstraintViolationException.class);
         }
 
         @Test
@@ -225,7 +230,7 @@ class VmServiceTest {
             CreateVmRequest zeroVcpuRequest = new CreateVmRequest(originVmName, originVmDescription, zeroVcpu, validMemory, validStorage, List.of(validNetworkId), null);
 
             //when & then
-            Assertions.assertThatThrownBy(() -> vmService.createVmFrom(zeroVcpuRequest)).isInstanceOf(ConstraintViolationException.class);
+            Assertions.assertThatThrownBy(() -> vmService.createVmFrom(zeroVcpuRequest, saveMember)).isInstanceOf(ConstraintViolationException.class);
         }
 
         @Test
@@ -235,7 +240,7 @@ class VmServiceTest {
             CreateVmRequest zeroMemoryRequest = new CreateVmRequest(originVmName, originVmDescription, validVcpu, zeroMemory, validStorage, List.of(validNetworkId), null);
 
             //when & then
-            Assertions.assertThatThrownBy(() -> vmService.createVmFrom(zeroMemoryRequest)).isInstanceOf(ConstraintViolationException.class);
+            Assertions.assertThatThrownBy(() -> vmService.createVmFrom(zeroMemoryRequest, saveMember)).isInstanceOf(ConstraintViolationException.class);
         }
 
         @Test
@@ -245,7 +250,7 @@ class VmServiceTest {
             CreateVmRequest zeroStorageRequest = new CreateVmRequest(originVmName, originVmDescription, validVcpu, validMemory, zeroStorage, List.of(validNetworkId), null);
 
             //when & then
-            Assertions.assertThatThrownBy(() -> vmService.createVmFrom(zeroStorageRequest)).isInstanceOf(ConstraintViolationException.class);
+            Assertions.assertThatThrownBy(() -> vmService.createVmFrom(zeroStorageRequest, saveMember)).isInstanceOf(ConstraintViolationException.class);
         }
 
         @Test
@@ -254,7 +259,7 @@ class VmServiceTest {
             CreateVmRequest validVmRequest = new CreateVmRequest(originVmName, originVmDescription, validVcpu, validMemory, validStorage, List.of(validNetworkId), null);
 
             //when
-            int createVmId = vmService.createVmFrom(validVmRequest);
+            int createVmId = vmService.createVmFrom(validVmRequest, saveMember).getVmId();
             em.flush();
             em.clear();
 

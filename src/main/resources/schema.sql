@@ -53,7 +53,7 @@ CREATE TABLE vm_tag (
 
 CREATE TABLE network (
                         network_id INTEGER NOT NULL AUTO_INCREMENT,
-                        vm_id INTEGER NOT NULL,
+                        vm_id INTEGER,
                         name VARCHAR(255),
                         open_ip VARCHAR(255),
                         open_port int(255),

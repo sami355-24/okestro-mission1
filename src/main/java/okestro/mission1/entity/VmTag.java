@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import static jakarta.persistence.GenerationType.*;
 import static lombok.AccessLevel.*;
 
 @Entity
@@ -18,16 +19,23 @@ import static lombok.AccessLevel.*;
 public class VmTag extends TimestampEntity {
 
     @Id
+    @GeneratedValue(strategy = IDENTITY)
     @Column(name = "vm_tag_id")
     int vmTagId;
 
     @ManyToOne
     @JoinColumn(name = "vm_id")
     @NotNull
+    @Setter(PUBLIC)
     Vm vm;
 
     @ManyToOne
     @JoinColumn(name = "tag_id")
     @NotNull
     Tag tag;
+
+    public VmTag(Vm vm, Tag tag) {
+        this.vm = vm;
+        this.tag = tag;
+    }
 }
