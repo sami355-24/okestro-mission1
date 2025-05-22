@@ -5,7 +5,6 @@ import okestro.mission1.exception.custom.NotExistException;
 import okestro.mission1.repository.MemberRepository;
 import okestro.mission1.repository.NetworkRepository;
 import okestro.mission1.repository.VmRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -15,6 +14,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
+import static org.assertj.core.api.Assertions.*;
 
 
 @SpringBootTest
@@ -103,6 +104,19 @@ class VmServiceTest {
                                 .privateIp("4.4.4.4")
                                 .network(List.of(saveNetwork))
                                 .deleted(false)
+                                .build(),
+                        Vm.builder()
+                                .member(saveMember)
+                                .vmStatus(VmStatus.TERMINATED)
+                                .title("vm-duplicate")
+                                .description("duplicate VM 4")
+                                .vCpu(4)
+                                .memory(4)
+                                .storage(20)
+                                .member(saveMember)
+                                .privateIp("5.5.5.5")
+                                .network(List.of(saveNetwork))
+                                .deleted(false)
                                 .build()
                 )
         );
@@ -116,7 +130,7 @@ class VmServiceTest {
             int notExistingVmId = -1;
 
             //when & then
-            Assertions.assertThatThrownBy(() -> vmService.findVm(notExistingVmId)).isInstanceOf(NotExistException.class);
+            assertThatThrownBy(() -> vmService.findVm(notExistingVmId)).isInstanceOf(NotExistException.class);
         }
 
         @Test
@@ -130,8 +144,35 @@ class VmServiceTest {
             Vm findVm = vmService.findVm(existVmId);
 
             //then
-            Assertions.assertThat(findVm).isNotNull();
+            assertThat(findVm).isNotNull();
 
+        }
+    }
+
+    @Nested
+    class 가상머신_이름이_주어지고{
+        @Test
+        void 기존_가상머신_이름과_중복된다면_true를_반환한다(){
+            //given
+            String duplicateVmTitle = "vm-duplicate";
+
+            //when
+            boolean result = vmService.isDuplicate(duplicateVmTitle);
+
+            //then
+            assertThat(result).isTrue();
+        }
+
+        @Test
+        void 기존_가상머신_이름과_중복된지_않으면_false를_반환한다(){
+            //given
+            String duplicateVmTitle = "vm-duplicate";
+
+            //when
+            boolean result = vmService.isDuplicate(duplicateVmTitle);
+
+            //then
+            assertThat(result).isFalse();
         }
     }
 

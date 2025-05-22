@@ -55,7 +55,7 @@ public class Vm extends TimestampEntity {
     @NotNull(message = "사용하실 storage 크기를 입력해주세요.")
     Integer storage;
 
-    @Column(name = "private_ip")
+    @Column(name = "private_ip", unique = true)
     String privateIp;
 
     @ManyToOne(fetch = FetchType.LAZY)
