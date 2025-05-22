@@ -166,10 +166,10 @@ class VmServiceTest {
         @Test
         void 기존_가상머신_이름과_중복된지_않으면_false를_반환한다(){
             //given
-            String duplicateVmTitle = "vm-duplicate";
+            String originVmTitle = "vm-origin";
 
             //when
-            boolean result = vmService.isDuplicate(duplicateVmTitle);
+            boolean result = vmService.isDuplicate(originVmTitle);
 
             //then
             assertThat(result).isFalse();

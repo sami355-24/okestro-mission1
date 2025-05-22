@@ -10,4 +10,6 @@ public interface VmRepository extends JpaRepository<Vm, Integer> {
     Optional<Vm> findById(Integer integer);
 
     Optional<Vm> findByTitle(String vmId);
+
+    boolean existsByTitle(String title);
 }
