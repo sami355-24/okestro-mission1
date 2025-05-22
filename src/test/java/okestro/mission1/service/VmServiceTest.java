@@ -5,6 +5,7 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.validation.ConstraintViolationException;
 import okestro.mission1.dto.request.CreateVmRequest;
 import okestro.mission1.entity.*;
+import okestro.mission1.exception.custom.InvalidDataException;
 import okestro.mission1.exception.custom.NotExistException;
 import okestro.mission1.repository.MemberRepository;
 import okestro.mission1.repository.NetworkRepository;
@@ -266,6 +267,91 @@ class VmServiceTest {
             //then
             Assertions.assertThat(vmRepository.findById(createVmId)).isPresent();
         }
+    }
+
+    @Nested
+    class 가상머신_수정_시도시 {
+        int validVmId = vmRepository.findAll().stream().findFirst().orElseThrow(() -> new InvalidDataException("테스트 데이터(가상머신)에 문제")).getVmId();
+        String validName = "new vm name";
+        String validDescription = "new vm description";
+        int validVcpu = 4;
+        int validMemory = 8;
+        int validNetworkId = networkRepository.findAll().stream().findFirst().orElseThrow(() -> new InvalidDataException("테스트 데이터(네트워크)에 문제")).getNetworkId();
+
+        @Test
+        void 존재하지_않는_가상머신_id로_수정시도할_경우_예외가_발생한다() {
+            //given
+            int invalidVmId = -1;
+            UpdateVmData updateVmData = new UpdateVmData(validName, validDescription, validVcpu, validMemory, validNetworkId);
+
+            //when & then
+            assertThatThrownBy(() -> vmService.updateVm(invalidVmId, updateVmData)).isInstanceOf(NotExistException.class);
+        }
+
+        @Test
+        void 가상머신_이름을_공백으로_수정할경우_예외가_발생한다() {
+            //given
+            String invalidName = "";
+            UpdateVmData updateVmData = new UpdateVmData(invalidName, validDescription, validVcpu, validMemory, validNetworkId);
+
+            //when & then
+            assertThatThrownBy(() -> vmService.updateVm(validVmId, updateVmData)).isInstanceOf(InvalidDataException.class);
+        }
+
+        @Test
+        void vcpu의_값을_0이하로_수정할경우_예외가_발생한다() {
+            //given
+            int invalidVcpu = 0;
+            UpdateVmData updateVmData = new UpdateVmData(validName, validDescription, invalidVcpu, validMemory, validNetworkId);
+
+            //when & then
+            assertThatThrownBy(() -> vmService.updateVm(validVmId, updateVmData)).isInstanceOf(InvalidDataException.class);
+        }
+
+        @Test
+        void memory의_값을_0이하로_수정할경우_예외가_발생한다() {
+            //given
+            int invalidMemory = 0;
+            UpdateVmData updateVmData = new UpdateVmData(validName, validDescription, validVcpu, invalidMemory, validNetworkId);
+
+            //when & then
+            assertThatThrownBy(() -> vmService.updateVm(validVmId, updateVmData)).isInstanceOf(InvalidDataException.class);
+        }
+
+        @Test
+        void 가상머신에_붙어있지_않은_네트워크를_수정시도하면_예외가_발생한다() {
+            //given
+            int invalidNetworkId = -1;
+            UpdateVmData updateVmData = new UpdateVmData(validName, validDescription, validVcpu, validMemory, invalidNetworkId);
+
+            //when & then
+            assertThatThrownBy(() -> vmService.updateVm(validVmId, updateVmData)).isInstanceOf(NotExistException.class);
+        }
+
+        @Test
+        void 입력값이_올바를경우_수정에_성공한다() {
+            //given
+            UpdateVmData updateVmData = new UpdateVmData(validName, validDescription, validVcpu, validMemory, validNetworkId);
+
+            //when
+            vmService.updateVm(validVmId, updateVmData);
+            em.flush();
+
+            //then
+            Vm vm = vmRepository.findById(validVmId).orElseThrow(() -> new InvalidDataException("Invalid dummy VM data"));
+            org.junit.jupiter.api.Assertions.assertAll(
+                    () -> assertThat(vm.getName()).isEqualTo(validName),
+                    () -> assertThat(vm.getDescription()).isEqualTo(validDescription),
+                    () -> assertThat(vm.getVCpu()).isEqualTo(validVcpu),
+                    () -> assertThat(vm.getMemory()).isEqualTo(validMemory),
+                    () -> assertThat(vm.getNetworks()
+                            .stream()
+                            .findFirst()
+                            .orElseThrow(() -> new InvalidDataException("Invalid dummy VM data"))
+                            .getNetworkId()).isEqualTo(validNetworkId)
+            );
+        }
+
     }
 
 }

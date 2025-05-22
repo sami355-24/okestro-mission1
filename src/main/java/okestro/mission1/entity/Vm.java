@@ -74,7 +74,7 @@ public class Vm extends TimestampEntity {
     List<Network> networks;
 
     @OneToMany(mappedBy = "vm", fetch = FetchType.LAZY)
-    @Cascade(PERSIST)
+    @Cascade(ALL)
     List<VmTag> vmTags;
 
     @Builder.Default
