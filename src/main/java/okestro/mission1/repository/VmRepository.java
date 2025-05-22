@@ -9,7 +9,7 @@ public interface VmRepository extends JpaRepository<Vm, Integer> {
 
     Optional<Vm> findById(Integer integer);
 
-    Optional<Vm> findByTitle(String vmId);
+    Optional<Vm> findByName(String vmId);
 
-    boolean existsByTitle(String title);
+    boolean existsByName(String title);
 }

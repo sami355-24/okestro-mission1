@@ -2,7 +2,7 @@ INSERT INTO member (member_id, create_at, update_at, email, password)
 VALUES
     (1, CURRENT_TIMESTAMP, NULL, 'user1@example.com', 'password1');
 
-INSERT INTO vm (vm_id, member_id, memory, storage, vcpu, create_at, update_at, description, private_ip, title, vm_status, deleted)
+INSERT INTO vm (vm_id, member_id, memory, storage, vcpu, create_at, update_at, description, private_ip, name, vm_status, deleted)
 VALUES
     (1, 1, 16, 4, 4, CURRENT_TIMESTAMP, NULL, 'Test VM 1', '192.168.10.10', 'VM1', 'STARTING', 0),
     (2, 1, 8, 8, 2, CURRENT_TIMESTAMP, NULL, 'Test VM 2', '192.168.10.11', 'VM2', 'RUNNING', 0),
@@ -11,7 +11,7 @@ VALUES
     (5, 1, 32, 64, 4, CURRENT_TIMESTAMP, NULL, 'Test VM 5', '192.168.10.14', 'VM5', 'TERMINATING', 0),
     (6, 1, 16, 128, 4, CURRENT_TIMESTAMP, NULL, 'Test VM 6', '192.168.10.15', 'VM6', 'TERMINATED', 0);
 
-INSERT INTO network (network_id, vm_id, title, open_ip, open_port, create_at, update_at)
+INSERT INTO network (network_id, vm_id, name, open_ip, open_port, create_at, update_at)
 VALUES
     (1, 1, "NETWORK1", "1.1.1.1", 10000, CURRENT_TIMESTAMP, NULL),
     (2, 1, "NETWORK2", "1.1.1.2", 10001, CURRENT_TIMESTAMP, NULL),
@@ -21,7 +21,7 @@ VALUES
     (6, 3, "NETWORK6", "1.1.1.6", 10005, CURRENT_TIMESTAMP, NULL),
     (7, 1, "NETWORK7", "1.1.1.7", 10006, CURRENT_TIMESTAMP, NULL);
 
-INSERT INTO tag (tag_id, create_at, update_at, title)
+INSERT INTO tag (tag_id, create_at, update_at, name)
 VALUES
     (1, CURRENT_TIMESTAMP, NULL, 'DEV'),
     (2, CURRENT_TIMESTAMP, NULL, 'PROD'),

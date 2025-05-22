@@ -28,7 +28,7 @@ public class Tag extends TimestampEntity {
     @NotBlank(message = "태그를 입력해주세요")
     @Column(unique = true)
     @Setter(PUBLIC)
-    String title;
+    String name;
 
     @OneToMany(mappedBy = "tag", cascade = CascadeType.ALL, orphanRemoval = true)
     List<VmTag> vmTags = new ArrayList<>();

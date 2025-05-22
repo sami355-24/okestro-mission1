@@ -1,6 +1,7 @@
 package okestro.mission1.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -41,18 +42,21 @@ public class Vm extends TimestampEntity {
 
     @NotBlank(message = "VM 이름을 지어주세요.")
     @Column(unique = true)
-    String title;
+    String name;
 
     String description;
 
     @NotNull(message = "사용하실 cpu 수를 입력해주세요.")
     @Column(name = "vcpu")
+    @Min(1)
     Integer vCpu;
 
     @NotNull(message = "사용하실 memory 크기를 입력해주세요.")
+    @Min(1)
     Integer memory;
 
     @NotNull(message = "사용하실 storage 크기를 입력해주세요.")
+    @Min(1)
     Integer storage;
 
     @Column(name = "private_ip", unique = true)

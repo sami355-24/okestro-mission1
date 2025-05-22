@@ -27,7 +27,7 @@ public class TagController {
     public ResponseEntity<ResponseTemplate<List<FindTagResponse>>> findAllTag() {
         return ResponseEntity.ok(ResponseTemplate.<List<FindTagResponse>>builder()
                 .metaData(MetaData.ofSuccess())
-                .result(tagService.findAll().stream().map(tag -> new FindTagResponse(tag.getId(), tag.getTitle())).toList())
+                .result(tagService.findAll().stream().map(tag -> new FindTagResponse(tag.getId(), tag.getName())).toList())
                 .build());
     }
 

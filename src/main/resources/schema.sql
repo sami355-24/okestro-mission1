@@ -21,9 +21,9 @@ CREATE TABLE tag (
                      tag_id INTEGER NOT NULL AUTO_INCREMENT,
                      create_at TIMESTAMP(6) NOT NULL,
                      update_at TIMESTAMP(6),
-                     title VARCHAR(255),
+                     name VARCHAR(255),
                      PRIMARY KEY (tag_id),
-                     UNIQUE KEY (title)
+                     UNIQUE KEY (name)
 ) ENGINE=InnoDB;
 
 CREATE TABLE vm (
@@ -36,7 +36,7 @@ CREATE TABLE vm (
                     update_at TIMESTAMP(6),
                     description VARCHAR(255),
                     private_ip VARCHAR(255),
-                    title VARCHAR(255),
+                    name VARCHAR(255),
                     vm_status ENUM ('PENDING','REBOOTING','RUNNING','STARTING','TERMINATED','TERMINATING') NOT NULL,
                     deleted INTEGER,
                     PRIMARY KEY (vm_id)
@@ -54,7 +54,7 @@ CREATE TABLE vm_tag (
 CREATE TABLE network (
                         network_id INTEGER NOT NULL AUTO_INCREMENT,
                         vm_id INTEGER NOT NULL,
-                        title VARCHAR(255),
+                        name VARCHAR(255),
                         open_ip VARCHAR(255),
                         open_port int(255),
                         create_at TIMESTAMP(6) NOT NULL,

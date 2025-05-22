@@ -20,7 +20,7 @@ public class VmService {
         return vmRepository.findById(vmId).orElseThrow(() -> new NotExistException("존재하지 않는 VM id입니다."));
     }
 
-    public boolean isDuplicate(String vmTitle) {
-        return vmRepository.existsByTitle(vmTitle);
+    public boolean isDuplicate(String vmName) {
+        return vmRepository.existsByName(vmName);
     }
 }

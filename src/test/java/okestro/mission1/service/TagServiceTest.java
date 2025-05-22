@@ -35,11 +35,11 @@ class TagServiceTest {
         tagRepository.deleteAll();
         tagRepository.saveAll(
                 List.of(
-                        Tag.builder().title("DEV").build(),
-                        Tag.builder().title("TEST").build(),
-                        Tag.builder().title("BUILD").build(),
-                        Tag.builder().title("PROD").build(),
-                        Tag.builder().title("EXISTING").build()
+                        Tag.builder().name("DEV").build(),
+                        Tag.builder().name("TEST").build(),
+                        Tag.builder().name("BUILD").build(),
+                        Tag.builder().name("PROD").build(),
+                        Tag.builder().name("EXISTING").build()
                 )
         );
     }
@@ -58,31 +58,31 @@ class TagServiceTest {
         @Test
         void 중복된_태그명일경우_태그_생성시_태그_생성에_실패한다() {
             //given
-            String existingTitle = "EXISTING";
+            String existingName = "EXISTING";
 
             //when & then
-            assertThatThrownBy(() -> tagService.createTagFrom(existingTitle)).isInstanceOf(DataIntegrityViolationException.class);
+            assertThatThrownBy(() -> tagService.createTagFrom(existingName)).isInstanceOf(DataIntegrityViolationException.class);
         }
 
         @Test
         void 공백일경우_태그_생성에_실패한다() {
             //given
-            String blankTitle = " ";
+            String blankName = " ";
 
             //when & then
-            assertThatThrownBy(() -> tagService.createTagFrom(blankTitle)).isInstanceOf(BlankException.class);
+            assertThatThrownBy(() -> tagService.createTagFrom(blankName)).isInstanceOf(BlankException.class);
         }
 
         @Test
         void 고유한_태그명일경우_태그가_생성에_성공한다() {
             //given
-            String originTitle = "ORIGIN";
+            String originName = "ORIGIN";
 
             //when
-            tagService.createTagFrom(originTitle);
+            tagService.createTagFrom(originName);
 
             //then
-            assertThat(tagRepository.findByTitle(originTitle)).isPresent();
+            assertThat(tagRepository.findByName(originName)).isPresent();
         }
     }
 
@@ -92,7 +92,7 @@ class TagServiceTest {
         @Test
         void 존재하는_태그_Id가_주어진다면_삭제에_성공한다() {
             //given
-            int existingTagId = tagRepository.findByTitle("DEV")
+            int existingTagId = tagRepository.findByName("DEV")
                     .map(Tag::getId)
                     .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 태그명입니다."));
 
@@ -119,7 +119,7 @@ class TagServiceTest {
         @Test
         void 중복된_태그_명이_주어진다면_수정에_실패한다() {
             //given
-            Tag findTag = tagRepository.findByTitle("PROD").orElseThrow(() -> new IllegalArgumentException("테스트 인자가 잘못되었습니다."));
+            Tag findTag = tagRepository.findByName("PROD").orElseThrow(() -> new IllegalArgumentException("테스트 인자가 잘못되었습니다."));
             String existingTitle = "PROD";
 
             //when & then
@@ -129,7 +129,7 @@ class TagServiceTest {
         @Test
         void 공백으로_태그_명이_주어진다면_수정에_실패한다() {
             //given
-            Tag findTag = tagRepository.findByTitle("PROD").orElseThrow(() -> new IllegalArgumentException("테스트 인자가 잘못되었습니다."));
+            Tag findTag = tagRepository.findByName("PROD").orElseThrow(() -> new IllegalArgumentException("테스트 인자가 잘못되었습니다."));
             String blankTitle = " ";
 
             //when & then
@@ -139,14 +139,14 @@ class TagServiceTest {
         @Test
         void 중복되지_않으며_공백이_아닌_태그_명이_주어진다면_수정에_성공한다() {
             //given
-            Tag findTag = tagRepository.findByTitle("EXISTING").orElseThrow(() -> new IllegalArgumentException("테스트 인자가 잘못되었습니다."));
+            Tag findTag = tagRepository.findByName("EXISTING").orElseThrow(() -> new IllegalArgumentException("테스트 인자가 잘못되었습니다."));
             String newTitle = "NEW_TITLE";
 
             //when
             tagService.updateTagFrom(findTag.getId(), newTitle);
 
             //then
-            Assertions.assertThat(tagRepository.findByTitle(newTitle)).isPresent();
+            Assertions.assertThat(tagRepository.findByName(newTitle)).isPresent();
         }
     }
 }

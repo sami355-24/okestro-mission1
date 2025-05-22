@@ -30,7 +30,7 @@ public record FindVmResponse(
                 vm.getVmId(),
                 vm.getVmStatus(),
                 vm.getDescription(),
-                vm.getTitle(),
+                vm.getName(),
                 vm.getVCpu(),
                 vm.getMemory(),
                 generateRandomValue(),
