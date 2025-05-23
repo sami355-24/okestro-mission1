@@ -1,4 +1,4 @@
-package okestro.mission1.dto.response.template;
+package okestro.mission1.dto.controller.response.template;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

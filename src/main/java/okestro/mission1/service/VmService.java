@@ -2,8 +2,9 @@ package okestro.mission1.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import okestro.mission1.dto.request.CreateVmRequest;
-import okestro.mission1.dto.request.UpdateVmRequest;
+import okestro.mission1.dto.controller.request.CreateVmRequest;
+import okestro.mission1.dto.controller.request.UpdateVmRequest;
+import okestro.mission1.dto.service.vm.VmServiceUpdateDto;
 import okestro.mission1.entity.Member;
 import okestro.mission1.entity.Vm;
 import okestro.mission1.exception.custom.DuplicateException;
@@ -50,10 +51,12 @@ public class VmService {
     }
 
     @Transactional
-    public Void updateVm(int vmId, UpdateVmRequest vmData) {
-        validateVmName(vmData.name());
-        Vm findVm = vmRepository.findById(vmId).orElseThrow(() -> new NotExistException("vm이 존재하지 않습니다."));
-        findVm.updateVmFrom(vmData);
+    public Void updateVm(VmServiceUpdateDto vmServiceUpdateDto) {
+        validateVmName(vmServiceUpdateDto.name());
+        Vm findVm = vmRepository.findById(vmServiceUpdateDto.vmId()).orElseThrow(() -> new NotExistException("vm이 존재하지 않습니다."));
+
+        findVm.updateVmFrom(vmServiceUpdateDto);
         return null;
     }
+
 }

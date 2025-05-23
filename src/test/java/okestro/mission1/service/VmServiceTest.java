@@ -3,13 +3,15 @@ package okestro.mission1.service;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.validation.ConstraintViolationException;
-import okestro.mission1.dto.request.CreateVmRequest;
-import okestro.mission1.dto.request.UpdateVmRequest;
+import okestro.mission1.dto.controller.request.CreateVmRequest;
+import okestro.mission1.dto.controller.request.UpdateVmRequest;
+import okestro.mission1.dto.service.vm.VmServiceUpdateDto;
 import okestro.mission1.entity.*;
 import okestro.mission1.exception.custom.InvalidDataException;
 import okestro.mission1.exception.custom.NotExistException;
 import okestro.mission1.repository.MemberRepository;
 import okestro.mission1.repository.NetworkRepository;
+import okestro.mission1.repository.TagRepository;
 import okestro.mission1.repository.VmRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,109 +46,101 @@ class VmServiceTest {
     @Autowired
     private NetworkRepository networkRepository;
 
+    @Autowired
+    private TagRepository tagRepository;
+
     @PersistenceContext
     EntityManager em;
 
-    Member saveMember;
+    Member validMember;
 
     int validVmId;
     int validNetworkId;
+    int validTagId;
+    Vm validVm;
+    Network validNetwork;
+    Tag validTag;
 
     @BeforeEach
     void setUp() {
+        tagRepository.deleteAll();
         memberRepository.deleteAll();
         networkRepository.deleteAll();
         vmRepository.deleteAll();
 
-        Member saveMember = Member.builder()
+        this.validMember = Member.builder()
                 .email("test@email.com")
                 .password("1q2w3e4R!")
                 .build();
 
-        Network saveNetwork = Network.builder()
+        this.validNetwork = Network.builder()
                 .name("Test Network")
                 .openIp("1.1.1.2")
                 .openPort(10000).build();
 
-        this.saveMember = saveMember;
-
-        memberRepository.save(saveMember);
-        networkRepository.save(saveNetwork);
-
-        vmRepository.saveAll(
+        memberRepository.save(validMember);
+        networkRepository.save(validNetwork);
+        tagRepository.saveAll(
+                List.of(
+                        Tag.builder().name("DEV").build(),
+                        Tag.builder().name("TEST").build(),
+                        Tag.builder().name("BUILD").build(),
+                        Tag.builder().name("PROD").build(),
+                        Tag.builder().name("EXISTING").build()
+                )
+        );
+        List<Vm> savedVms = vmRepository.saveAll(
                 List.of(
                         Vm.builder()
-                                .member(saveMember)
+                                .member(validMember)
                                 .vmStatus(VmStatus.STARTING)
                                 .name("vm1")
                                 .description("Test VM 1")
                                 .vCpu(4)
                                 .memory(16)
                                 .storage(4)
-                                .member(saveMember)
+                                .member(validMember)
                                 .privateIp("1.1.1.1")
-                                .networks(List.of(saveNetwork))
+                                .networks(List.of(validNetwork))
                                 .deleted(false)
                                 .build(),
                         Vm.builder()
-                                .member(saveMember)
+                                .member(validMember)
                                 .vmStatus(VmStatus.RUNNING)
                                 .name("vm2")
                                 .description("Test VM 2")
                                 .vCpu(4)
                                 .memory(20)
                                 .storage(8)
-                                .member(saveMember)
+                                .member(validMember)
                                 .privateIp("2.2.2.2")
-                                .networks(List.of(saveNetwork))
+                                .networks(List.of(validNetwork))
                                 .deleted(false)
                                 .build(),
                         Vm.builder()
-                                .member(saveMember)
-                                .vmStatus(VmStatus.PENDING)
-                                .name("vm3")
-                                .description("Test VM 3")
-                                .vCpu(8)
-                                .memory(16)
-                                .storage(20)
-                                .member(saveMember)
-                                .privateIp("3.3.3.3")
-                                .networks(List.of(saveNetwork))
-                                .deleted(false)
-                                .build(),
-                        Vm.builder()
-                                .member(saveMember)
-                                .vmStatus(VmStatus.TERMINATED)
-                                .name("vm4")
-                                .description("Test VM 4")
-                                .vCpu(4)
-                                .memory(4)
-                                .storage(20)
-                                .member(saveMember)
-                                .privateIp("4.4.4.4")
-                                .networks(List.of(saveNetwork))
-                                .deleted(false)
-                                .build(),
-                        Vm.builder()
-                                .member(saveMember)
-                                .vmStatus(VmStatus.TERMINATED)
+                                .member(validMember)
+                                .vmStatus(VmStatus.RUNNING)
                                 .name("vm-duplicate")
-                                .description("duplicate VM 4")
+                                .description("Test VM 2")
                                 .vCpu(4)
-                                .memory(4)
-                                .storage(20)
-                                .member(saveMember)
-                                .privateIp("5.5.5.5")
-                                .networks(List.of(saveNetwork))
+                                .memory(20)
+                                .storage(8)
+                                .member(validMember)
+                                .privateIp("3.3.3.3")
+                                .networks(List.of(validNetwork))
                                 .deleted(false)
                                 .build()
                 )
         );
 
-        validVmId = vmRepository.findAll().stream().findFirst().orElseThrow(() -> new InvalidDataException("테스트 데이터(가상머신)에 문제")).getVmId();
-        validNetworkId = networkRepository.findAll().stream().findFirst().orElseThrow(() -> new InvalidDataException("테스트 데이터(네트워크)에 문제")).getNetworkId();
-
         em.flush();
+
+        validVm = savedVms.get(0);
+        validVmId = validVm.getVmId();
+        validNetworkId = validNetwork.getNetworkId();
+        validTag = tagRepository.findAll().get(0);
+        validTagId = validTag.getId();
+
         em.clear();
     }
 
@@ -221,7 +215,7 @@ class VmServiceTest {
             CreateVmRequest duplicateVmNameRequest = new CreateVmRequest(duplicateVmName, originVmDescription, validVcpu, validMemory, validStorage, List.of(validNetworkId), null);
 
             //when & then
-            Assertions.assertThatThrownBy(() -> vmService.createVmFrom(duplicateVmNameRequest, saveMember)).isInstanceOf(DataIntegrityViolationException.class);
+            Assertions.assertThatThrownBy(() -> vmService.createVmFrom(duplicateVmNameRequest, validMember)).isInstanceOf(DataIntegrityViolationException.class);
         }
 
         @Test
@@ -231,7 +225,7 @@ class VmServiceTest {
             CreateVmRequest emptyVmNameRequest = new CreateVmRequest(nullVmName, originVmDescription, validVcpu, validMemory, validStorage, List.of(validNetworkId), null);
 
             //when & then
-            Assertions.assertThatThrownBy(() -> vmService.createVmFrom(emptyVmNameRequest, saveMember)).isInstanceOf(ConstraintViolationException.class);
+            Assertions.assertThatThrownBy(() -> vmService.createVmFrom(emptyVmNameRequest, validMember)).isInstanceOf(ConstraintViolationException.class);
         }
 
         @Test
@@ -241,7 +235,7 @@ class VmServiceTest {
             CreateVmRequest zeroVcpuRequest = new CreateVmRequest(originVmName, originVmDescription, zeroVcpu, validMemory, validStorage, List.of(validNetworkId), null);
 
             //when & then
-            Assertions.assertThatThrownBy(() -> vmService.createVmFrom(zeroVcpuRequest, saveMember)).isInstanceOf(ConstraintViolationException.class);
+            Assertions.assertThatThrownBy(() -> vmService.createVmFrom(zeroVcpuRequest, validMember)).isInstanceOf(ConstraintViolationException.class);
         }
 
         @Test
@@ -251,7 +245,7 @@ class VmServiceTest {
             CreateVmRequest zeroMemoryRequest = new CreateVmRequest(originVmName, originVmDescription, validVcpu, zeroMemory, validStorage, List.of(validNetworkId), null);
 
             //when & then
-            Assertions.assertThatThrownBy(() -> vmService.createVmFrom(zeroMemoryRequest, saveMember)).isInstanceOf(ConstraintViolationException.class);
+            Assertions.assertThatThrownBy(() -> vmService.createVmFrom(zeroMemoryRequest, validMember)).isInstanceOf(ConstraintViolationException.class);
         }
 
         @Test
@@ -261,7 +255,7 @@ class VmServiceTest {
             CreateVmRequest zeroStorageRequest = new CreateVmRequest(originVmName, originVmDescription, validVcpu, validMemory, zeroStorage, List.of(validNetworkId), null);
 
             //when & then
-            Assertions.assertThatThrownBy(() -> vmService.createVmFrom(zeroStorageRequest, saveMember)).isInstanceOf(ConstraintViolationException.class);
+            Assertions.assertThatThrownBy(() -> vmService.createVmFrom(zeroStorageRequest, validMember)).isInstanceOf(ConstraintViolationException.class);
         }
 
         @Test
@@ -270,7 +264,7 @@ class VmServiceTest {
             CreateVmRequest validVmRequest = new CreateVmRequest(originVmName, originVmDescription, validVcpu, validMemory, validStorage, List.of(validNetworkId), null);
 
             //when
-            int createVmId = vmService.createVmFrom(validVmRequest, saveMember).getVmId();
+            int createVmId = vmService.createVmFrom(validVmRequest, validMember).getVmId();
             em.flush();
             em.clear();
 
@@ -290,46 +284,64 @@ class VmServiceTest {
         void 존재하지_않는_가상머신_id로_수정시도할_경우_예외가_발생한다() {
             //given
             int invalidVmId = -1;
-            UpdateVmRequest updateVmRequest = new UpdateVmRequest(validName, validDescription, validVcpu, validMemory, List.of(validNetworkId));
+            UpdateVmRequest updateVmRequest = new UpdateVmRequest(validName, validDescription, validVcpu, validMemory, List.of(validNetworkId), List.of(validTagId));
+            VmServiceUpdateDto vmServiceUpdateDto = new VmServiceUpdateDto(invalidVmId, List.of(validTag), List.of(validNetwork), updateVmRequest);
 
             //when & then
-            assertThatThrownBy(() -> vmService.updateVm(invalidVmId, updateVmRequest)).isInstanceOf(NotExistException.class);
+            assertThatThrownBy(() -> vmService.updateVm(vmServiceUpdateDto)).isInstanceOf(NotExistException.class);
         }
 
         @Test
-        void 가상머신에_붙어있지_않은_네트워크를_수정시도하면_예외가_발생한다() {
+        void 입력_값이_올바를경우_수정에_성공한다() {
             //given
-            int invalidNetworkId = -1;
-            UpdateVmRequest updateVmRequest = new UpdateVmRequest(validName, validDescription, validVcpu, validMemory, List.of(validNetworkId));
-
-            //when & then
-            assertThatThrownBy(() -> vmService.updateVm(validVmId, updateVmRequest)).isInstanceOf(NotExistException.class);
-        }
-
-        @Test
-        void 입력값이_올바를경우_수정에_성공한다() {
-            //given
-            UpdateVmRequest updateVmRequest = new UpdateVmRequest(validName, validDescription, validVcpu, validMemory, List.of(validNetworkId));
+            String updateVmName = "new vm name";
+            String updateVmDescription = "new vm description";
+            int updateVcpu = 11;
+            int updateMemory = 22;
+            UpdateVmRequest updateVmRequest = new UpdateVmRequest(updateVmName, updateVmDescription, updateVcpu, updateMemory, List.of(validNetworkId), List.of(validTagId));
+            VmServiceUpdateDto vmServiceUpdateDto = new VmServiceUpdateDto(validVmId, List.of(validTag), List.of(validNetwork), updateVmRequest);
 
             //when
-            vmService.updateVm(validVmId, updateVmRequest);
+            vmService.updateVm(vmServiceUpdateDto);
             em.flush();
 
             //then
-            Vm vm = vmRepository.findById(validVmId).orElseThrow(() -> new InvalidDataException("Invalid dummy VM data"));
+            Vm vm = vmRepository.findById(validVmId).orElseThrow(() -> new InvalidDataException("VM 데이터(vmId) 이상 존재"));
             org.junit.jupiter.api.Assertions.assertAll(
-                    () -> assertThat(vm.getName()).isEqualTo(validName),
-                    () -> assertThat(vm.getDescription()).isEqualTo(validDescription),
-                    () -> assertThat(vm.getVCpu()).isEqualTo(validVcpu),
-                    () -> assertThat(vm.getMemory()).isEqualTo(validMemory),
+                    () -> assertThat(vm.getName()).isEqualTo(updateVmName),
+                    () -> assertThat(vm.getDescription()).isEqualTo(updateVmDescription),
+                    () -> assertThat(vm.getVCpu()).isEqualTo(updateVcpu),
+                    () -> assertThat(vm.getMemory()).isEqualTo(updateMemory),
                     () -> assertThat(vm.getNetworks()
                             .stream()
                             .findFirst()
-                            .orElseThrow(() -> new InvalidDataException("Invalid dummy VM data"))
+                            .orElseThrow(() -> new InvalidDataException("VM 데이터(network) 이상 존재"))
                             .getNetworkId()).isEqualTo(validNetworkId)
             );
         }
 
+    }
+
+    @Nested
+    class 가상머신_삭제_시도시 {
+        @Test
+        void 가상머신_id가_db에_존재하지_않는다면_예외가_발생한다() {
+            //given
+            int notExistingVmId = -1;
+
+            //when & then
+            Assertions.assertThatThrownBy(()->vmService.deleteVmFrom(notExistingVmId)).isInstanceOf(NotExistException.class);
+        }
+
+        @Test
+        void 가상머신_id가_db에_존재한다면_삭제에_성공한다() {
+            //when
+            vmService.deleteVmFrom(validVmId);
+            List<Vm> deletedVm = vmRepository.findByDeletedTrue();
+
+            //then
+            Assertions.assertThat(deletedVm.get(0).getVmId()).isEqualTo(validVmId);
+        }
     }
 
 }

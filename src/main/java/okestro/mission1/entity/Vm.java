@@ -9,8 +9,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import okestro.mission1.dto.request.CreateVmRequest;
-import okestro.mission1.dto.request.UpdateVmRequest;
+import okestro.mission1.dto.controller.request.CreateVmRequest;
+import okestro.mission1.dto.service.vm.VmServiceUpdateDto;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
@@ -74,8 +74,8 @@ public class Vm extends TimestampEntity {
     @OneToMany(mappedBy = "vm", fetch = FetchType.LAZY)
     List<Network> networks;
 
-    @OneToMany(mappedBy = "vm", fetch = FetchType.LAZY)
-    @Cascade(ALL)
+    @OneToMany(mappedBy = "vm", fetch = FetchType.LAZY, orphanRemoval = true)
+    @Cascade({ALL})
     List<VmTag> vmTags;
 
     @Builder.Default
@@ -94,19 +94,23 @@ public class Vm extends TimestampEntity {
         this.member = member;
     }
 
-    public void updateVmFrom(UpdateVmRequest updateVmRequest) {
-        if (updateVmRequest.name() != null) this.name = updateVmRequest.name();
-        if (updateVmRequest.description() != null) this.description = updateVmRequest.description();
-        if (updateVmRequest.vCpu() != null) this.vCpu = updateVmRequest.vCpu();
-        if (updateVmRequest.memory() != null) this.memory = updateVmRequest.memory();
+    public void updateVmFrom(VmServiceUpdateDto vmServiceUpdateDto) {
+        if (vmServiceUpdateDto.name() != null) this.name = vmServiceUpdateDto.name();
+        if (vmServiceUpdateDto.description() != null) this.description = vmServiceUpdateDto.description();
+        if (vmServiceUpdateDto.vCpu() != null) this.vCpu = vmServiceUpdateDto.vCpu();
+        if (vmServiceUpdateDto.memory() != null) this.memory = vmServiceUpdateDto.memory();
+        setNetworksFrom(vmServiceUpdateDto.networks());
+        setTagsFrom(vmServiceUpdateDto.tags());
     }
 
-    public void setNetworks(List<Network> networks) {
+    public void setNetworksFrom(List<Network> networks) {
+        this.networks.forEach(network -> network.setVm(null));
         this.networks = networks;
         networks.forEach(network -> network.setVm(this));
     }
 
-    public void setTags(List<Tag> tags) {
+    public void setTagsFrom(List<Tag> tags) {
+        this.vmTags.clear();
         tags.forEach(
                 tag -> {
                     VmTag newVmTag = new VmTag(this, tag);

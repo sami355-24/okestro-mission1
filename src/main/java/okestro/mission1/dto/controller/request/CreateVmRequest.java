@@ -1,4 +1,4 @@
-package okestro.mission1.dto.request;
+package okestro.mission1.dto.controller.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;

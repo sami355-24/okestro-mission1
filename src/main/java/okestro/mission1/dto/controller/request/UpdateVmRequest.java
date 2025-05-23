@@ -1,15 +1,15 @@
-package okestro.mission1.dto.request;
+package okestro.mission1.dto.controller.request;
 
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
 
 import java.util.List;
 
 public record UpdateVmRequest(
-        @NotBlank String name,
+        String name,
         String description,
         @Min(1) Integer vCpu,
         @Min(1) Integer memory,
-        List<Integer> networkIds
+        List<Integer> networkIds,
+        List<Integer> tagIds
 ) {
 }

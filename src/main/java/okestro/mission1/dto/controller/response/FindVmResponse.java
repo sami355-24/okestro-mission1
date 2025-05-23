@@ -1,6 +1,7 @@
-package okestro.mission1.dto.response;
+package okestro.mission1.dto.controller.response;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import okestro.mission1.entity.Vm;
 import okestro.mission1.entity.VmStatus;
 
@@ -18,6 +19,7 @@ public record FindVmResponse(
         int cpuUsage,
         int memoryUsage,
         int storage,
+        @JsonProperty("networks")
         List<FindVmResponseNetworkDTO> findVmResponseNetworkDTOList,
         LocalDateTime createAt,
         LocalDateTime updateAt,
@@ -44,7 +46,7 @@ public record FindVmResponse(
     }
 
     private static int generateRandomValue() {
-        return random.nextInt(80) + 1; // 0~79 사이의 값 + 1 = 1~80
+        return random.nextInt(80) + 1;
     }
 
     private static List<FindVmResponseNetworkDTO> generateNetworkList(List<okestro.mission1.entity.Network> originNetworks) {
