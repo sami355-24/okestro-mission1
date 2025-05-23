@@ -330,13 +330,13 @@ class VmServiceTest {
             int notExistingVmId = -1;
 
             //when & then
-            Assertions.assertThatThrownBy(()->vmService.deleteVmFrom(List.of(notExistingVmId))).isInstanceOf(IllegalArgumentException.class);
+            Assertions.assertThatThrownBy(()->vmService.deleteVmFrom(notExistingVmId)).isInstanceOf(IllegalArgumentException.class);
         }
 
         @Test
         void 가상머신_id가_db에_존재한다면_삭제에_성공한다() {
             //when
-            vmService.deleteVmFrom(List.of(validVmId));
+            vmService.deleteVmFrom(validVmId);
             em.flush();
             List<Vm> deletedVm = vmRepository.findDeletedVmsWithNativeQuery();
 

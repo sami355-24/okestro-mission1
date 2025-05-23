@@ -30,7 +30,7 @@ import static org.hibernate.annotations.CascadeType.*;
 @Builder
 @Getter
 @FieldDefaults(level = PRIVATE)
-@SQLDelete(sql = "UPDATE Vm SET deleted = true WHERE id = ?")
+@SQLDelete(sql = "UPDATE vm SET deleted = true WHERE vm_id = ?")
 @SQLRestriction("deleted = false")
 public class Vm extends TimestampEntity {
     /**
@@ -39,6 +39,7 @@ public class Vm extends TimestampEntity {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
+    @Column(name = "vm_id")
     int vmId;
 
     @NotNull
@@ -79,7 +80,7 @@ public class Vm extends TimestampEntity {
     List<VmTag> vmTags;
 
     @Builder.Default
-    @Column(nullable = false)
+    @Column(nullable = false, name = "deleted")
     boolean deleted = false;
 
     public Vm(CreateVmRequest requestDto, String privateIp, Member member) {

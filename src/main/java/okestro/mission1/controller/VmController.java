@@ -76,8 +76,12 @@ public class VmController {
                 .build());
     }
 
-//    @DeleteMapping("/vm/{vmId}")
-//    public ResponseEntity<ResponseTemplate<Void>> deleteVm(@PathVariable int vmId) {
-//
-//    }
+    @DeleteMapping("/{vmId}")
+    public ResponseEntity<ResponseTemplate<Void>> deleteVm(@PathVariable int vmId) {
+        vmService.deleteVmFrom(vmId);
+        return ResponseEntity.ok(ResponseTemplate.<Void>builder()
+                .metaData(MetaData.ofSuccess())
+                .result(null)
+                .build());
+    }
 }

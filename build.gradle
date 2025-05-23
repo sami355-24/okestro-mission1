@@ -46,7 +46,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     //DevTools
-//    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
 
 }

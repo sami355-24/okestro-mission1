@@ -13,6 +13,7 @@ import okestro.mission1.repository.VmRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Random;
 
 import static lombok.AccessLevel.PROTECTED;
@@ -46,7 +47,7 @@ public class VmService {
     }
 
     private void validateVmName(String vmName) {
-        if(vmName != null && isDuplicate(vmName))
+        if (vmName != null && isDuplicate(vmName))
             throw new DuplicateException("이미 존재한는 VM이름입니다.");
     }
 
@@ -59,4 +60,9 @@ public class VmService {
         return null;
     }
 
+    @Transactional
+    public Void deleteVmFrom(int vmId) {
+        vmRepository.delete(vmRepository.findById(vmId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 VM ID입니다.")));
+        return null;
+    }
 }
