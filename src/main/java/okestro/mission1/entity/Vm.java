@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import okestro.mission1.dto.request.CreateVmRequest;
+import okestro.mission1.dto.request.UpdateVmRequest;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
@@ -91,6 +92,13 @@ public class Vm extends TimestampEntity {
         this.privateIp = privateIp;
         this.vmTags = new ArrayList<>();
         this.member = member;
+    }
+
+    public void updateVmFrom(UpdateVmRequest updateVmRequest) {
+        if (updateVmRequest.name() != null) this.name = updateVmRequest.name();
+        if (updateVmRequest.description() != null) this.description = updateVmRequest.description();
+        if (updateVmRequest.vCpu() != null) this.vCpu = updateVmRequest.vCpu();
+        if (updateVmRequest.memory() != null) this.memory = updateVmRequest.memory();
     }
 
     public void setNetworks(List<Network> networks) {

@@ -1,10 +1,12 @@
 package okestro.mission1.controller;
 
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import okestro.mission1.annotation.customannotaion.RequestMember;
 import okestro.mission1.dto.request.CreateVmRequest;
+import okestro.mission1.dto.request.UpdateVmRequest;
 import okestro.mission1.dto.response.FindVmResponse;
 import okestro.mission1.dto.response.template.MetaData;
 import okestro.mission1.dto.response.template.ResponseTemplate;
@@ -49,6 +51,14 @@ public class VmController {
         return ResponseEntity.ok(ResponseTemplate.<Integer>builder()
                 .metaData(MetaData.ofSuccess())
                 .result(vmFrom.getVmId())
+                .build());
+    }
+
+    @PatchMapping("/{vmId}")
+    public ResponseEntity<ResponseTemplate<Void>> updateVm(@PathVariable int vmId, @RequestBody @Valid UpdateVmRequest updateVmRequest) {
+        return ResponseEntity.ok(ResponseTemplate.<Void>builder()
+                .metaData(MetaData.ofSuccess())
+                .result(vmService.updateVm(vmId, updateVmRequest))
                 .build());
     }
 }

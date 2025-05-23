@@ -4,6 +4,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.validation.ConstraintViolationException;
 import okestro.mission1.dto.request.CreateVmRequest;
+import okestro.mission1.dto.request.UpdateVmRequest;
 import okestro.mission1.entity.*;
 import okestro.mission1.exception.custom.InvalidDataException;
 import okestro.mission1.exception.custom.NotExistException;
@@ -47,6 +48,9 @@ class VmServiceTest {
     EntityManager em;
 
     Member saveMember;
+
+    int validVmId;
+    int validNetworkId;
 
     @BeforeEach
     void setUp() {
@@ -138,6 +142,12 @@ class VmServiceTest {
                                 .build()
                 )
         );
+
+        validVmId = vmRepository.findAll().stream().findFirst().orElseThrow(() -> new InvalidDataException("테스트 데이터(가상머신)에 문제")).getVmId();
+        validNetworkId = networkRepository.findAll().stream().findFirst().orElseThrow(() -> new InvalidDataException("테스트 데이터(네트워크)에 문제")).getNetworkId();
+
+        em.flush();
+        em.clear();
     }
 
     @Nested
@@ -271,70 +281,38 @@ class VmServiceTest {
 
     @Nested
     class 가상머신_수정_시도시 {
-        int validVmId = vmRepository.findAll().stream().findFirst().orElseThrow(() -> new InvalidDataException("테스트 데이터(가상머신)에 문제")).getVmId();
-        String validName = "new vm name";
-        String validDescription = "new vm description";
-        int validVcpu = 4;
-        int validMemory = 8;
-        int validNetworkId = networkRepository.findAll().stream().findFirst().orElseThrow(() -> new InvalidDataException("테스트 데이터(네트워크)에 문제")).getNetworkId();
+        final String validName = "new vm name";
+        final String validDescription = "new vm description";
+        final int validVcpu = 4;
+        final int validMemory = 8;
 
         @Test
         void 존재하지_않는_가상머신_id로_수정시도할_경우_예외가_발생한다() {
             //given
             int invalidVmId = -1;
-            UpdateVmData updateVmData = new UpdateVmData(validName, validDescription, validVcpu, validMemory, validNetworkId);
+            UpdateVmRequest updateVmRequest = new UpdateVmRequest(validName, validDescription, validVcpu, validMemory, List.of(validNetworkId));
 
             //when & then
-            assertThatThrownBy(() -> vmService.updateVm(invalidVmId, updateVmData)).isInstanceOf(NotExistException.class);
-        }
-
-        @Test
-        void 가상머신_이름을_공백으로_수정할경우_예외가_발생한다() {
-            //given
-            String invalidName = "";
-            UpdateVmData updateVmData = new UpdateVmData(invalidName, validDescription, validVcpu, validMemory, validNetworkId);
-
-            //when & then
-            assertThatThrownBy(() -> vmService.updateVm(validVmId, updateVmData)).isInstanceOf(InvalidDataException.class);
-        }
-
-        @Test
-        void vcpu의_값을_0이하로_수정할경우_예외가_발생한다() {
-            //given
-            int invalidVcpu = 0;
-            UpdateVmData updateVmData = new UpdateVmData(validName, validDescription, invalidVcpu, validMemory, validNetworkId);
-
-            //when & then
-            assertThatThrownBy(() -> vmService.updateVm(validVmId, updateVmData)).isInstanceOf(InvalidDataException.class);
-        }
-
-        @Test
-        void memory의_값을_0이하로_수정할경우_예외가_발생한다() {
-            //given
-            int invalidMemory = 0;
-            UpdateVmData updateVmData = new UpdateVmData(validName, validDescription, validVcpu, invalidMemory, validNetworkId);
-
-            //when & then
-            assertThatThrownBy(() -> vmService.updateVm(validVmId, updateVmData)).isInstanceOf(InvalidDataException.class);
+            assertThatThrownBy(() -> vmService.updateVm(invalidVmId, updateVmRequest)).isInstanceOf(NotExistException.class);
         }
 
         @Test
         void 가상머신에_붙어있지_않은_네트워크를_수정시도하면_예외가_발생한다() {
             //given
             int invalidNetworkId = -1;
-            UpdateVmData updateVmData = new UpdateVmData(validName, validDescription, validVcpu, validMemory, invalidNetworkId);
+            UpdateVmRequest updateVmRequest = new UpdateVmRequest(validName, validDescription, validVcpu, validMemory, List.of(validNetworkId));
 
             //when & then
-            assertThatThrownBy(() -> vmService.updateVm(validVmId, updateVmData)).isInstanceOf(NotExistException.class);
+            assertThatThrownBy(() -> vmService.updateVm(validVmId, updateVmRequest)).isInstanceOf(NotExistException.class);
         }
 
         @Test
         void 입력값이_올바를경우_수정에_성공한다() {
             //given
-            UpdateVmData updateVmData = new UpdateVmData(validName, validDescription, validVcpu, validMemory, validNetworkId);
+            UpdateVmRequest updateVmRequest = new UpdateVmRequest(validName, validDescription, validVcpu, validMemory, List.of(validNetworkId));
 
             //when
-            vmService.updateVm(validVmId, updateVmData);
+            vmService.updateVm(validVmId, updateVmRequest);
             em.flush();
 
             //then

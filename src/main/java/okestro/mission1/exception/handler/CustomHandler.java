@@ -9,6 +9,7 @@ import okestro.mission1.exception.custom.DuplicateException;
 import okestro.mission1.exception.custom.NotExistException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
@@ -54,6 +55,14 @@ public class CustomHandler {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseTemplate.<Void>builder()
                 .metaData(MetaData.ofClientFailure("URI를 확인해주세요."))
+                .build());
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    private ResponseEntity<ResponseTemplate<Void>> validationExceptionHandler(MethodArgumentNotValidException e){
+        log.warn(e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseTemplate.<Void>builder()
+                .metaData(MetaData.ofClientFailure("요청 인자 검증에 실패했습니다."))
                 .build());
     }
 
