@@ -121,7 +121,7 @@ class VmServiceTest {
                                 .member(validMember)
                                 .vmStatus(VmStatus.RUNNING)
                                 .name("vm-duplicate")
-                                .description("Test VM 2")
+                                .description("Test VM Duplicate")
                                 .vCpu(4)
                                 .memory(20)
                                 .storage(8)
@@ -330,14 +330,15 @@ class VmServiceTest {
             int notExistingVmId = -1;
 
             //when & then
-            Assertions.assertThatThrownBy(()->vmService.deleteVmFrom(notExistingVmId)).isInstanceOf(NotExistException.class);
+            Assertions.assertThatThrownBy(()->vmService.deleteVmFrom(List.of(notExistingVmId))).isInstanceOf(IllegalArgumentException.class);
         }
 
         @Test
         void 가상머신_id가_db에_존재한다면_삭제에_성공한다() {
             //when
-            vmService.deleteVmFrom(validVmId);
-            List<Vm> deletedVm = vmRepository.findByDeletedTrue();
+            vmService.deleteVmFrom(List.of(validVmId));
+            em.flush();
+            List<Vm> deletedVm = vmRepository.findDeletedVmsWithNativeQuery();
 
             //then
             Assertions.assertThat(deletedVm.get(0).getVmId()).isEqualTo(validVmId);

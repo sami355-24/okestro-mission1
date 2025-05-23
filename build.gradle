@@ -37,6 +37,8 @@ dependencies {
     testImplementation 'com.h2database:h2'
     //JPA
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    //p6spy
+    implementation("p6spy:p6spy:3.9.1")
     //Testing
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
@@ -44,7 +46,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     //DevTools
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+//    developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
 
 }
