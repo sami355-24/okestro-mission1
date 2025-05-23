@@ -4,6 +4,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.validation.ConstraintViolationException;
 import okestro.mission1.dto.controller.request.CreateVmRequest;
+import okestro.mission1.dto.controller.request.FindVmFilterRequest;
 import okestro.mission1.dto.controller.request.UpdateVmRequest;
 import okestro.mission1.dto.service.vm.VmServiceUpdateDto;
 import okestro.mission1.entity.*;
@@ -24,6 +25,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -178,21 +180,31 @@ class VmServiceTest {
         class 태그id_목록이_주어지고 {
             int page = 0;
 
-            String order = "acs";
-            String sort = "name";
-
             @Test
             void DB에_없는_태그_id가_있다면_예외가_발생한다() {
                 //given
                 int invalidTagId = -1;
+                FindVmFilterRequest invalidFilterRequest = new FindVmFilterRequest(
+                        1,
+                        FindVmFilterRequest.Size.FIVE,
+                        List.of(invalidTagId),
+                        Map.of("name", "asc", "create-at", "asc")
+                );
 
                 //when & then
-                Assertions.assertThatThrownBy(()->vmService.findVmsFrom(new FindVmFilterRequest(page, List.of(invalidTagId)), order, sort)).isInstanceOf(NotExistException.class);
+                Assertions.assertThatThrownBy(()->vmService.findVmsFrom(invalidFilterRequest).isInstanceOf(NotExistException.class));
             }
             @Test
             void DB에_존재하는_태그_id가_있다면_조회에_성공한다() {
+                FindVmFilterRequest validFilterRequest = new FindVmFilterRequest(
+                        1,
+                        FindVmFilterRequest.Size.FIVE,
+                        List.of(validTagId),
+                        Map.of("name", "asc", "create-at", "asc")
+                );
+
                 //when
-                List<Vm> findVms = vmService.findVmsFrom(new FindVmFilterRequest(page, List.of(validTagId)), order, sort);
+                List<Vm> findVms = vmService.findVmsFrom(validFilterRequest);
 
                 //then
                 Assertions.assertThat(findVms).isNotEmpty();
