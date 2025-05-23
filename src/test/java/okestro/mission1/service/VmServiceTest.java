@@ -145,7 +145,7 @@ class VmServiceTest {
     }
 
     @Nested
-    class 가상머신_조회시도시 {
+    class 가상머신_단일_조회_시도시 {
         @Test
         void id가_DB에_존재하지_않는다면_예외를_발생시킨다() {
             //given
@@ -168,6 +168,35 @@ class VmServiceTest {
             //then
             assertThat(findVm).isNotNull();
 
+        }
+    }
+
+    @Nested
+    class 가상머신_목록_조회_시도시 {
+
+        @Nested
+        class 태그id_목록이_주어지고 {
+            int page = 0;
+
+            String order = "acs";
+            String sort = "name";
+
+            @Test
+            void DB에_없는_태그_id가_있다면_예외가_발생한다() {
+                //given
+                int invalidTagId = -1;
+
+                //when & then
+                Assertions.assertThatThrownBy(()->vmService.findVmsFrom(new FindVmFilterRequest(page, List.of(invalidTagId)), order, sort)).isInstanceOf(NotExistException.class);
+            }
+            @Test
+            void DB에_존재하는_태그_id가_있다면_조회에_성공한다() {
+                //when
+                List<Vm> findVms = vmService.findVmsFrom(new FindVmFilterRequest(page, List.of(validTagId)), order, sort);
+
+                //then
+                Assertions.assertThat(findVms).isNotEmpty();
+            }
         }
     }
 
