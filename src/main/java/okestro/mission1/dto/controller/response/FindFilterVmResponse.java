@@ -1,11 +1,15 @@
 package okestro.mission1.dto.controller.response;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
 import java.util.List;
 
-public record FindFilterVmResponse(
-        int vmId,
-        String vmName,
-        List<String> tags,
-        String privateIp
-) {
+@Data
+@AllArgsConstructor
+public class FindFilterVmResponse {
+    int vmId;
+    String vmName;
+    List<String> tags;
+    String privateIp;
 }

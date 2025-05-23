@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="okestro.mission1.service.TagServiceTest$태그를_생성시도시" tests="3" skipped="0" failures="0" errors="0" timestamp="2025-05-23T07:40:58.605Z" hostname="isangmin-ui-MacBookPro.local" time="0.013">
+<testsuite name="okestro.mission1.service.TagServiceTest$태그를_생성시도시" tests="3" skipped="0" failures="0" errors="0" timestamp="2025-05-26T00:35:49.899Z" hostname="isangmin-ui-MacBookPro.local" time="0.022">
   <properties/>
-  <testcase name="공백일경우_태그_생성에_실패한다()" classname="okestro.mission1.service.TagServiceTest$태그를_생성시도시" time="0.003"/>
-  <testcase name="중복된_태그명일경우_태그_생성시_태그_생성에_실패한다()" classname="okestro.mission1.service.TagServiceTest$태그를_생성시도시" time="0.004"/>
-  <testcase name="고유한_태그명일경우_태그가_생성에_성공한다()" classname="okestro.mission1.service.TagServiceTest$태그를_생성시도시" time="0.005"/>
-  <system-out><![CDATA[2025-05-23T16:40:58.604+09:00  INFO 38395 --- [mission1] [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [okestro.mission1.service.TagServiceTest$태그를_생성시도시]: 태그를_생성시도시 does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-2025-05-23T16:40:58.605+09:00  INFO 38395 --- [mission1] [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration okestro.mission1.Mission1Application for test class okestro.mission1.service.TagServiceTest$태그를_생성시도시
+  <testcase name="공백일경우_태그_생성에_실패한다()" classname="okestro.mission1.service.TagServiceTest$태그를_생성시도시" time="0.006"/>
+  <testcase name="중복된_태그명일경우_태그_생성시_태그_생성에_실패한다()" classname="okestro.mission1.service.TagServiceTest$태그를_생성시도시" time="0.006"/>
+  <testcase name="고유한_태그명일경우_태그가_생성에_성공한다()" classname="okestro.mission1.service.TagServiceTest$태그를_생성시도시" time="0.008"/>
+  <system-out><![CDATA[2025-05-26T09:35:49.896+09:00  INFO 36575 --- [mission1] [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [okestro.mission1.service.TagServiceTest$태그를_생성시도시]: 태그를_생성시도시 does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2025-05-26T09:35:49.897+09:00  INFO 36575 --- [mission1] [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration okestro.mission1.Mission1Application for test class okestro.mission1.service.TagServiceTest$태그를_생성시도시
 Hibernate: select t1_0.tag_id,t1_0.create_at,t1_0.name,t1_0.update_at from tag t1_0
 Hibernate: insert into tag (create_at,name,update_at,tag_id) values (?,?,?,default)
 Hibernate: insert into tag (create_at,name,update_at,tag_id) values (?,?,?,default)

@@ -72,8 +72,8 @@ public class CustomHandler {
 
     @ExceptionHandler(Exception.class)
     private ResponseEntity<ResponseTemplate<Void>> exceptionHandler(Exception e) {
+        e.printStackTrace();
         log.error(e.getMessage());
-        log.error(Arrays.toString(e.getStackTrace()));
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseTemplate.<Void>builder()
                 .metaData(MetaData.ofServerFailure("서버 내부 로직에 문제가 발생하였습니다."))
                 .build());

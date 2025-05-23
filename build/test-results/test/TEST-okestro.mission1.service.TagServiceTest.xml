@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="okestro.mission1.service.TagServiceTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2025-05-23T07:40:58.550Z" hostname="isangmin-ui-MacBookPro.local" time="0.013">
+<testsuite name="okestro.mission1.service.TagServiceTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2025-05-26T00:35:49.809Z" hostname="isangmin-ui-MacBookPro.local" time="0.02">
   <properties/>
-  <testcase name="태그를_조회할_수_있다()" classname="okestro.mission1.service.TagServiceTest" time="0.013"/>
-  <system-out><![CDATA[2025-05-23T16:40:58.549+09:00  INFO 38395 --- [mission1] [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [okestro.mission1.service.TagServiceTest]: TagServiceTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-2025-05-23T16:40:58.550+09:00  INFO 38395 --- [mission1] [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration okestro.mission1.Mission1Application for test class okestro.mission1.service.TagServiceTest
+  <testcase name="태그를_조회할_수_있다()" classname="okestro.mission1.service.TagServiceTest" time="0.02"/>
+  <system-out><![CDATA[2025-05-26T09:35:49.808+09:00  INFO 36575 --- [mission1] [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [okestro.mission1.service.TagServiceTest]: TagServiceTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2025-05-26T09:35:49.809+09:00  INFO 36575 --- [mission1] [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration okestro.mission1.Mission1Application for test class okestro.mission1.service.TagServiceTest
 Hibernate: select t1_0.tag_id,t1_0.create_at,t1_0.name,t1_0.update_at from tag t1_0
 Hibernate: insert into tag (create_at,name,update_at,tag_id) values (?,?,?,default)
 Hibernate: insert into tag (create_at,name,update_at,tag_id) values (?,?,?,default)

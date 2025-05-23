@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Optional;
 
-public interface VmRepository extends JpaRepository<Vm, Integer> {
+public interface VmRepository extends JpaRepository<Vm, Integer>, VmRepositoryCustom {
 
     Optional<Vm> findById(Integer integer);
 

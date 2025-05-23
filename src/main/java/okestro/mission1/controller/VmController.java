@@ -6,13 +6,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import okestro.mission1.annotation.customannotaion.RequestMember;
 import okestro.mission1.dto.controller.request.CreateVmRequest;
-import okestro.mission1.dto.controller.request.Order;
 import okestro.mission1.dto.controller.request.PageSize;
 import okestro.mission1.dto.controller.request.UpdateVmRequest;
 import okestro.mission1.dto.controller.response.FindFilterVmResponse;
 import okestro.mission1.dto.controller.response.FindVmResponse;
 import okestro.mission1.dto.controller.response.template.MetaData;
 import okestro.mission1.dto.controller.response.template.ResponseTemplate;
+import okestro.mission1.dto.repository.SortParam;
 import okestro.mission1.dto.service.vm.FindFilterVmService;
 import okestro.mission1.dto.service.vm.UpdateVmService;
 import okestro.mission1.entity.Member;
@@ -47,16 +47,20 @@ public class VmController {
     }
 
     @GetMapping
-    public ResponseEntity<ResponseTemplate<List<FindVmResponse>>> findFilterVms(
+    public ResponseEntity<ResponseTemplate<List<FindFilterVmResponse>>> findFilterVms(
             @RequestParam(name = "page", defaultValue = "0") int page,
-            @RequestParam(name = "size", defaultValue = "5") PageSize pageSize,
+            @RequestParam(name = "size", defaultValue = "FIVE") PageSize pageSize,
             @RequestParam(name = "tags", required = false) List<Integer> tags,
-            @RequestParam(name = "name", required = false) Order nameOrder,
-            @RequestParam(name = "create-at", required = false) Order createAtOrder,
-            @RequestParam(name = "update-at", required = false) Order updateAtOrder
+            @RequestParam(name = "name", required = false) SortParam name,
+            @RequestParam(name = "create-at", required = false, defaultValue = "CREATED_AT_DESC") SortParam createAt,
+            @RequestParam(name = "update-at", required = false) SortParam updateAt
             ) {
-        List<FindFilterVmResponse> filterVmResponses = vmService.findFilterVms(new FindFilterVmService(page, pageSize, tags, nameOrder, createAtOrder, updateAtOrder));
-        return null;
+        List<FindFilterVmResponse> filterVmResponses = vmService.findFilterVms(new FindFilterVmService(page, pageSize, tags, name, createAt, updateAt));
+
+        return ResponseEntity.ok(ResponseTemplate.<List<FindFilterVmResponse>>builder()
+                .metaData(MetaData.ofSuccess())
+                .result(filterVmResponses)
+                .build());
     }
 
     @PostMapping

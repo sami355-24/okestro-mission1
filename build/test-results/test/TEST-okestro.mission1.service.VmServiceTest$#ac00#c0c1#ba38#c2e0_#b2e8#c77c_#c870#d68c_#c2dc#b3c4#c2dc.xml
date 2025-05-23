@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="okestro.mission1.service.VmServiceTest$가상머신_단일_조회_시도시" tests="2" skipped="0" failures="0" errors="0" timestamp="2025-05-23T07:40:58.766Z" hostname="isangmin-ui-MacBookPro.local" time="0.014">
+<testsuite name="okestro.mission1.service.VmServiceTest$가상머신_단일_조회_시도시" tests="2" skipped="0" failures="0" errors="0" timestamp="2025-05-26T00:35:50.120Z" hostname="isangmin-ui-MacBookPro.local" time="0.017">
   <properties/>
   <testcase name="id가_DB에_존재하지_않는다면_예외를_발생시킨다()" classname="okestro.mission1.service.VmServiceTest$가상머신_단일_조회_시도시" time="0.007"/>
-  <testcase name="id가_DB에_존재한다면_VM을_반환한다()" classname="okestro.mission1.service.VmServiceTest$가상머신_단일_조회_시도시" time="0.007"/>
-  <system-out><![CDATA[2025-05-23T16:40:58.766+09:00  INFO 38395 --- [mission1] [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [okestro.mission1.service.VmServiceTest$가상머신_단일_조회_시도시]: 가상머신_단일_조회_시도시 does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-2025-05-23T16:40:58.766+09:00  INFO 38395 --- [mission1] [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration okestro.mission1.Mission1Application for test class okestro.mission1.service.VmServiceTest$가상머신_단일_조회_시도시
+  <testcase name="id가_DB에_존재한다면_VM을_반환한다()" classname="okestro.mission1.service.VmServiceTest$가상머신_단일_조회_시도시" time="0.009"/>
+  <system-out><![CDATA[2025-05-26T09:35:50.119+09:00  INFO 36575 --- [mission1] [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [okestro.mission1.service.VmServiceTest$가상머신_단일_조회_시도시]: 가상머신_단일_조회_시도시 does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2025-05-26T09:35:50.119+09:00  INFO 36575 --- [mission1] [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration okestro.mission1.Mission1Application for test class okestro.mission1.service.VmServiceTest$가상머신_단일_조회_시도시
 Hibernate: select t1_0.tag_id,t1_0.create_at,t1_0.name,t1_0.update_at from tag t1_0
 Hibernate: select m1_0.member_id,m1_0.create_at,m1_0.email,m1_0.password,m1_0.update_at from member m1_0
 Hibernate: select n1_0.network_id,n1_0.create_at,n1_0.name,n1_0.open_ip,n1_0.open_port,n1_0.update_at,n1_0.vm_id from network n1_0

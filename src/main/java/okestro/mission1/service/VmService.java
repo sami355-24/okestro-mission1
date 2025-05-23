@@ -3,8 +3,8 @@ package okestro.mission1.service;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import okestro.mission1.dto.controller.request.CreateVmRequest;
-import okestro.mission1.dto.controller.request.FindVmFilterRequest;
 import okestro.mission1.dto.controller.response.FindFilterVmResponse;
+import okestro.mission1.dto.repository.FindFilterVmRepository;
 import okestro.mission1.dto.service.vm.FindFilterVmService;
 import okestro.mission1.dto.service.vm.UpdateVmService;
 import okestro.mission1.entity.Member;
@@ -12,12 +12,17 @@ import okestro.mission1.entity.Vm;
 import okestro.mission1.exception.custom.DuplicateException;
 import okestro.mission1.exception.custom.NotExistException;
 import okestro.mission1.repository.VmRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Stream;
 
+import static java.util.stream.Collectors.toList;
 import static lombok.AccessLevel.PROTECTED;
 
 @Service
@@ -32,8 +37,16 @@ public class VmService {
     }
 
     public List<FindFilterVmResponse> findFilterVms(FindFilterVmService findFilterVmService) {
-
-        return null;
+        Pageable pageable = PageRequest.of(findFilterVmService.page(), findFilterVmService.size().getValue());
+        FindFilterVmRepository findFilterVmRepository = new FindFilterVmRepository(findFilterVmService.tagIds(), findFilterVmService.getSortParam());
+        Page<Vm> filterVm = vmRepository.findFilterVm(findFilterVmRepository, pageable);
+        return filterVm.stream().map(
+                vm -> new FindFilterVmResponse(
+                        vm.getVmId(),
+                        vm.getName(),
+                        vm.getVmTags().stream().map(vmTag -> vmTag.getTag().getName()).toList(),
+                        vm.getPrivateIp())
+        ).toList();
     }
 
     public boolean isDuplicate(String vmName) {

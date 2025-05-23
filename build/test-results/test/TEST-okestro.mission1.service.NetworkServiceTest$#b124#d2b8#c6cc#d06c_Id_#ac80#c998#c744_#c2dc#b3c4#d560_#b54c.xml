@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="okestro.mission1.service.NetworkServiceTest$네트워크_Id_검즘을_시도할_때" tests="3" skipped="0" failures="0" errors="0" timestamp="2025-05-23T07:40:58.465Z" hostname="isangmin-ui-MacBookPro.local" time="0.082">
+<testsuite name="okestro.mission1.service.NetworkServiceTest$네트워크_Id_검즘을_시도할_때" tests="3" skipped="0" failures="0" errors="0" timestamp="2025-05-26T00:35:49.452Z" hostname="isangmin-ui-MacBookPro.local" time="0.353">
   <properties/>
-  <testcase name="네트워크_id가_DB에_존재하지_않는다면_예외가_발생한다()" classname="okestro.mission1.service.NetworkServiceTest$네트워크_Id_검즘을_시도할_때" time="0.074"/>
-  <testcase name="네트워크_id가_DB에_존재한다면_검증에_성공한다()" classname="okestro.mission1.service.NetworkServiceTest$네트워크_Id_검즘을_시도할_때" time="0.004"/>
-  <testcase name="하나의_네트워크_id라도_DB에_존재하지_않는다면_예외가_발생한다()" classname="okestro.mission1.service.NetworkServiceTest$네트워크_Id_검즘을_시도할_때" time="0.003"/>
-  <system-out><![CDATA[2025-05-23T16:40:58.148+09:00  INFO 38395 --- [mission1] [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [okestro.mission1.service.NetworkServiceTest$네트워크_Id_검즘을_시도할_때]: 네트워크_Id_검즘을_시도할_때 does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-2025-05-23T16:40:58.149+09:00  INFO 38395 --- [mission1] [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration okestro.mission1.Mission1Application for test class okestro.mission1.service.NetworkServiceTest$네트워크_Id_검즘을_시도할_때
+  <testcase name="네트워크_id가_DB에_존재하지_않는다면_예외가_발생한다()" classname="okestro.mission1.service.NetworkServiceTest$네트워크_Id_검즘을_시도할_때" time="0.334"/>
+  <testcase name="네트워크_id가_DB에_존재한다면_검증에_성공한다()" classname="okestro.mission1.service.NetworkServiceTest$네트워크_Id_검즘을_시도할_때" time="0.01"/>
+  <testcase name="하나의_네트워크_id라도_DB에_존재하지_않는다면_예외가_발생한다()" classname="okestro.mission1.service.NetworkServiceTest$네트워크_Id_검즘을_시도할_때" time="0.007"/>
+  <system-out><![CDATA[09:35:47.936 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [okestro.mission1.service.NetworkServiceTest$네트워크_Id_검즘을_시도할_때]: 네트워크_Id_검즘을_시도할_때 does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+09:35:47.937 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration okestro.mission1.Mission1Application for test class okestro.mission1.service.NetworkServiceTest$네트워크_Id_검즘을_시도할_때
 
   .   ____          _            __ _ _
  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
@@ -15,18 +15,19 @@
  =========|_|==============|___/=/_/_/_/
  :: Spring Boot ::                (v3.2.7)
 
-2025-05-23T16:40:58.159+09:00  INFO 38395 --- [mission1] [    Test worker] o.mission1.service.NetworkServiceTest    : Starting NetworkServiceTest using Java 17.0.15 with PID 38395 (started by okestro in /Users/okestro/IdeaProjects/mission1)
-2025-05-23T16:40:58.159+09:00  INFO 38395 --- [mission1] [    Test worker] o.mission1.service.NetworkServiceTest    : The following 1 profile is active: "test"
-2025-05-23T16:40:58.213+09:00  INFO 38395 --- [mission1] [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2025-05-23T16:40:58.222+09:00  INFO 38395 --- [mission1] [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 8 ms. Found 5 JPA repository interfaces.
-2025-05-23T16:40:58.246+09:00  INFO 38395 --- [mission1] [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2025-05-23T16:40:58.247+09:00  INFO 38395 --- [mission1] [    Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
-2025-05-23T16:40:58.248+09:00  INFO 38395 --- [mission1] [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-2025-05-23T16:40:58.248+09:00  INFO 38395 --- [mission1] [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Starting...
-2025-05-23T16:40:58.305+09:00  INFO 38395 --- [mission1] [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-2 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
-2025-05-23T16:40:58.305+09:00  INFO 38395 --- [mission1] [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Start completed.
-2025-05-23T16:40:58.306+09:00  WARN 38395 --- [mission1] [    Test worker] org.hibernate.orm.deprecation            : HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2025-05-23T16:40:58.362+09:00  INFO 38395 --- [mission1] [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-05-26T09:35:48.043+09:00  INFO 36575 --- [mission1] [    Test worker] o.mission1.service.NetworkServiceTest    : Starting NetworkServiceTest using Java 17.0.15 with PID 36575 (started by okestro in /Users/okestro/IdeaProjects/mission1)
+2025-05-26T09:35:48.044+09:00  INFO 36575 --- [mission1] [    Test worker] o.mission1.service.NetworkServiceTest    : The following 1 profile is active: "test"
+2025-05-26T09:35:48.272+09:00  INFO 36575 --- [mission1] [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-05-26T09:35:48.299+09:00  INFO 36575 --- [mission1] [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 24 ms. Found 5 JPA repository interfaces.
+2025-05-26T09:35:48.436+09:00  INFO 36575 --- [mission1] [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-05-26T09:35:48.458+09:00  INFO 36575 --- [mission1] [    Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.9.Final
+2025-05-26T09:35:48.469+09:00  INFO 36575 --- [mission1] [    Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-05-26T09:35:48.542+09:00  INFO 36575 --- [mission1] [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-05-26T09:35:48.551+09:00  INFO 36575 --- [mission1] [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-05-26T09:35:48.605+09:00  INFO 36575 --- [mission1] [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+2025-05-26T09:35:48.605+09:00  INFO 36575 --- [mission1] [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-05-26T09:35:48.615+09:00  WARN 36575 --- [mission1] [    Test worker] org.hibernate.orm.deprecation            : HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-05-26T09:35:48.957+09:00  INFO 36575 --- [mission1] [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
 Hibernate: drop table if exists member cascade 
 Hibernate: drop table if exists network cascade 
 Hibernate: drop table if exists tag cascade 
@@ -43,9 +44,10 @@ Hibernate: alter table if exists network add constraint FKpx2mna8rctiglh6v2u5mgm
 Hibernate: alter table if exists vm add constraint FKoct54tc73pv3g6iqp2kub0joe foreign key (member_id) references member
 Hibernate: alter table if exists vm_tag add constraint FKlv4cl1uayj5jy37i4vyj3cedn foreign key (tag_id) references tag
 Hibernate: alter table if exists vm_tag add constraint FKpa2socv3uwd0lnc5yunbd8b40 foreign key (vm_id) references vm
-2025-05-23T16:40:58.379+09:00  INFO 38395 --- [mission1] [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2025-05-23T16:40:58.418+09:00  WARN 38395 --- [mission1] [    Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2025-05-23T16:40:58.464+09:00  INFO 38395 --- [mission1] [    Test worker] o.mission1.service.NetworkServiceTest    : Started NetworkServiceTest in 0.314 seconds (process running for 2.408)
+2025-05-26T09:35:48.976+09:00  INFO 36575 --- [mission1] [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-05-26T09:35:49.088+09:00  INFO 36575 --- [mission1] [    Test worker] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-05-26T09:35:49.304+09:00  WARN 36575 --- [mission1] [    Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-05-26T09:35:49.445+09:00  INFO 36575 --- [mission1] [    Test worker] o.mission1.service.NetworkServiceTest    : Started NetworkServiceTest in 1.488 seconds (process running for 1.9)
 Hibernate: select next value for member_seq
 Hibernate: insert into member (create_at,email,password,update_at,member_id) values (?,?,?,?,?)
 Hibernate: insert into network (create_at,name,open_ip,open_port,update_at,vm_id,network_id) values (?,?,?,?,?,?,default)
