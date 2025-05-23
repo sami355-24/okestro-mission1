@@ -6,14 +6,16 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import okestro.mission1.annotation.customannotaion.RequestMember;
 import okestro.mission1.dto.controller.request.CreateVmRequest;
+import okestro.mission1.dto.controller.request.Order;
+import okestro.mission1.dto.controller.request.PageSize;
 import okestro.mission1.dto.controller.request.UpdateVmRequest;
+import okestro.mission1.dto.controller.response.FindFilterVmResponse;
 import okestro.mission1.dto.controller.response.FindVmResponse;
 import okestro.mission1.dto.controller.response.template.MetaData;
 import okestro.mission1.dto.controller.response.template.ResponseTemplate;
-import okestro.mission1.dto.service.vm.VmServiceUpdateDto;
+import okestro.mission1.dto.service.vm.FindFilterVmService;
+import okestro.mission1.dto.service.vm.UpdateVmService;
 import okestro.mission1.entity.Member;
-import okestro.mission1.entity.Network;
-import okestro.mission1.entity.Tag;
 import okestro.mission1.entity.Vm;
 import okestro.mission1.service.NetworkService;
 import okestro.mission1.service.TagService;
@@ -44,6 +46,19 @@ public class VmController {
                 .build());
     }
 
+    @GetMapping
+    public ResponseEntity<ResponseTemplate<List<FindVmResponse>>> findFilterVms(
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "5") PageSize pageSize,
+            @RequestParam(name = "tags", required = false) List<Integer> tags,
+            @RequestParam(name = "name", required = false) Order nameOrder,
+            @RequestParam(name = "create-at", required = false) Order createAtOrder,
+            @RequestParam(name = "update-at", required = false) Order updateAtOrder
+            ) {
+        List<FindFilterVmResponse> filterVmResponses = vmService.findFilterVms(new FindFilterVmService(page, pageSize, tags, nameOrder, createAtOrder, updateAtOrder));
+        return null;
+    }
+
     @PostMapping
     @Transactional
     public ResponseEntity<ResponseTemplate<Integer>> createVm(@RequestMember Member member, @RequestBody CreateVmRequest vmRequest) {
@@ -67,7 +82,7 @@ public class VmController {
         return ResponseEntity.ok(ResponseTemplate.<Void>builder()
                 .metaData(MetaData.ofSuccess())
                 .result(vmService.updateVm(
-                        new VmServiceUpdateDto(
+                        new UpdateVmService(
                                 vmId,
                                 tagService.findAllByTagIds(updateVmRequest.tagIds()),
                                 networkService.findAllByNetworkIds(updateVmRequest.networkIds()),

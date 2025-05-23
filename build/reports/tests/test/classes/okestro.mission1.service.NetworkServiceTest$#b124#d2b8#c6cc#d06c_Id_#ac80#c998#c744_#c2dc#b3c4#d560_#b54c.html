@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=edge"/>
+<title>Test results - 네트워크_Id_검즘을_시도할_때</title>
+<link href="../css/base-style.css" rel="stylesheet" type="text/css"/>
+<link href="../css/style.css" rel="stylesheet" type="text/css"/>
+<script src="../js/report.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="content">
+<h1>네트워크_Id_검즘을_시도할_때</h1>
+<div class="breadcrumbs">
+<a href="../index.html">all</a> &gt; 
+<a href="../packages/okestro.mission1.service.html">okestro.mission1.service</a> &gt; NetworkServiceTest$네트워크_Id_검즘을_시도할_때</div>
+<div id="summary">
+<table>
+<tr>
+<td>
+<div class="summaryGroup">
+<table>
+<tr>
+<td>
+<div class="infoBox" id="tests">
+<div class="counter">3</div>
+<p>tests</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="failures">
+<div class="counter">0</div>
+<p>failures</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="ignored">
+<div class="counter">0</div>
+<p>ignored</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="duration">
+<div class="counter">0.081s</div>
+<p>duration</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</td>
+<td>
+<div class="infoBox success" id="successRate">
+<div class="percent">100%</div>
+<p>successful</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="tab-container">
+<ul class="tabLinks">
+<li>
+<a href="#">Tests</a>
+</li>
+<li>
+<a href="#">Standard output</a>
+</li>
+</ul>
+<div class="tab">
+<h2>Tests</h2>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Duration</th>
+<th>Result</th>
+</tr>
+</thead>
+<tr>
+<td class="success">네트워크_id가_DB에_존재하지_않는다면_예외가_발생한다()</td>
+<td class="success">0.074s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">네트워크_id가_DB에_존재한다면_검증에_성공한다()</td>
+<td class="success">0.004s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">하나의_네트워크_id라도_DB에_존재하지_않는다면_예외가_발생한다()</td>
+<td class="success">0.003s</td>
+<td class="success">passed</td>
+</tr>
+</table>
+</div>
+<div class="tab">
+<h2>Standard output</h2>
+<span class="code">
+<pre>2025-05-23T16:40:58.148+09:00  INFO 38395 --- [mission1] [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [okestro.mission1.service.NetworkServiceTest$네트워크_Id_검즘을_시도할_때]: 네트워크_Id_검즘을_시도할_때 does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2025-05-23T16:40:58.149+09:00  INFO 38395 --- [mission1] [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration okestro.mission1.Mission1Application for test class okestro.mission1.service.NetworkServiceTest$네트워크_Id_검즘을_시도할_때
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.7)
+
+2025-05-23T16:40:58.159+09:00  INFO 38395 --- [mission1] [    Test worker] o.mission1.service.NetworkServiceTest    : Starting NetworkServiceTest using Java 17.0.15 with PID 38395 (started by okestro in /Users/okestro/IdeaProjects/mission1)
+2025-05-23T16:40:58.159+09:00  INFO 38395 --- [mission1] [    Test worker] o.mission1.service.NetworkServiceTest    : The following 1 profile is active: &quot;test&quot;
+2025-05-23T16:40:58.213+09:00  INFO 38395 --- [mission1] [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-05-23T16:40:58.222+09:00  INFO 38395 --- [mission1] [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 8 ms. Found 5 JPA repository interfaces.
+2025-05-23T16:40:58.246+09:00  INFO 38395 --- [mission1] [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-05-23T16:40:58.247+09:00  INFO 38395 --- [mission1] [    Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-05-23T16:40:58.248+09:00  INFO 38395 --- [mission1] [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-05-23T16:40:58.248+09:00  INFO 38395 --- [mission1] [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Starting...
+2025-05-23T16:40:58.305+09:00  INFO 38395 --- [mission1] [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-2 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+2025-05-23T16:40:58.305+09:00  INFO 38395 --- [mission1] [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Start completed.
+2025-05-23T16:40:58.306+09:00  WARN 38395 --- [mission1] [    Test worker] org.hibernate.orm.deprecation            : HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-05-23T16:40:58.362+09:00  INFO 38395 --- [mission1] [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+Hibernate: drop table if exists member cascade 
+Hibernate: drop table if exists network cascade 
+Hibernate: drop table if exists tag cascade 
+Hibernate: drop table if exists vm cascade 
+Hibernate: drop table if exists vm_tag cascade 
+Hibernate: drop sequence if exists member_seq
+Hibernate: create sequence member_seq start with 1 increment by 50
+Hibernate: create table member (member_id integer not null, create_at timestamp(6) not null, update_at timestamp(6), email varchar(255), password varchar(255), primary key (member_id))
+Hibernate: create table network (network_id integer generated by default as identity, open_port integer not null check ((open_port&lt;=65535) and (open_port&gt;=0)), vm_id integer, create_at timestamp(6) not null, update_at timestamp(6), name varchar(255), open_ip varchar(255), primary key (network_id))
+Hibernate: create table tag (tag_id integer generated by default as identity, create_at timestamp(6) not null, update_at timestamp(6), name varchar(255) unique, primary key (tag_id))
+Hibernate: create table vm (deleted boolean not null, member_id integer, memory integer not null check (memory&gt;=1), storage integer not null check (storage&gt;=1), vcpu integer not null check (vcpu&gt;=1), vm_id integer generated by default as identity, create_at timestamp(6) not null, update_at timestamp(6), description varchar(255), name varchar(255) unique, private_ip varchar(255) unique, vm_status varchar(255) not null check (vm_status in ('STARTING','RUNNING','PENDING','REBOOTING','TERMINATING','TERMINATED')), primary key (vm_id))
+Hibernate: create table vm_tag (tag_id integer not null, vm_id integer not null, vm_tag_id integer generated by default as identity, create_at timestamp(6) not null, update_at timestamp(6), primary key (vm_tag_id))
+Hibernate: alter table if exists network add constraint FKpx2mna8rctiglh6v2u5mgmya2 foreign key (vm_id) references vm
+Hibernate: alter table if exists vm add constraint FKoct54tc73pv3g6iqp2kub0joe foreign key (member_id) references member
+Hibernate: alter table if exists vm_tag add constraint FKlv4cl1uayj5jy37i4vyj3cedn foreign key (tag_id) references tag
+Hibernate: alter table if exists vm_tag add constraint FKpa2socv3uwd0lnc5yunbd8b40 foreign key (vm_id) references vm
+2025-05-23T16:40:58.379+09:00  INFO 38395 --- [mission1] [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-05-23T16:40:58.418+09:00  WARN 38395 --- [mission1] [    Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-05-23T16:40:58.464+09:00  INFO 38395 --- [mission1] [    Test worker] o.mission1.service.NetworkServiceTest    : Started NetworkServiceTest in 0.314 seconds (process running for 2.408)
+Hibernate: select next value for member_seq
+Hibernate: insert into member (create_at,email,password,update_at,member_id) values (?,?,?,?,?)
+Hibernate: insert into network (create_at,name,open_ip,open_port,update_at,vm_id,network_id) values (?,?,?,?,?,?,default)
+Hibernate: insert into vm (create_at,deleted,description,member_id,memory,name,private_ip,storage,update_at,vcpu,vm_status,vm_id) values (?,?,?,?,?,?,?,?,?,?,?,default)
+Hibernate: select count(n1_0.network_id) from network n1_0 where n1_0.network_id in (?) and n1_0.vm_id is null
+Hibernate: select next value for member_seq
+Hibernate: insert into member (create_at,email,password,update_at,member_id) values (?,?,?,?,?)
+Hibernate: insert into network (create_at,name,open_ip,open_port,update_at,vm_id,network_id) values (?,?,?,?,?,?,default)
+Hibernate: insert into vm (create_at,deleted,description,member_id,memory,name,private_ip,storage,update_at,vcpu,vm_status,vm_id) values (?,?,?,?,?,?,?,?,?,?,?,default)
+Hibernate: select count(n1_0.network_id) from network n1_0 where n1_0.network_id in (?) and n1_0.vm_id is null
+Hibernate: insert into member (create_at,email,password,update_at,member_id) values (?,?,?,?,?)
+Hibernate: insert into network (create_at,name,open_ip,open_port,update_at,vm_id,network_id) values (?,?,?,?,?,?,default)
+Hibernate: insert into vm (create_at,deleted,description,member_id,memory,name,private_ip,storage,update_at,vcpu,vm_status,vm_id) values (?,?,?,?,?,?,?,?,?,?,?,default)
+Hibernate: select count(n1_0.network_id) from network n1_0 where n1_0.network_id in (?,?) and n1_0.vm_id is null
+</pre>
+</span>
+</div>
+</div>
+<div id="footer">
+<p>
+<div>
+<label class="hidden" id="label-for-line-wrapping-toggle" for="line-wrapping-toggle">Wrap lines
+<input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
+</label>
+</div>Generated by 
+<a href="https://www.gradle.org">Gradle 8.13</a> at 2025. 5. 23. 오후 4:40:58</p>
+</div>
+</div>
+</body>
+</html>

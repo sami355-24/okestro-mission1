@@ -5,23 +5,8 @@ import java.util.Map;
 
 public record FindVmFilterRequest(
         int page,
-        Size size,
+        PageSize pageSize,
         List<Integer> tagIds,
         Map<String, String> sortParams
 ) {
-    public enum Size {
-        FIVE(5),
-        TEN(10),
-        TWENTY(20);
-
-        private final int value;
-
-        Size(int value) {
-            this.value = value;
-        }
-
-        public int getValue() {
-            return value;
-        }
-    }
 }

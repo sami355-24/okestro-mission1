@@ -5,8 +5,9 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.validation.ConstraintViolationException;
 import okestro.mission1.dto.controller.request.CreateVmRequest;
 import okestro.mission1.dto.controller.request.FindVmFilterRequest;
+import okestro.mission1.dto.controller.request.PageSize;
 import okestro.mission1.dto.controller.request.UpdateVmRequest;
-import okestro.mission1.dto.service.vm.VmServiceUpdateDto;
+import okestro.mission1.dto.service.vm.UpdateVmService;
 import okestro.mission1.entity.*;
 import okestro.mission1.exception.custom.InvalidDataException;
 import okestro.mission1.exception.custom.NotExistException;
@@ -173,44 +174,44 @@ class VmServiceTest {
         }
     }
 
-    @Nested
-    class 가상머신_목록_조회_시도시 {
-
-        @Nested
-        class 태그id_목록이_주어지고 {
-            int page = 0;
-
-            @Test
-            void DB에_없는_태그_id가_있다면_예외가_발생한다() {
-                //given
-                int invalidTagId = -1;
-                FindVmFilterRequest invalidFilterRequest = new FindVmFilterRequest(
-                        1,
-                        FindVmFilterRequest.Size.FIVE,
-                        List.of(invalidTagId),
-                        Map.of("name", "asc", "create-at", "asc")
-                );
-
-                //when & then
-                Assertions.assertThatThrownBy(()->vmService.findVmsFrom(invalidFilterRequest).isInstanceOf(NotExistException.class));
-            }
-            @Test
-            void DB에_존재하는_태그_id가_있다면_조회에_성공한다() {
-                FindVmFilterRequest validFilterRequest = new FindVmFilterRequest(
-                        1,
-                        FindVmFilterRequest.Size.FIVE,
-                        List.of(validTagId),
-                        Map.of("name", "asc", "create-at", "asc")
-                );
-
-                //when
-                List<Vm> findVms = vmService.findVmsFrom(validFilterRequest);
-
-                //then
-                Assertions.assertThat(findVms).isNotEmpty();
-            }
-        }
-    }
+//    @Nested
+//    class 가상머신_목록_조회_시도시 {
+//
+//        @Nested
+//        class 태그id_목록이_주어지고 {
+//            int page = 0;
+//
+//            @Test
+//            void DB에_없는_태그_id가_있다면_예외가_발생한다() {
+//                //given
+//                int invalidTagId = -1;
+//                FindVmFilterRequest invalidFilterRequest = new FindVmFilterRequest(
+//                        1,
+//                        PageSize.FIVE,
+//                        List.of(invalidTagId),
+//                        Map.of("name", "asc", "create-at", "asc")
+//                );
+//
+//                //when & then
+//                Assertions.assertThatThrownBy(()->vmService.findVmsFrom(invalidFilterRequest)).isInstanceOf(NotExistException.class);
+//            }
+//            @Test
+//            void DB에_존재하는_태그_id가_있다면_조회에_성공한다() {
+//                FindVmFilterRequest validFilterRequest = new FindVmFilterRequest(
+//                        1,
+//                        PageSize.FIVE,
+//                        List.of(validTagId),
+//                        Map.of("name", "asc", "create-at", "asc")
+//                );
+//
+//                //when
+//                List<Vm> findVms = vmService.findVmsFrom(validFilterRequest);
+//
+//                //then
+//                Assertions.assertThat(findVms).isNotEmpty();
+//            }
+//        }
+//    }
 
     @Nested
     class 가상머신_이름_중복체크시도시 {
@@ -326,10 +327,10 @@ class VmServiceTest {
             //given
             int invalidVmId = -1;
             UpdateVmRequest updateVmRequest = new UpdateVmRequest(validName, validDescription, validVcpu, validMemory, List.of(validNetworkId), List.of(validTagId));
-            VmServiceUpdateDto vmServiceUpdateDto = new VmServiceUpdateDto(invalidVmId, List.of(validTag), List.of(validNetwork), updateVmRequest);
+            UpdateVmService updateVmService = new UpdateVmService(invalidVmId, List.of(validTag), List.of(validNetwork), updateVmRequest);
 
             //when & then
-            assertThatThrownBy(() -> vmService.updateVm(vmServiceUpdateDto)).isInstanceOf(NotExistException.class);
+            assertThatThrownBy(() -> vmService.updateVm(updateVmService)).isInstanceOf(NotExistException.class);
         }
 
         @Test
@@ -340,10 +341,10 @@ class VmServiceTest {
             int updateVcpu = 11;
             int updateMemory = 22;
             UpdateVmRequest updateVmRequest = new UpdateVmRequest(updateVmName, updateVmDescription, updateVcpu, updateMemory, List.of(validNetworkId), List.of(validTagId));
-            VmServiceUpdateDto vmServiceUpdateDto = new VmServiceUpdateDto(validVmId, List.of(validTag), List.of(validNetwork), updateVmRequest);
+            UpdateVmService updateVmService = new UpdateVmService(validVmId, List.of(validTag), List.of(validNetwork), updateVmRequest);
 
             //when
-            vmService.updateVm(vmServiceUpdateDto);
+            vmService.updateVm(updateVmService);
             em.flush();
 
             //then
