@@ -4,7 +4,11 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.validation.ConstraintViolationException;
 import okestro.mission1.dto.controller.request.CreateVmRequestDto;
+import okestro.mission1.dto.controller.request.PageSize;
 import okestro.mission1.dto.controller.request.UpdateVmRequestDto;
+import okestro.mission1.dto.controller.response.FindFilterVmResponseDto;
+import okestro.mission1.dto.repository.SortParam;
+import okestro.mission1.dto.service.vm.FindFilterVmServiceDto;
 import okestro.mission1.dto.service.vm.UpdateVmServiceDto;
 import okestro.mission1.entity.*;
 import okestro.mission1.exception.custom.InvalidDataException;
@@ -171,44 +175,32 @@ class VmServiceTest {
         }
     }
 
-//    @Nested
-//    class 가상머신_목록_조회_시도시 {
-//
-//        @Nested
-//        class 태그id_목록이_주어지고 {
-//            int page = 0;
-//
-//            @Test
-//            void DB에_없는_태그_id가_있다면_예외가_발생한다() {
-//                //given
-//                int invalidTagId = -1;
-//                FindVmFilterRequest invalidFilterRequest = new FindVmFilterRequest(
-//                        1,
-//                        PageSize.FIVE,
-//                        List.of(invalidTagId),
-//                        Map.of("name", "asc", "create-at", "asc")
-//                );
-//
-//                //when & then
-//                Assertions.assertThatThrownBy(()->vmService.findVmsFrom(invalidFilterRequest)).isInstanceOf(NotExistException.class);
-//            }
-//            @Test
-//            void DB에_존재하는_태그_id가_있다면_조회에_성공한다() {
-//                FindVmFilterRequest validFilterRequest = new FindVmFilterRequest(
-//                        1,
-//                        PageSize.FIVE,
-//                        List.of(validTagId),
-//                        Map.of("name", "asc", "create-at", "asc")
-//                );
-//
-//                //when
-//                List<Vm> findVms = vmService.findVmsFrom(validFilterRequest);
-//
-//                //then
-//                Assertions.assertThat(findVms).isNotEmpty();
-//            }
-//        }
-//    }
+    @Nested
+    class 가상머신_목록_조회_시도시 {
+
+        @Nested
+        class 태그id_목록이_주어지고 {
+            int page = 1;
+
+            @Test
+            void DB에_존재하는_태그_id가_있다면_조회에_성공한다() {
+                FindFilterVmServiceDto invalidFilterRequest = new FindFilterVmServiceDto(
+                        page,
+                        PageSize.FIVE,
+                        List.of(),
+                        SortParam.NAME_DESC,
+                        null,
+                        null
+                );
+
+                //when
+                FindFilterVmResponseDto findVms = vmService.findFilterVms(invalidFilterRequest);
+
+                //then
+                Assertions.assertThat(findVms.getPageContents()).isNotNull();
+            }
+        }
+    }
 
     @Nested
     class 가상머신_이름_중복체크시도시 {

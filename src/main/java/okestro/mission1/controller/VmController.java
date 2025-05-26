@@ -56,6 +56,7 @@ public class VmController {
             @RequestParam(name = "update-at", required = false) String updateAt
             ) {
 
+        tagService.validateTagIds(tags);
         FindFilterVmResponseDto filterVmResponses = vmService.findFilterVms(
                 new FindFilterVmServiceDto(page, PageSize.convertToPageSize(pageSize), tags, SortParam.from(name), SortParam.from(createAt), SortParam.from(updateAt))
         );
