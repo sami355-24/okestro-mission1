@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import okestro.mission1.dto.controller.response.template.MetaData;
 import okestro.mission1.dto.controller.response.template.ResponseTemplate;
 import okestro.mission1.exception.custom.DuplicateException;
+import okestro.mission1.exception.custom.InvalidDataException;
 import okestro.mission1.exception.custom.NotExistException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -67,6 +68,15 @@ public class CustomHandler {
         log.warn(Arrays.toString(e.getStackTrace()));
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseTemplate.<Void>builder()
                 .metaData(MetaData.ofClientFailure("요청 인자 검증에 실패했습니다."))
+                .build());
+    }
+
+    @ExceptionHandler(InvalidDataException.class)
+    private ResponseEntity<ResponseTemplate<Void>> invalidDataExceptionHandler(InvalidDataException e){
+        log.warn(e.getMessage());
+        log.warn(Arrays.toString(e.getStackTrace()));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseTemplate.<Void>builder()
+                .metaData(MetaData.ofClientFailure(e.getMessage()))
                 .build());
     }
 
