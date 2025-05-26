@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Random;
 
-public record FindVmResponse(
+public record FindVmResponseDto(
         int vmId,
         VmStatus vmStatus,
         String description,
@@ -27,7 +27,7 @@ public record FindVmResponse(
 ) {
     private final static Random random = new Random();
 
-    public FindVmResponse(Vm vm) {
+    public FindVmResponseDto(Vm vm) {
         this(
                 vm.getVmId(),
                 vm.getVmStatus(),

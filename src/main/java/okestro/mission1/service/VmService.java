@@ -2,11 +2,11 @@ package okestro.mission1.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import okestro.mission1.dto.controller.request.CreateVmRequest;
-import okestro.mission1.dto.controller.response.FindFilterVmResponse;
-import okestro.mission1.dto.repository.FindFilterVmRepository;
-import okestro.mission1.dto.service.vm.FindFilterVmService;
-import okestro.mission1.dto.service.vm.UpdateVmService;
+import okestro.mission1.dto.controller.request.CreateVmRequestDto;
+import okestro.mission1.dto.controller.response.FindFilterVmResponseDto;
+import okestro.mission1.dto.repository.FindFilterVmRepositoryDto;
+import okestro.mission1.dto.service.vm.FindFilterVmServiceDto;
+import okestro.mission1.dto.service.vm.UpdateVmServiceDto;
 import okestro.mission1.entity.Member;
 import okestro.mission1.entity.Vm;
 import okestro.mission1.exception.custom.DuplicateException;
@@ -18,11 +18,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Random;
-import java.util.stream.Stream;
 
-import static java.util.stream.Collectors.toList;
 import static lombok.AccessLevel.PROTECTED;
 
 @Service
@@ -36,24 +33,18 @@ public class VmService {
         return vmRepository.findById(vmId).orElseThrow(() -> new NotExistException("존재하지 않는 VM id입니다."));
     }
 
-    public List<FindFilterVmResponse> findFilterVms(FindFilterVmService findFilterVmService) {
-        Pageable pageable = PageRequest.of(findFilterVmService.page(), findFilterVmService.size().getValue());
-        FindFilterVmRepository findFilterVmRepository = new FindFilterVmRepository(findFilterVmService.tagIds(), findFilterVmService.getSortParam());
-        Page<Vm> filterVm = vmRepository.findFilterVm(findFilterVmRepository, pageable);
-        return filterVm.stream().map(
-                vm -> new FindFilterVmResponse(
-                        vm.getVmId(),
-                        vm.getName(),
-                        vm.getVmTags().stream().map(vmTag -> vmTag.getTag().getName()).toList(),
-                        vm.getPrivateIp())
-        ).toList();
+    public FindFilterVmResponseDto findFilterVms(FindFilterVmServiceDto findFilterVmServiceDto) {
+        Pageable pageable = PageRequest.of(findFilterVmServiceDto.page()-1, findFilterVmServiceDto.size().getValue());
+        FindFilterVmRepositoryDto findFilterVmRepositoryDto = new FindFilterVmRepositoryDto(findFilterVmServiceDto.tagIds(), findFilterVmServiceDto.getSortParam());
+        Page<Vm> filterVm = vmRepository.findFilterVm(findFilterVmRepositoryDto, pageable);
+        return new FindFilterVmResponseDto(filterVm);
     }
 
     public boolean isDuplicate(String vmName) {
         return vmRepository.existsByName(vmName);
     }
 
-    public Vm createVmFrom(CreateVmRequest vmRequest, Member requestMember) {
+    public Vm createVmFrom(CreateVmRequestDto vmRequest, Member requestMember) {
         validateVmName(vmRequest.name());
         return vmRepository.save(new Vm(vmRequest, generateRandomIPv4(), requestMember));
     }
@@ -72,11 +63,11 @@ public class VmService {
     }
 
     @Transactional
-    public Void updateVm(UpdateVmService updateVmService) {
-        validateVmName(updateVmService.name());
-        Vm findVm = vmRepository.findById(updateVmService.vmId()).orElseThrow(() -> new NotExistException("vm이 존재하지 않습니다."));
+    public Void updateVm(UpdateVmServiceDto updateVmServiceDto) {
+        validateVmName(updateVmServiceDto.name());
+        Vm findVm = vmRepository.findById(updateVmServiceDto.vmId()).orElseThrow(() -> new NotExistException("vm이 존재하지 않습니다."));
 
-        findVm.updateVmFrom(updateVmService);
+        findVm.updateVmFrom(updateVmServiceDto);
         return null;
     }
 

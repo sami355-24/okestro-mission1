@@ -9,8 +9,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import okestro.mission1.dto.controller.request.CreateVmRequest;
-import okestro.mission1.dto.service.vm.UpdateVmService;
+import okestro.mission1.dto.controller.request.CreateVmRequestDto;
+import okestro.mission1.dto.service.vm.UpdateVmServiceDto;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
@@ -83,7 +83,7 @@ public class Vm extends TimestampEntity {
     @Column(nullable = false, name = "deleted")
     boolean deleted = false;
 
-    public Vm(CreateVmRequest requestDto, String privateIp, Member member) {
+    public Vm(CreateVmRequestDto requestDto, String privateIp, Member member) {
         this.vmStatus = VmStatus.STARTING;
         this.name = requestDto.name();
         this.description = requestDto.description();
@@ -95,13 +95,13 @@ public class Vm extends TimestampEntity {
         this.member = member;
     }
 
-    public void updateVmFrom(UpdateVmService updateVmService) {
-        if (updateVmService.name() != null) this.name = updateVmService.name();
-        if (updateVmService.description() != null) this.description = updateVmService.description();
-        if (updateVmService.vCpu() != null) this.vCpu = updateVmService.vCpu();
-        if (updateVmService.memory() != null) this.memory = updateVmService.memory();
-        setNetworksFrom(updateVmService.networks());
-        setTagsFrom(updateVmService.tags());
+    public void updateVmFrom(UpdateVmServiceDto updateVmServiceDto) {
+        if (updateVmServiceDto.name() != null) this.name = updateVmServiceDto.name();
+        if (updateVmServiceDto.description() != null) this.description = updateVmServiceDto.description();
+        if (updateVmServiceDto.vCpu() != null) this.vCpu = updateVmServiceDto.vCpu();
+        if (updateVmServiceDto.memory() != null) this.memory = updateVmServiceDto.memory();
+        setNetworksFrom(updateVmServiceDto.networks());
+        setTagsFrom(updateVmServiceDto.tags());
     }
 
     public void setNetworksFrom(List<Network> networks) {

@@ -10,7 +10,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import okestro.mission1.dto.repository.FindFilterVmRepository;
+import okestro.mission1.dto.repository.FindFilterVmRepositoryDto;
 import okestro.mission1.dto.repository.SortParam;
 import okestro.mission1.entity.Vm;
 import org.springframework.data.domain.Page;
@@ -28,7 +28,7 @@ public class VmRepositoryCustomImpl implements VmRepositoryCustom {
     JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Page<Vm> findFilterVm(FindFilterVmRepository filterDto, Pageable pageable) {
+    public Page<Vm> findFilterVm(FindFilterVmRepositoryDto filterDto, Pageable pageable) {
         List<Integer> vmIds = jpaQueryFactory
                 .select(vm.vmId)
                 .from(vm)
@@ -57,7 +57,7 @@ public class VmRepositoryCustomImpl implements VmRepositoryCustom {
         return PageableExecutionUtils.getPage(vms, pageable, () -> totalCount);
     }
 
-    private Predicate generateWherePredicate(FindFilterVmRepository filterDto) {
+    private Predicate generateWherePredicate(FindFilterVmRepositoryDto filterDto) {
         return filterDto.tagIds() != null ? vm.vmTags.any().tag.id.in(filterDto.tagIds()) : null;
     }
 

@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import okestro.mission1.dto.controller.response.FindTagResponse;
+import okestro.mission1.dto.controller.response.FindTagResponseDto;
 import okestro.mission1.dto.controller.response.template.MetaData;
 import okestro.mission1.dto.controller.response.template.ResponseTemplate;
 import okestro.mission1.service.TagService;
@@ -24,10 +24,10 @@ public class TagController {
     TagService tagService;
 
     @GetMapping
-    public ResponseEntity<ResponseTemplate<List<FindTagResponse>>> findAllTag() {
-        return ResponseEntity.ok(ResponseTemplate.<List<FindTagResponse>>builder()
+    public ResponseEntity<ResponseTemplate<List<FindTagResponseDto>>> findAllTag() {
+        return ResponseEntity.ok(ResponseTemplate.<List<FindTagResponseDto>>builder()
                 .metaData(MetaData.ofSuccess())
-                .result(tagService.findAll().stream().map(tag -> new FindTagResponse(tag.getId(), tag.getName())).toList())
+                .result(tagService.findAll().stream().map(tag -> new FindTagResponseDto(tag.getId(), tag.getName())).toList())
                 .build());
     }
 

@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
-public record CreateVmRequest(
+public record CreateVmRequestDto(
         @JsonProperty("name") @NotNull String name,
         @JsonProperty("description") @NotNull String description,
         @JsonProperty("vCpu") int vCpu,

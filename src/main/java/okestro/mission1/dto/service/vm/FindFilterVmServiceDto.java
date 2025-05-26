@@ -5,7 +5,7 @@ import okestro.mission1.dto.repository.SortParam;
 
 import java.util.List;
 
-public record FindFilterVmService(
+public record FindFilterVmServiceDto(
         int page,
         PageSize size,
         List<Integer> tagIds,

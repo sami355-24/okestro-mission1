@@ -3,11 +3,9 @@ package okestro.mission1.service;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.validation.ConstraintViolationException;
-import okestro.mission1.dto.controller.request.CreateVmRequest;
-import okestro.mission1.dto.controller.request.FindVmFilterRequest;
-import okestro.mission1.dto.controller.request.PageSize;
-import okestro.mission1.dto.controller.request.UpdateVmRequest;
-import okestro.mission1.dto.service.vm.UpdateVmService;
+import okestro.mission1.dto.controller.request.CreateVmRequestDto;
+import okestro.mission1.dto.controller.request.UpdateVmRequestDto;
+import okestro.mission1.dto.service.vm.UpdateVmServiceDto;
 import okestro.mission1.entity.*;
 import okestro.mission1.exception.custom.InvalidDataException;
 import okestro.mission1.exception.custom.NotExistException;
@@ -26,7 +24,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Map;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -254,7 +251,7 @@ class VmServiceTest {
         void 중복된_이름으로_생성_시도시_예외가_발생한다() {
             //given
             String duplicateVmName = "vm-duplicate";
-            CreateVmRequest duplicateVmNameRequest = new CreateVmRequest(duplicateVmName, originVmDescription, validVcpu, validMemory, validStorage, List.of(validNetworkId), null);
+            CreateVmRequestDto duplicateVmNameRequest = new CreateVmRequestDto(duplicateVmName, originVmDescription, validVcpu, validMemory, validStorage, List.of(validNetworkId), null);
 
             //when & then
             Assertions.assertThatThrownBy(() -> vmService.createVmFrom(duplicateVmNameRequest, validMember)).isInstanceOf(DataIntegrityViolationException.class);
@@ -264,7 +261,7 @@ class VmServiceTest {
         void 필수로_들어가야하는_데이터가_null일때_예외가_발생한다() {
             //given
             String nullVmName = null;
-            CreateVmRequest emptyVmNameRequest = new CreateVmRequest(nullVmName, originVmDescription, validVcpu, validMemory, validStorage, List.of(validNetworkId), null);
+            CreateVmRequestDto emptyVmNameRequest = new CreateVmRequestDto(nullVmName, originVmDescription, validVcpu, validMemory, validStorage, List.of(validNetworkId), null);
 
             //when & then
             Assertions.assertThatThrownBy(() -> vmService.createVmFrom(emptyVmNameRequest, validMember)).isInstanceOf(ConstraintViolationException.class);
@@ -274,7 +271,7 @@ class VmServiceTest {
         void cpu_크기가_0이하면_예외가_발생한다() {
             //given
             int zeroVcpu = 0;
-            CreateVmRequest zeroVcpuRequest = new CreateVmRequest(originVmName, originVmDescription, zeroVcpu, validMemory, validStorage, List.of(validNetworkId), null);
+            CreateVmRequestDto zeroVcpuRequest = new CreateVmRequestDto(originVmName, originVmDescription, zeroVcpu, validMemory, validStorage, List.of(validNetworkId), null);
 
             //when & then
             Assertions.assertThatThrownBy(() -> vmService.createVmFrom(zeroVcpuRequest, validMember)).isInstanceOf(ConstraintViolationException.class);
@@ -284,7 +281,7 @@ class VmServiceTest {
         void memory_크기가_0이하면_예외가_발생한다() {
             //given
             int zeroMemory = 0;
-            CreateVmRequest zeroMemoryRequest = new CreateVmRequest(originVmName, originVmDescription, validVcpu, zeroMemory, validStorage, List.of(validNetworkId), null);
+            CreateVmRequestDto zeroMemoryRequest = new CreateVmRequestDto(originVmName, originVmDescription, validVcpu, zeroMemory, validStorage, List.of(validNetworkId), null);
 
             //when & then
             Assertions.assertThatThrownBy(() -> vmService.createVmFrom(zeroMemoryRequest, validMember)).isInstanceOf(ConstraintViolationException.class);
@@ -294,7 +291,7 @@ class VmServiceTest {
         void storage_크기가_0이하면_예외가_발생한다() {
             //given
             int zeroStorage = 0;
-            CreateVmRequest zeroStorageRequest = new CreateVmRequest(originVmName, originVmDescription, validVcpu, validMemory, zeroStorage, List.of(validNetworkId), null);
+            CreateVmRequestDto zeroStorageRequest = new CreateVmRequestDto(originVmName, originVmDescription, validVcpu, validMemory, zeroStorage, List.of(validNetworkId), null);
 
             //when & then
             Assertions.assertThatThrownBy(() -> vmService.createVmFrom(zeroStorageRequest, validMember)).isInstanceOf(ConstraintViolationException.class);
@@ -303,7 +300,7 @@ class VmServiceTest {
         @Test
         void 올바른_입력값이_들어왔을경우_생성에_성공한다() {
             //given
-            CreateVmRequest validVmRequest = new CreateVmRequest(originVmName, originVmDescription, validVcpu, validMemory, validStorage, List.of(validNetworkId), null);
+            CreateVmRequestDto validVmRequest = new CreateVmRequestDto(originVmName, originVmDescription, validVcpu, validMemory, validStorage, List.of(validNetworkId), null);
 
             //when
             int createVmId = vmService.createVmFrom(validVmRequest, validMember).getVmId();
@@ -326,11 +323,11 @@ class VmServiceTest {
         void 존재하지_않는_가상머신_id로_수정시도할_경우_예외가_발생한다() {
             //given
             int invalidVmId = -1;
-            UpdateVmRequest updateVmRequest = new UpdateVmRequest(validName, validDescription, validVcpu, validMemory, List.of(validNetworkId), List.of(validTagId));
-            UpdateVmService updateVmService = new UpdateVmService(invalidVmId, List.of(validTag), List.of(validNetwork), updateVmRequest);
+            UpdateVmRequestDto updateVmRequestDto = new UpdateVmRequestDto(validName, validDescription, validVcpu, validMemory, List.of(validNetworkId), List.of(validTagId));
+            UpdateVmServiceDto updateVmServiceDto = new UpdateVmServiceDto(invalidVmId, List.of(validTag), List.of(validNetwork), updateVmRequestDto);
 
             //when & then
-            assertThatThrownBy(() -> vmService.updateVm(updateVmService)).isInstanceOf(NotExistException.class);
+            assertThatThrownBy(() -> vmService.updateVm(updateVmServiceDto)).isInstanceOf(NotExistException.class);
         }
 
         @Test
@@ -340,11 +337,11 @@ class VmServiceTest {
             String updateVmDescription = "new vm description";
             int updateVcpu = 11;
             int updateMemory = 22;
-            UpdateVmRequest updateVmRequest = new UpdateVmRequest(updateVmName, updateVmDescription, updateVcpu, updateMemory, List.of(validNetworkId), List.of(validTagId));
-            UpdateVmService updateVmService = new UpdateVmService(validVmId, List.of(validTag), List.of(validNetwork), updateVmRequest);
+            UpdateVmRequestDto updateVmRequestDto = new UpdateVmRequestDto(updateVmName, updateVmDescription, updateVcpu, updateMemory, List.of(validNetworkId), List.of(validTagId));
+            UpdateVmServiceDto updateVmServiceDto = new UpdateVmServiceDto(validVmId, List.of(validTag), List.of(validNetwork), updateVmRequestDto);
 
             //when
-            vmService.updateVm(updateVmService);
+            vmService.updateVm(updateVmServiceDto);
             em.flush();
 
             //then

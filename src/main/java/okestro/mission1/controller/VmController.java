@@ -5,16 +5,16 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import okestro.mission1.annotation.customannotaion.RequestMember;
-import okestro.mission1.dto.controller.request.CreateVmRequest;
+import okestro.mission1.dto.controller.request.CreateVmRequestDto;
 import okestro.mission1.dto.controller.request.PageSize;
-import okestro.mission1.dto.controller.request.UpdateVmRequest;
-import okestro.mission1.dto.controller.response.FindFilterVmResponse;
-import okestro.mission1.dto.controller.response.FindVmResponse;
+import okestro.mission1.dto.controller.request.UpdateVmRequestDto;
+import okestro.mission1.dto.controller.response.FindFilterVmResponseDto;
+import okestro.mission1.dto.controller.response.FindVmResponseDto;
 import okestro.mission1.dto.controller.response.template.MetaData;
 import okestro.mission1.dto.controller.response.template.ResponseTemplate;
 import okestro.mission1.dto.repository.SortParam;
-import okestro.mission1.dto.service.vm.FindFilterVmService;
-import okestro.mission1.dto.service.vm.UpdateVmService;
+import okestro.mission1.dto.service.vm.FindFilterVmServiceDto;
+import okestro.mission1.dto.service.vm.UpdateVmServiceDto;
 import okestro.mission1.entity.Member;
 import okestro.mission1.entity.Vm;
 import okestro.mission1.service.NetworkService;
@@ -38,26 +38,26 @@ public class VmController {
     TagService tagService;
 
     @GetMapping("/{vmId}")
-    public ResponseEntity<ResponseTemplate<FindVmResponse>> findVm(@PathVariable int vmId) {
+    public ResponseEntity<ResponseTemplate<FindVmResponseDto>> findVm(@PathVariable int vmId) {
         Vm findVm = vmService.findVm(vmId);
-        return ResponseEntity.ok(ResponseTemplate.<FindVmResponse>builder()
+        return ResponseEntity.ok(ResponseTemplate.<FindVmResponseDto>builder()
                 .metaData(MetaData.ofSuccess())
-                .result(new FindVmResponse(findVm))
+                .result(new FindVmResponseDto(findVm))
                 .build());
     }
 
     @GetMapping
-    public ResponseEntity<ResponseTemplate<List<FindFilterVmResponse>>> findFilterVms(
-            @RequestParam(name = "page", defaultValue = "0") int page,
+    public ResponseEntity<ResponseTemplate<FindFilterVmResponseDto>> findFilterVms(
+            @RequestParam(name = "page", defaultValue = "1") int page,
             @RequestParam(name = "size", defaultValue = "FIVE") PageSize pageSize,
             @RequestParam(name = "tags", required = false) List<Integer> tags,
             @RequestParam(name = "name", required = false) SortParam name,
             @RequestParam(name = "create-at", required = false, defaultValue = "CREATED_AT_DESC") SortParam createAt,
             @RequestParam(name = "update-at", required = false) SortParam updateAt
             ) {
-        List<FindFilterVmResponse> filterVmResponses = vmService.findFilterVms(new FindFilterVmService(page, pageSize, tags, name, createAt, updateAt));
 
-        return ResponseEntity.ok(ResponseTemplate.<List<FindFilterVmResponse>>builder()
+        FindFilterVmResponseDto filterVmResponses = vmService.findFilterVms(new FindFilterVmServiceDto(page, pageSize, tags, name, createAt, updateAt));
+        return ResponseEntity.ok(ResponseTemplate.<FindFilterVmResponseDto>builder()
                 .metaData(MetaData.ofSuccess())
                 .result(filterVmResponses)
                 .build());
@@ -65,7 +65,7 @@ public class VmController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity<ResponseTemplate<Integer>> createVm(@RequestMember Member member, @RequestBody CreateVmRequest vmRequest) {
+    public ResponseEntity<ResponseTemplate<Integer>> createVm(@RequestMember Member member, @RequestBody CreateVmRequestDto vmRequest) {
         networkService.validateNetworkId(vmRequest.networkIds());
         tagService.validateTagIds(vmRequest.tagIds());
 
@@ -79,18 +79,18 @@ public class VmController {
     }
 
     @PatchMapping("/{vmId}")
-    public ResponseEntity<ResponseTemplate<Void>> updateVm(@PathVariable int vmId, @RequestBody @Valid UpdateVmRequest updateVmRequest) {
-        networkService.validateNetworkId(updateVmRequest.networkIds());
-        tagService.validateTagIds(updateVmRequest.tagIds());
+    public ResponseEntity<ResponseTemplate<Void>> updateVm(@PathVariable int vmId, @RequestBody @Valid UpdateVmRequestDto updateVmRequestDto) {
+        networkService.validateNetworkId(updateVmRequestDto.networkIds());
+        tagService.validateTagIds(updateVmRequestDto.tagIds());
 
         return ResponseEntity.ok(ResponseTemplate.<Void>builder()
                 .metaData(MetaData.ofSuccess())
                 .result(vmService.updateVm(
-                        new UpdateVmService(
+                        new UpdateVmServiceDto(
                                 vmId,
-                                tagService.findAllByTagIds(updateVmRequest.tagIds()),
-                                networkService.findAllByNetworkIds(updateVmRequest.networkIds()),
-                                updateVmRequest)
+                                tagService.findAllByTagIds(updateVmRequestDto.tagIds()),
+                                networkService.findAllByNetworkIds(updateVmRequestDto.networkIds()),
+                                updateVmRequestDto)
                 ))
                 .build());
     }

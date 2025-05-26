@@ -4,7 +4,7 @@ import jakarta.validation.constraints.Min;
 
 import java.util.List;
 
-public record UpdateVmRequest(
+public record UpdateVmRequestDto(
         String name,
         String description,
         @Min(1) Integer vCpu,
