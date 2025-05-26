@@ -16,6 +16,7 @@ import okestro.mission1.entity.Vm;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.Collections;
 import java.util.List;
 import org.springframework.data.support.PageableExecutionUtils;
 
@@ -28,14 +29,24 @@ public class VmRepositoryCustomImpl implements VmRepositoryCustom {
 
     @Override
     public Page<Vm> findFilterVm(FindFilterVmRepository filterDto, Pageable pageable) {
-        List<Vm> vms = jpaQueryFactory
-                .selectFrom(vm)
+        List<Integer> vmIds = jpaQueryFactory
+                .select(vm.vmId)
+                .from(vm)
                 .where(generateWherePredicate(filterDto))
-                .innerJoin(vm.vmTags, vmTag).fetchJoin()
                 .orderBy(generateOrderSpecifier(filterDto.sortParam()))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
+
+        List<Vm> vms = Collections.emptyList();
+        if (!vmIds.isEmpty()) {
+            vms = jpaQueryFactory
+                    .selectFrom(vm)
+                    .innerJoin(vm.vmTags, vmTag).fetchJoin()
+                    .where(vm.vmId.in(vmIds))
+                    .orderBy(generateOrderSpecifier(filterDto.sortParam()))
+                    .fetch();
+        }
 
         long totalCount = jpaQueryFactory
                 .select(vm.count())
