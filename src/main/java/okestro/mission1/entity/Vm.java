@@ -95,6 +95,12 @@ public class Vm extends TimestampEntity {
         this.member = member;
     }
 
+
+
+    public void UpdateVmStatus() {
+        this.vmStatus = VmStatus.getRandomStatus();
+    }
+
     public void updateVmFrom(UpdateVmServiceDto updateVmServiceDto) {
         if (updateVmServiceDto.name() != null) this.name = updateVmServiceDto.name();
         if (updateVmServiceDto.description() != null) this.description = updateVmServiceDto.description();
@@ -119,9 +125,5 @@ public class Vm extends TimestampEntity {
                     newVmTag.setVm(this);
                 }
         );
-    }
-
-    public void UpdateVmStatus() {
-        this.vmStatus = VmStatus.getRandomStatus();
     }
 }
