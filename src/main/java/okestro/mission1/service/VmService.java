@@ -76,4 +76,10 @@ public class VmService {
         vmRepository.delete(vmRepository.findById(vmId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 VM ID입니다.")));
         return null;
     }
+
+    @Transactional
+    public Void changeVmsStatus(Member member) {
+        vmRepository.findAllByMember(member).forEach(Vm::UpdateVmStatus);
+        return null;
+    }
 }

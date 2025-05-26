@@ -120,4 +120,8 @@ public class Vm extends TimestampEntity {
                 }
         );
     }
+
+    public void UpdateVmStatus() {
+        this.vmStatus = VmStatus.getRandomStatus();
+    }
 }

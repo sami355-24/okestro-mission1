@@ -380,11 +380,8 @@ class VmServiceTest {
     class 가상머신_상태_수정시 {
         @Test
         void 올바른_정보가_들어오면_수정에_성공한다() {
-            //given
-            int validUserId = validMember.getMemberId();
-
             //when
-            vmService.changeVmStatus(validUserId);
+            vmService.changeVmsStatus(validMember);
 
             //then
             vmRepository.findAll().forEach(vm -> Assertions.assertThat(vm.getUpdateAt()).isNotNull());

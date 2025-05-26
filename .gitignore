@@ -1,3 +1,5 @@
 /src/main/generated/okestro/mission1/entity/
 
 .idea/
+
+build/
