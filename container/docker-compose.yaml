@@ -10,3 +10,4 @@ services:
       MYSQL_ROOT_PASSWORD: okestro1
     volumes:
       - /Users/okestro/IdeaProjects/mission1/init.sql:/docker-entrypoint-initdb.d/init.sql
+#      - /Users/sangmin/Local/GitHub/okestro-mission1/init.sql:/docker-entrypoint-initdb.d/init.sql

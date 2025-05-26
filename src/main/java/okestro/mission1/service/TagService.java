@@ -19,20 +19,24 @@ import static lombok.AccessLevel.PROTECTED;
 @FieldDefaults(level = PROTECTED, makeFinal = true)
 public class TagService {
 
-    String DUPLICATE_TAG_TITLE_MESSAGE = "이미 존재하는 태그 이름입니다.";
-    String NOT_EXIST_TAG_TITLE_MESSAGE = "존재하지 않는 태그 이름입니다.";
+    String DUPLICATE_TAG_NAME_MESSAGE = "이미 존재하는 태그 이름입니다.";
+    String NOT_EXIST_TAG_NAME_MESSAGE = "존재하지 않는 태그 이름입니다.";
     String NOT_EXIST_TAG_ID_MESSAGE = "존재하지 않는 태그 ID입니다.";
-    String BLANK_TAG_TITLE_MESSAGE = "태그 이름이 공백입니다.";
+    String BLANK_TAG_NAME_MESSAGE = "태그 이름이 공백입니다.";
     TagRepository tagRepository;
 
     public List<Tag> findAll() {
         return tagRepository.findAll();
     }
 
+    public List<Tag> findAllByTagIds(List<Integer> tagIds) {
+        return tagRepository.findAllById(tagIds);
+    }
+
     @Transactional
     public Void deleteTagFrom(int tagId) {
-        if(tagRepository.findById(tagId).isEmpty())
-            throw new NotExistException(NOT_EXIST_TAG_TITLE_MESSAGE);
+        if (tagRepository.findById(tagId).isEmpty())
+            throw new NotExistException(NOT_EXIST_TAG_NAME_MESSAGE);
         tagRepository.deleteById(tagId);
         return null;
     }
@@ -40,30 +44,35 @@ public class TagService {
     @Transactional
     public Void updateTagFrom(int existingTagId, String newTitle) {
         Tag findTag = tagRepository.findById(existingTagId).orElseThrow(() -> new NotExistException(NOT_EXIST_TAG_ID_MESSAGE));
-        validateTagTitle(newTitle);
-        findTag.setTitle(newTitle);
+        validateTagName(newTitle);
+        findTag.setName(newTitle);
         return null;
+    }
+
+    public void validateTagIds(List<Integer> ids) {
+        int existsAllTagsWithIds = tagRepository.existsAllTagsWithIds(ids);
+        if (existsAllTagsWithIds == ids.size()) return;
+        throw new NotExistException(NOT_EXIST_TAG_ID_MESSAGE);
     }
 
     @Transactional
-    public Void createTagFrom(String tagTitle) {
-        validateTagTitle(tagTitle);
-        tagRepository.save(Tag.builder().title(tagTitle).build());
-        return null;
+    public Integer createTagFrom(String tagName) {
+        validateTagName(tagName);
+        return tagRepository.save(Tag.builder().name(tagName).build()).getId();
     }
 
-    private void validateTagTitle(String tagTitle) {
-        checkBlankTagTitle(tagTitle);
-        checkDuplicateTagTitle(tagTitle);
+    private void validateTagName(String tagName) {
+        checkBlankTagName(tagName);
+        checkDuplicateTagName(tagName);
     }
 
-    private void checkBlankTagTitle(String tagTitle) {
-        if(tagTitle.isBlank())
-            throw new BlankException(BLANK_TAG_TITLE_MESSAGE);
+    private void checkBlankTagName(String tagName) {
+        if (tagName.isBlank())
+            throw new BlankException(BLANK_TAG_NAME_MESSAGE);
     }
 
-    private void checkDuplicateTagTitle(String tagTitle) {
-        if(Boolean.TRUE.equals(tagRepository.existsByTitle(tagTitle)))
-            throw new DuplicateException(DUPLICATE_TAG_TITLE_MESSAGE);
+    private void checkDuplicateTagName(String tagName) {
+        if (Boolean.TRUE.equals(tagRepository.existsByName(tagName)))
+            throw new DuplicateException(DUPLICATE_TAG_NAME_MESSAGE);
     }
 }

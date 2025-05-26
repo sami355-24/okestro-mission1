@@ -9,6 +9,7 @@ if [ -f "$COMPOSE_FILE" ]; then
 
   # docker-compose 실행
   docker-compose -f "$COMPOSE_FILE" up -d
+#  docker compose -f "$COMPOSE_FILE" up -d
 
   # 실행 결과 확인
   if [ $? -eq 0 ]; then
