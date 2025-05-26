@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import okestro.mission1.dto.controller.request.CreateVmRequestDto;
 import okestro.mission1.dto.service.vm.UpdateVmServiceDto;
+import okestro.mission1.listener.VmEntityListener;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
@@ -32,6 +33,7 @@ import static org.hibernate.annotations.CascadeType.*;
 @FieldDefaults(level = PRIVATE)
 @SQLDelete(sql = "UPDATE vm SET deleted = true WHERE vm_id = ?")
 @SQLRestriction("deleted = false")
+@EntityListeners(value = VmEntityListener.class)
 public class Vm extends TimestampEntity {
     /**
      * 주의! 영속성 컨텍스트를 통해서 로직수행할때만 @SQLRestriction, @SQLDelete 동작 -> JPQL로 바로 변환될 경우 동작x
@@ -83,6 +85,10 @@ public class Vm extends TimestampEntity {
     @Column(nullable = false, name = "deleted")
     boolean deleted = false;
 
+    @Transient
+    private VmStatus previousVmStatus;
+
+
     public Vm(CreateVmRequestDto requestDto, String privateIp, Member member) {
         this.vmStatus = VmStatus.STARTING;
         this.name = requestDto.name();
@@ -95,9 +101,12 @@ public class Vm extends TimestampEntity {
         this.member = member;
     }
 
+    @PostLoad
+    public void storePreviousStatus() {
+        this.previousVmStatus = this.vmStatus;
+    }
 
-
-    public void UpdateVmStatus() {
+    public void updateVmStatus() {
         this.vmStatus = VmStatus.getRandomStatus();
     }
 

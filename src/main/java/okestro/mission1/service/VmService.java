@@ -79,7 +79,7 @@ public class VmService {
 
     @Transactional
     public Void changeVmsStatus(Member member) {
-        vmRepository.findAllByMember(member).forEach(Vm::UpdateVmStatus);
+        vmRepository.findAllByMember(member).forEach(Vm::updateVmStatus);
         return null;
     }
 }

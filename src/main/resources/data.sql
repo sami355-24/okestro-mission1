@@ -1,6 +1,7 @@
 INSERT INTO member (member_id, create_at, update_at, email, password)
 VALUES
-    (1, CURRENT_TIMESTAMP, NULL, 'user1@example.com', 'password1');
+    (1, CURRENT_TIMESTAMP, NULL, 'user1@example.com', 'password1'),
+    (2, CURRENT_TIMESTAMP, NULL, 'user2@example.com', 'password2');
 
 INSERT INTO vm (vm_id, member_id, memory, storage, vcpu, create_at, update_at, description, private_ip, name, vm_status, deleted)
 VALUES
