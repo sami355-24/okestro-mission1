@@ -106,4 +106,12 @@ public class VmController {
                 .result(null)
                 .build());
     }
+
+    @PutMapping("/status")
+    public ResponseEntity<ResponseTemplate<Void>> changeVmStatus(@RequestMember Member member){
+        return ResponseEntity.ok(ResponseTemplate.<Void>builder()
+                .metaData(MetaData.ofSuccess())
+                .result(vmService.changeVmStatus())
+                .build());
+    }
 }

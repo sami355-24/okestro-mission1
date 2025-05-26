@@ -1,6 +1,7 @@
 package okestro.mission1.repository;
 
 import jakarta.persistence.criteria.CriteriaBuilder;
+import okestro.mission1.entity.Member;
 import okestro.mission1.entity.Vm;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -14,10 +15,10 @@ public interface VmRepository extends JpaRepository<Vm, Integer>, VmRepositoryCu
 
     Optional<Vm> findById(Integer integer);
 
-    Optional<Vm> findByName(String vmId);
-
     boolean existsByName(String title);
 
     @Query(value = "SELECT * FROM vm WHERE deleted=true;", nativeQuery = true)
     List<Vm> findDeletedVmsWithNativeQuery();
+
+    List<Vm> findAllByMember(Member member);
 }

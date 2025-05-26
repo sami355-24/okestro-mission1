@@ -361,7 +361,7 @@ class VmServiceTest {
             int notExistingVmId = -1;
 
             //when & then
-            Assertions.assertThatThrownBy(()->vmService.deleteVmFrom(notExistingVmId)).isInstanceOf(IllegalArgumentException.class);
+            Assertions.assertThatThrownBy(() -> vmService.deleteVmFrom(notExistingVmId)).isInstanceOf(IllegalArgumentException.class);
         }
 
         @Test
@@ -373,6 +373,21 @@ class VmServiceTest {
 
             //then
             Assertions.assertThat(deletedVm.get(0).getVmId()).isEqualTo(validVmId);
+        }
+    }
+
+    @Nested
+    class 가상머신_상태_수정시 {
+        @Test
+        void 올바른_정보가_들어오면_수정에_성공한다() {
+            //given
+            int validUserId = validMember.getMemberId();
+
+            //when
+            vmService.changeVmStatus(validUserId);
+
+            //then
+            vmRepository.findAll().forEach(vm -> Assertions.assertThat(vm.getUpdateAt()).isNotNull());
         }
     }
 
