@@ -51,13 +51,13 @@ public class VmController {
             @RequestParam(name = "page", defaultValue = "1") int page,
             @RequestParam(name = "size", defaultValue = "5") int pageSize,
             @RequestParam(name = "tags", required = false) List<Integer> tags,
-            @RequestParam(name = "name", required = false) SortParam name,
-            @RequestParam(name = "create-at", required = false, defaultValue = "CREATED_AT_DESC") SortParam createAt,
-            @RequestParam(name = "update-at", required = false) SortParam updateAt
+            @RequestParam(name = "name", required = false) String name,
+            @RequestParam(name = "create-at", required = false, defaultValue = "create-at-desc") String createAt,
+            @RequestParam(name = "update-at", required = false) String updateAt
             ) {
 
         FindFilterVmResponseDto filterVmResponses = vmService.findFilterVms(
-                new FindFilterVmServiceDto(page, PageSize.convertToPageSize(pageSize), tags, name, createAt, updateAt)
+                new FindFilterVmServiceDto(page, PageSize.convertToPageSize(pageSize), tags, SortParam.from(name), SortParam.from(createAt), SortParam.from(updateAt))
         );
         return ResponseEntity.ok(ResponseTemplate.<FindFilterVmResponseDto>builder()
                 .metaData(MetaData.ofSuccess())
