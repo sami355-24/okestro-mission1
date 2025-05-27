@@ -3,11 +3,12 @@ spring:
     resources:
       add-mappings: false
 
-  datasource:
-    driver-class-name: org.mariadb.jdbc.Driver
-    username: root
-    url: jdbc:mariadb://localhost:3306/mission1?characterEncoding=UTF-8
-    password: okestro1
+
+#  datasource:
+#    driver-class-name: org.mariadb.jdbc.Driver
+#    username: root
+#    url: jdbc:mariadb://localhost:3306/mission1?characterEncoding=UTF-8
+#    password: okestro1
 
   sql:
     init:

@@ -20,3 +20,14 @@ if [ -f "$COMPOSE_FILE" ]; then
 else
   echo "Docker Compose 파일이 [$COMPOSE_FILE]에 존재하지 않습니다!"
 fi
+
+export VAULT_ADDR='http://localhost:8200'
+vault login myroot
+
+# 데이터베이스 접근 정보 저장
+vault secrets enable -path=secret kv
+vault kv put secret/myapp/db \
+  url="jdbc:mariadb://localhost:3306/mission1?characterEncoding=UTF-8" \
+  username="root" \
+  password="okestro1" \
+  driver-class-name="org.mariadb.jdbc.Driver"
