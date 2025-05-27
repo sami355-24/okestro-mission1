@@ -32,7 +32,7 @@ public class RequestUserArgumentResolver implements HandlerMethodArgumentResolve
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
                                   NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
-        String userId = request.getHeader("userId");
+        String userId = request.getHeader("memberId");
 
         if (userId == null || userId.isEmpty()) {
             throw new NotExistException(ERROR_NOT_FOUND_MEMBER_IN_HEADER.getMessage());

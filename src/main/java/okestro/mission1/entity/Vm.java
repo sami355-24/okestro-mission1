@@ -123,7 +123,7 @@ public class Vm extends TimestampEntity {
     }
 
     public void setNetworksFrom(List<Network> networks) {
-        this.networks.forEach(network -> network.setVm(null));
+        if (networks == null) this.networks.forEach(network -> network.setVm(null));
         this.networks = networks;
         networks.forEach(network -> network.setVm(this));
     }
