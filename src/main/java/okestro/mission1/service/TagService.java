@@ -2,6 +2,7 @@ package okestro.mission1.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import okestro.mission1.entity.Tag;
 import okestro.mission1.exception.custom.BlankException;
 import okestro.mission1.exception.custom.DuplicateException;
@@ -17,6 +18,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Service
 @RequiredArgsConstructor(access = PROTECTED)
 @FieldDefaults(level = PROTECTED, makeFinal = true)
+@Slf4j
 public class TagService {
 
     String DUPLICATE_TAG_NAME_MESSAGE = "이미 존재하는 태그 이름입니다.";
@@ -49,7 +51,12 @@ public class TagService {
         return null;
     }
 
-    public void validateTagIds(List<Integer> ids) {
+    public void validateTagFrom(List<Integer> ids) {
+        if (ids == null) {
+            log.warn("태그 Id가 Null입니다");
+            return;
+        }
+
         int existsAllTagsWithIds = tagRepository.existsAllTagsWithIds(ids);
         if (existsAllTagsWithIds == ids.size()) return;
         throw new NotExistException(NOT_EXIST_TAG_ID_MESSAGE);

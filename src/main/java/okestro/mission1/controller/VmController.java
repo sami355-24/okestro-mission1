@@ -50,15 +50,14 @@ public class VmController {
     public ResponseEntity<ResponseTemplate<FindFilterVmResponseDto>> findFilterVms(
             @RequestParam(name = "page", defaultValue = "1") int page,
             @RequestParam(name = "size", defaultValue = "5") int pageSize,
-            @RequestParam(name = "tags", required = false) List<Integer> tags,
+            @RequestParam(name = "tagIds", required = false) List<Integer> tagIds,
             @RequestParam(name = "name", required = false) String name,
             @RequestParam(name = "create-at", required = false, defaultValue = "create-at-desc") String createAt,
             @RequestParam(name = "update-at", required = false) String updateAt
             ) {
-
-        tagService.validateTagIds(tags);
+        tagService.validateTagFrom(tagIds);
         FindFilterVmResponseDto filterVmResponses = vmService.findFilterVms(
-                new FindFilterVmServiceDto(page, PageSize.convertToPageSize(pageSize), tags, SortParam.from(name), SortParam.from(createAt), SortParam.from(updateAt))
+                new FindFilterVmServiceDto(page, PageSize.convertToPageSize(pageSize), tagIds, SortParam.from(name), SortParam.from(createAt), SortParam.from(updateAt))
         );
         return ResponseEntity.ok(ResponseTemplate.<FindFilterVmResponseDto>builder()
                 .metaData(MetaData.ofSuccess())
@@ -70,7 +69,7 @@ public class VmController {
     @Transactional
     public ResponseEntity<ResponseTemplate<Integer>> createVm(@RequestMember Member member, @RequestBody CreateVmRequestDto vmRequest) {
         networkService.validateNetworkId(vmRequest.networkIds());
-        tagService.validateTagIds(vmRequest.tagIds());
+        tagService.validateTagFrom(vmRequest.tagIds());
 
         Vm vmFrom = vmService.createVmFrom(vmRequest, member);
         vmFrom.setNetworksFrom(networkService.findAllByNetworkIds(vmRequest.networkIds()));
@@ -84,7 +83,7 @@ public class VmController {
     @PatchMapping("/{vmId}")
     public ResponseEntity<ResponseTemplate<Void>> updateVm(@PathVariable int vmId, @RequestBody @Valid UpdateVmRequestDto updateVmRequestDto) {
         networkService.validateNetworkId(updateVmRequestDto.networkIds());
-        tagService.validateTagIds(updateVmRequestDto.tagIds());
+        tagService.validateTagFrom(updateVmRequestDto.tagIds());
 
         return ResponseEntity.ok(ResponseTemplate.<Void>builder()
                 .metaData(MetaData.ofSuccess())
