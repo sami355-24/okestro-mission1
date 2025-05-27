@@ -14,12 +14,16 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
+
 @RestController
 @RequestMapping("/tag")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Validated
 public class TagController {
+
+    static final String ERROR_TAG_NAME_EMPTY = "태그 명은 공백일 수 없습니다.";
 
     TagService tagService;
 
@@ -32,7 +36,7 @@ public class TagController {
     }
 
     @PostMapping
-    public ResponseEntity<ResponseTemplate<Integer>> createTag(@RequestParam @NotBlank(message = "태그 명은 공백일 수 없습니다.") String title) {
+    public ResponseEntity<ResponseTemplate<Integer>> createTag(@RequestParam @NotBlank(message = ERROR_TAG_NAME_EMPTY) String title) {
         return ResponseEntity.ok(ResponseTemplate.<Integer>builder()
                 .metaData(MetaData.ofSuccess())
                 .result(tagService.createTagFrom(title))
@@ -48,7 +52,7 @@ public class TagController {
     }
 
     @PutMapping("/{tagId}")
-    public ResponseEntity<ResponseTemplate<Void>> updateTag(@PathVariable Integer tagId, @RequestParam @NotBlank(message = "태그 명은 공백일 수 없습니다.") String tagTitle) {
+    public ResponseEntity<ResponseTemplate<Void>> updateTag(@PathVariable Integer tagId, @RequestParam @NotBlank(message = ERROR_TAG_NAME_EMPTY) String tagTitle) {
         return ResponseEntity.ok(ResponseTemplate.<Void>builder()
                 .metaData(MetaData.ofSuccess())
                 .result(tagService.updateTagFrom(tagId, tagTitle))

@@ -2,6 +2,8 @@ package okestro.mission1.dto.controller.request;
 
 import okestro.mission1.exception.custom.InvalidDataException;
 
+import static okestro.mission1.util.Message.ERROR_PAGE_SIZE;
+
 public enum PageSize {
     FIVE(5),
     TEN(10),
@@ -14,7 +16,7 @@ public enum PageSize {
             case 5 -> PageSize.FIVE;
             case 10 -> PageSize.TEN;
             case 20 -> PageSize.TWENTY;
-            default -> throw new InvalidDataException("유효하지 않은 페이지 크기입니다. 5, 10, 20으로만 입력해주세요. 입력값 = " + size);
+            default -> throw new InvalidDataException(ERROR_PAGE_SIZE.getMessage(size));
         };
     }
 

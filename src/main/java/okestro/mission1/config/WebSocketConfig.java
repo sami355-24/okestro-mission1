@@ -1,6 +1,6 @@
 package okestro.mission1.config;
 
-import okestro.mission1.component.VmSocketHandler;
+import okestro.mission1.socket.VmSocketHandler;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;

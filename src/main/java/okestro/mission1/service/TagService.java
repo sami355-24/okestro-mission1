@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static lombok.AccessLevel.PROTECTED;
+import static okestro.mission1.util.Message.*;
 
 @Service
 @RequiredArgsConstructor(access = PROTECTED)
@@ -21,10 +22,6 @@ import static lombok.AccessLevel.PROTECTED;
 @Slf4j
 public class TagService {
 
-    String DUPLICATE_TAG_NAME_MESSAGE = "이미 존재하는 태그 이름입니다.";
-    String NOT_EXIST_TAG_NAME_MESSAGE = "존재하지 않는 태그 이름입니다.";
-    String NOT_EXIST_TAG_ID_MESSAGE = "존재하지 않는 태그 ID입니다.";
-    String BLANK_TAG_NAME_MESSAGE = "태그 이름이 공백입니다.";
     TagRepository tagRepository;
 
     public List<Tag> findAll() {
@@ -38,14 +35,14 @@ public class TagService {
     @Transactional
     public Void deleteTagFrom(int tagId) {
         if (tagRepository.findById(tagId).isEmpty())
-            throw new NotExistException(NOT_EXIST_TAG_NAME_MESSAGE);
+            throw new NotExistException(ERROR_NOT_EXIST_TAG_IN_DB.getMessage());
         tagRepository.deleteById(tagId);
         return null;
     }
 
     @Transactional
     public Void updateTagFrom(int existingTagId, String newTitle) {
-        Tag findTag = tagRepository.findById(existingTagId).orElseThrow(() -> new NotExistException(NOT_EXIST_TAG_ID_MESSAGE));
+        Tag findTag = tagRepository.findById(existingTagId).orElseThrow(() -> new NotExistException(ERROR_NOT_EXIST_TAG_IN_DB.getMessage()));
         validateTagName(newTitle);
         findTag.setName(newTitle);
         return null;
@@ -53,13 +50,13 @@ public class TagService {
 
     public void validateTagFrom(List<Integer> ids) {
         if (ids == null) {
-            log.warn("태그 Id가 Null입니다");
+            log.warn(ERROR_TAG_ID_IS_NULL.getMessage());
             return;
         }
 
         int existsAllTagsWithIds = tagRepository.existsAllTagsWithIds(ids);
         if (existsAllTagsWithIds == ids.size()) return;
-        throw new NotExistException(NOT_EXIST_TAG_ID_MESSAGE);
+        throw new NotExistException(ERROR_NOT_EXIST_TAG_IN_DB.getMessage());
     }
 
     @Transactional
@@ -75,11 +72,11 @@ public class TagService {
 
     private void checkBlankTagName(String tagName) {
         if (tagName.isBlank())
-            throw new BlankException(BLANK_TAG_NAME_MESSAGE);
+            throw new BlankException(ERROR_BLANK_TAG_NAME_MESSAGE.getMessage());
     }
 
     private void checkDuplicateTagName(String tagName) {
         if (Boolean.TRUE.equals(tagRepository.existsByName(tagName)))
-            throw new DuplicateException(DUPLICATE_TAG_NAME_MESSAGE);
+            throw new DuplicateException(ERROR_DUPLICATE_TAG_NAME_MESSAGE.getMessage());
     }
 }

@@ -17,6 +17,11 @@ import static lombok.AccessLevel.*;
 @FieldDefaults(level = PRIVATE)
 public class Network extends TimestampEntity {
 
+    static final String IP_PATTERN = "^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$";
+    static final String ERROR_NOT_MATCH_IP_FORMAT = "IPv4 형식과 다릅니다.";
+    static final String ERROR_VALUE_IS_HIGHER_THAN_MiN = "값은 1 이상이어야 합니다.";
+    static final String ERROR_VALUE_IS_LOWER_THAN_MAX = "값은 65535 이하여야 합니다.";
+
     @Id
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "network_id")
@@ -30,10 +35,12 @@ public class Network extends TimestampEntity {
     @NotBlank
     String name;
 
-    @Pattern(regexp = "^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$")
+    @Pattern(
+            regexp = IP_PATTERN,
+            message = ERROR_NOT_MATCH_IP_FORMAT)
     String openIp;
 
-    @Min(0)
-    @Max(65535)
+    @Min(value = 0, message = ERROR_VALUE_IS_HIGHER_THAN_MiN)
+    @Max(value = 65535, message = ERROR_VALUE_IS_LOWER_THAN_MAX)
     int openPort;
 }

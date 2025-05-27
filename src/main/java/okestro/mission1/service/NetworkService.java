@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 import static lombok.AccessLevel.PROTECTED;
+import static okestro.mission1.util.Message.ERROR_NOT_FOUND_NETWORK_IN_DB;
 
 @Service
 @RequiredArgsConstructor(access = PROTECTED)
@@ -21,7 +22,7 @@ public class NetworkService {
     public void validateNetworkId(List<Integer> networkIds) {
         int matchedIdCount = networkRepository.countMatchingIdsWithoutVm(networkIds);
         if(matchedIdCount == networkIds.size()) return;
-        throw new NotExistException("존재하지 않는 network id입니다");
+        throw new NotExistException(ERROR_NOT_FOUND_NETWORK_IN_DB.getMessage());
     }
 
     public List<Network> findAllByNetworkIds(List<Integer> networkIds) {

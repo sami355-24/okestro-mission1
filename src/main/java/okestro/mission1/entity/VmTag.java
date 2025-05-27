@@ -18,6 +18,9 @@ import static lombok.AccessLevel.*;
 @FieldDefaults(level = PRIVATE)
 public class VmTag extends TimestampEntity {
 
+    static final String ERROR_VM_IS_NULL = "VM 연관관계가 NULL입니다.";
+    static final String ERROR_TAG_IS_NULL = "TAG 연관관계가 NULL입니다.";
+
     @Id
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "vm_tag_id")
@@ -25,13 +28,13 @@ public class VmTag extends TimestampEntity {
 
     @ManyToOne
     @JoinColumn(name = "vm_id")
-    @NotNull
+    @NotNull(message = ERROR_VM_IS_NULL)
     @Setter(PUBLIC)
     Vm vm;
 
     @ManyToOne
     @JoinColumn(name = "tag_id")
-    @NotNull
+    @NotNull(message = ERROR_TAG_IS_NULL)
     Tag tag;
 
     public VmTag(Vm vm, Tag tag) {

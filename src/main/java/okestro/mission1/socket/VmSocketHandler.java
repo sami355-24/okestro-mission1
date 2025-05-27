@@ -1,4 +1,4 @@
-package okestro.mission1.component;
+package okestro.mission1.socket;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static okestro.mission1.util.Message.*;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -28,21 +30,21 @@ public class VmSocketHandler extends TextWebSocketHandler {
         String userId = getUserIdFromHeader(session);
         addUserToServerSession(session, userId);
 
-        log.info("사용자 연결됨 - userId: {}, 세션 ID: {}", userId, session.getId());
-        session.sendMessage(new TextMessage("서버에 연결되었습니다. userId: " + userId));
+        log.info(SUCCESS_WEBSOCKET_CONNECT_WITH_SESSION.getMessage().formatted(userId, session.getId()));
+        session.sendMessage(new TextMessage(SUCCESS_WEBSOCKET_CONNECT.getMessage().formatted(userId)));
     }
 
     private String getUserIdFromHeader(WebSocketSession session) {
         String userId = session.getHandshakeHeaders().getFirst("userId");
-        if (userId == null) throw new NotExistException("헤더에 유저 정보가 존재하지 않습니다.");
+        if (userId == null) throw new NotExistException(ERROR_NOT_FOUND_MEMBER_IN_HEADER.getMessage());
         return userId;
     }
 
     private void addUserToServerSession(WebSocketSession session, String userId) throws IOException {
         WebSocketSession existingSession = userSessions.get(userId);
         if (existingSession != null && existingSession.isOpen()) {
-            log.info("이미 연결된 사용자 세션이 있습니다. 기존 세션을 종료합니다. UserId: {}", userId);
-            existingSession.close(CloseStatus.NORMAL.withReason("새 연결에 의해 대체됨"));
+            log.info(SUCCESS_WEBSOCKET_DUPLICATE_SESSION.getMessage().formatted(userId) );
+            existingSession.close(CloseStatus.NORMAL.withReason(SUCCESS_WEBSOCKET_REPLACE_SESSION.getMessage()));
         }
 
         userSessions.put(userId, session);
@@ -50,7 +52,7 @@ public class VmSocketHandler extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-        log.info("소켓 연결 끊어짐");
+        log.info(SUCCESS_WEBSOCKET_DISCONNET.getMessage());
     }
 
     public void sendMessageToUser(String userId, String message) throws IOException {
