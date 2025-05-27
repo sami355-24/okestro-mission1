@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import okestro.mission1.dto.controller.request.CreateVmRequestDto;
 import okestro.mission1.dto.service.vm.UpdateVmServiceDto;
-import okestro.mission1.listener.VmEntityListener;
+import okestro.mission1.socket.VmEntityListener;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
@@ -35,9 +35,12 @@ import static org.hibernate.annotations.CascadeType.*;
 @SQLRestriction("deleted = false")
 @EntityListeners(value = VmEntityListener.class)
 public class Vm extends TimestampEntity {
-    /**
-     * 주의! 영속성 컨텍스트를 통해서 로직수행할때만 @SQLRestriction, @SQLDelete 동작 -> JPQL로 바로 변환될 경우 동작x
-     */
+    static final String ERROR_VM_NAME_BLANK = "VM 이름은 공백이 될 수 없습니다.";
+    static final String ERROR_VM_VCPU_IS_NULL = "VM이 사용할 CPU가 null입니다.";
+    static final String ERROR_VM_MEMORY_IS_NULL = "VM이 사용할 MEMORY가 null입니다.";
+    static final String ERROR_VM_STORAGE_IS_NULL = "VM이 사용할 STORAGE가 null입니다.";
+    static final String ERROR_VM_MIN_RESOURCE = "자원을 1 이상 입력해주세요";
+
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -48,23 +51,23 @@ public class Vm extends TimestampEntity {
     @Enumerated(value = STRING)
     VmStatus vmStatus;
 
-    @NotBlank(message = "VM 이름을 지어주세요.")
+    @NotBlank(message = ERROR_VM_NAME_BLANK)
     @Column(unique = true)
     String name;
 
     String description;
 
-    @NotNull(message = "사용하실 cpu 수를 입력해주세요.")
+    @NotNull(message = ERROR_VM_VCPU_IS_NULL)
     @Column(name = "vcpu")
-    @Min(1)
+    @Min(value = 1, message = ERROR_VM_MIN_RESOURCE)
     Integer vCpu;
 
-    @NotNull(message = "사용하실 memory 크기를 입력해주세요.")
-    @Min(1)
+    @NotNull(message = ERROR_VM_MEMORY_IS_NULL)
+    @Min(value = 1, message = ERROR_VM_MIN_RESOURCE)
     Integer memory;
 
-    @NotNull(message = "사용하실 storage 크기를 입력해주세요.")
-    @Min(1)
+    @NotNull(message = ERROR_VM_STORAGE_IS_NULL)
+    @Min(value = 1, message = ERROR_VM_MIN_RESOURCE)
     Integer storage;
 
     @Column(name = "private_ip", unique = true)

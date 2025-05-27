@@ -20,12 +20,14 @@ import static lombok.AccessLevel.*;
 @FieldDefaults(level = PRIVATE)
 public class Tag extends TimestampEntity {
 
+    private static final String ERROR_TAG_NAME_BLANK = "태그는 공백이 될 수 없습니다.";
+    
     @Id
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "tag_id")
     int id;
 
-    @NotBlank(message = "태그를 입력해주세요")
+    @NotBlank(message = ERROR_TAG_NAME_BLANK)
     @Column(unique = true)
     @Setter(PUBLIC)
     String name;

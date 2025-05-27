@@ -99,10 +99,9 @@ public class VmController {
 
     @DeleteMapping("/{vmId}")
     public ResponseEntity<ResponseTemplate<Void>> deleteVm(@PathVariable int vmId) {
-        vmService.deleteVmFrom(vmId);
         return ResponseEntity.ok(ResponseTemplate.<Void>builder()
                 .metaData(MetaData.ofSuccess())
-                .result(null)
+                .result(vmService.deleteVmFrom(vmId))
                 .build());
     }
 

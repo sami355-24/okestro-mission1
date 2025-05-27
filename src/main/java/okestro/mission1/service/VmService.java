@@ -21,6 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Random;
 
 import static lombok.AccessLevel.PROTECTED;
+import static okestro.mission1.util.Message.ERROR_DUPLICATE_VM_NAME;
+import static okestro.mission1.util.Message.ERROR_NOT_FOUND_VM_IN_DB;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +32,7 @@ public class VmService {
     VmRepository vmRepository;
 
     public Vm findVm(int vmId) {
-        return vmRepository.findById(vmId).orElseThrow(() -> new NotExistException("존재하지 않는 VM id입니다."));
+        return vmRepository.findById(vmId).orElseThrow(() -> new NotExistException(ERROR_NOT_FOUND_VM_IN_DB.getMessage()));
     }
 
     public FindFilterVmResponseDto findFilterVms(FindFilterVmServiceDto findFilterVmServiceDto) {
@@ -59,13 +61,13 @@ public class VmService {
 
     private void validateVmName(String vmName) {
         if (vmName != null && isDuplicate(vmName))
-            throw new DuplicateException("이미 존재한는 VM이름입니다.");
+            throw new DuplicateException(ERROR_DUPLICATE_VM_NAME.getMessage());
     }
 
     @Transactional
     public Void updateVm(UpdateVmServiceDto updateVmServiceDto) {
         validateVmName(updateVmServiceDto.name());
-        Vm findVm = vmRepository.findById(updateVmServiceDto.vmId()).orElseThrow(() -> new NotExistException("vm이 존재하지 않습니다."));
+        Vm findVm = vmRepository.findById(updateVmServiceDto.vmId()).orElseThrow(() -> new NotExistException(ERROR_NOT_FOUND_VM_IN_DB.getMessage()));
 
         findVm.updateVmFrom(updateVmServiceDto);
         return null;
@@ -73,7 +75,7 @@ public class VmService {
 
     @Transactional
     public Void deleteVmFrom(int vmId) {
-        vmRepository.delete(vmRepository.findById(vmId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 VM ID입니다.")));
+        vmRepository.delete(vmRepository.findById(vmId).orElseThrow(() -> new IllegalArgumentException(ERROR_NOT_FOUND_VM_IN_DB.getMessage())));
         return null;
     }
 

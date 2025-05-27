@@ -1,14 +1,15 @@
-package okestro.mission1.listener;
+package okestro.mission1.socket;
 
 import jakarta.persistence.PostPersist;
 import jakarta.persistence.PostUpdate;
 import lombok.extern.slf4j.Slf4j;
-import okestro.mission1.component.VmSocketHandler;
 import okestro.mission1.entity.Vm;
 import okestro.mission1.util.BeanUtils;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+
+import static okestro.mission1.util.Message.*;
 
 @Slf4j
 @Component
@@ -18,13 +19,16 @@ public class VmEntityListener {
     @PostPersist
     public void postUpdate(Vm vm) {
         if (vm.getPreviousVmStatus() == null) {
-            log.info("새로운 VM 생성: 상태 = {}, VM ID: {}", vm.getVmStatus(), vm.getVmId());
-            sendNotification(vm, "새로운 VM 생성: 상태 = %s, VM ID: %s", vm.getVmStatus(), vm.getVmId());
+            String message = SUCCESS_VM_CREATE.getMessage().formatted(String.valueOf(vm.getVmStatus()), String.valueOf(vm.getVmId()));
+            log.info(message);
+            sendNotification(vm, message);
+            return;
         }
 
-        else if (vm.getPreviousVmStatus() != vm.getVmStatus()) {
-            log.info("VM 상태 변경 감지: {} -> {}, VM ID: {}", vm.getPreviousVmStatus(), vm.getVmStatus(), vm.getVmId());
-            sendNotification(vm, "VM 상태 변경: %s → %s, VM ID: %s", vm.getPreviousVmStatus(), vm.getVmStatus(), vm.getVmId());
+        if (vm.getPreviousVmStatus() != vm.getVmStatus()) {
+            String message = SUCCESS_VM_LISTENER.getMessage().formatted(String.valueOf(vm.getPreviousVmStatus()), String.valueOf(vm.getVmStatus()), vm.getVmId());
+            log.info(message);
+            sendNotification(vm, message);
         }
 
     }
@@ -35,7 +39,7 @@ public class VmEntityListener {
             VmSocketHandler vmSocketHandler = BeanUtils.getBean(VmSocketHandler.class);
             vmSocketHandler.sendMessageToUser(String.valueOf(vm.getMember().getMemberId()), message);
         } catch (IOException e) {
-            log.error("웹소켓 메시지 전송 중 오류 발생", e);
+            log.error(ERROR_WEBSOCKET.getMessage(), e);
         }
     }
 

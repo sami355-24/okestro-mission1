@@ -14,6 +14,8 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
+import static okestro.mission1.util.Message.*;
+
 @Component
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -33,10 +35,10 @@ public class RequestUserArgumentResolver implements HandlerMethodArgumentResolve
         String userId = request.getHeader("userId");
 
         if (userId == null || userId.isEmpty()) {
-            throw new NotExistException("헤더에 유저 정보가 존재하지 않습니다.");
+            throw new NotExistException(ERROR_NOT_FOUND_MEMBER_IN_HEADER.getMessage());
         }
 
         int id = Integer.parseInt(userId);
-        return memberRepository.findById(id).orElseThrow(() -> new NotExistException("DB에 유저 정보가 존재하지 않습니다."));
+        return memberRepository.findById(id).orElseThrow(() -> new NotExistException(ERROR_NOT_FOUND_MEMBER_IN_DB.getMessage()));
     }
 }

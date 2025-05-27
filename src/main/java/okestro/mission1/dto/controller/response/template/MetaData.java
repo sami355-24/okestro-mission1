@@ -2,6 +2,8 @@ package okestro.mission1.dto.controller.response.template;
 
 import lombok.Data;
 
+import static okestro.mission1.util.Message.SUCCESS;
+
 @Data
 public class MetaData {
 
@@ -14,7 +16,7 @@ public class MetaData {
     }
 
     public static MetaData ofSuccess() {
-        return new MetaData(200, "Success");
+        return new MetaData(200, SUCCESS.getMessage());
     }
 
     public static MetaData ofClientFailure(String message) {
