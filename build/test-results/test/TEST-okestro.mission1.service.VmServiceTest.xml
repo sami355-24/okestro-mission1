@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuite name="okestro.mission1.service.VmServiceTest" tests="0" skipped="0" failures="0" errors="0" timestamp="1970-01-01T00:00:00Z" hostname="isangmin-ui-MacBookPro.local" time="0.0">
   <properties/>
-  <system-out><![CDATA[2025-05-27T15:18:40.842+09:00  INFO 43549 --- [mission1] [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [okestro.mission1.service.VmServiceTest]: VmServiceTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-2025-05-27T15:18:40.843+09:00  INFO 43549 --- [mission1] [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration okestro.mission1.Mission1Application for test class okestro.mission1.service.VmServiceTest
+  <system-out><![CDATA[2025-05-28T10:52:39.312+09:00  INFO 98319 --- [mission1/db] [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [okestro.mission1.service.VmServiceTest]: VmServiceTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2025-05-28T10:52:39.312+09:00  INFO 98319 --- [mission1/db] [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration okestro.mission1.Mission1Application for test class okestro.mission1.service.VmServiceTest
 ]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>
