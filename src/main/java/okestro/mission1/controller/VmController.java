@@ -46,8 +46,8 @@ public class VmController {
                 .build());
     }
 
-    @GetMapping("/check-name}")
-    public ResponseEntity<ResponseTemplate<Boolean>> checkVmName(@RequestParam String vmName) {
+    @GetMapping("/check-name")
+    public ResponseEntity<ResponseTemplate<Boolean>> checkVmName(@RequestParam(name = "vm-name") String vmName) {
         return ResponseEntity.ok(ResponseTemplate.<Boolean>builder()
                 .metaData(MetaData.ofSuccess())
                 .result(vmService.isDuplicate(vmName))
