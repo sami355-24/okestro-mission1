@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import okestro.mission1.dto.controller.request.CreateVmRequestDto;
 import okestro.mission1.dto.service.vm.UpdateVmServiceDto;
+import okestro.mission1.exception.custom.InvalidDataException;
 import okestro.mission1.socket.VmEntityListener;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.SQLDelete;
@@ -22,6 +23,7 @@ import java.util.List;
 import static jakarta.persistence.EnumType.*;
 import static jakarta.persistence.GenerationType.*;
 import static lombok.AccessLevel.*;
+import static okestro.mission1.util.Message.ERROR_BLANK_NETWORK_ID;
 import static org.hibernate.annotations.CascadeType.*;
 
 @Entity
@@ -123,9 +125,11 @@ public class Vm extends TimestampEntity {
     }
 
     public void setNetworksFrom(List<Network> networks) {
-        if (networks == null) this.networks.forEach(network -> network.setVm(null));
-        this.networks = networks;
+        if (networks == null) return;
+        if (networks.isEmpty()) throw new InvalidDataException(ERROR_BLANK_NETWORK_ID.getMessage());
+        this.networks.forEach(network -> network.setVm(null));
         networks.forEach(network -> network.setVm(this));
+        this.networks = networks;
     }
 
     public void setTagsFrom(List<Tag> tags) {
