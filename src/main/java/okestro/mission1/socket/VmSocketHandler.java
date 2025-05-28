@@ -23,32 +23,32 @@ import static okestro.mission1.util.Message.*;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class VmSocketHandler extends TextWebSocketHandler {
 
-    static Map<String, WebSocketSession> userSessions = new ConcurrentHashMap<>();
+    static Map<String, WebSocketSession> memberSessions = new ConcurrentHashMap<>();
     String HEADER_NAME = "memberId";
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-        String userId = getUserIdFromHeader(session);
-        addUserToServerSession(session, userId);
+        String memberId = getMemberIdFromHeader(session);
+        addMemberToServerSession(session, memberId);
 
-        log.info(SUCCESS_WEBSOCKET_CONNECT_WITH_SESSION.getMessage().formatted(userId, session.getId()));
-        session.sendMessage(new TextMessage(SUCCESS_WEBSOCKET_CONNECT.getMessage().formatted(userId)));
+        log.info(SUCCESS_WEBSOCKET_CONNECT_WITH_SESSION.getMessage().formatted(memberId, session.getId()));
+        session.sendMessage(new TextMessage(SUCCESS_WEBSOCKET_CONNECT.getMessage().formatted(memberId)));
     }
 
-    private String getUserIdFromHeader(WebSocketSession session) {
-        String userId = session.getHandshakeHeaders().getFirst(HEADER_NAME);
-        if (userId == null) throw new NotExistException(ERROR_NOT_FOUND_MEMBER_IN_HEADER.getMessage());
-        return userId;
+    private String getMemberIdFromHeader(WebSocketSession session) {
+        String memberId = session.getHandshakeHeaders().getFirst(HEADER_NAME);
+        if (memberId == null) throw new NotExistException(ERROR_NOT_FOUND_MEMBER_IN_HEADER.getMessage());
+        return memberId;
     }
 
-    private void addUserToServerSession(WebSocketSession session, String userId) throws IOException {
-        WebSocketSession existingSession = userSessions.get(userId);
+    private void addMemberToServerSession(WebSocketSession session, String memberId) throws IOException {
+        WebSocketSession existingSession = memberSessions.get(memberId);
         if (existingSession != null && existingSession.isOpen()) {
-            log.info(SUCCESS_WEBSOCKET_DUPLICATE_SESSION.getMessage().formatted(userId) );
+            log.info(SUCCESS_WEBSOCKET_DUPLICATE_SESSION.getMessage().formatted(memberId) );
             existingSession.close(CloseStatus.NORMAL.withReason(SUCCESS_WEBSOCKET_REPLACE_SESSION.getMessage()));
         }
 
-        userSessions.put(userId, session);
+        memberSessions.put(memberId, session);
     }
 
     @Override
@@ -57,7 +57,7 @@ public class VmSocketHandler extends TextWebSocketHandler {
     }
 
     public void sendMessageToUser(String userId, String message) throws IOException {
-        WebSocketSession userSession = userSessions.get(userId);
+        WebSocketSession userSession = memberSessions.get(userId);
         if (userSession == null) return;
         userSession.sendMessage(new TextMessage(message));
     }
