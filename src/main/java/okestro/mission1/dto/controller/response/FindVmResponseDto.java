@@ -2,6 +2,7 @@ package okestro.mission1.dto.controller.response;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import okestro.mission1.entity.Vm;
 import okestro.mission1.entity.VmStatus;
 
@@ -13,16 +14,22 @@ public record FindVmResponseDto(
         int vmId,
         VmStatus vmStatus,
         String description,
-        String vmTitle,
+        String vmName,
+        @Schema(description = "cpu 코어수입니다.")
         int vCpu,
+        @Schema(description = "memory 크기입니다. 단위는 GB입니다.")
         int memory,
+        @Schema(description = "cpu 사용량 입니다. 단위는 %입니다.")
         int cpuUsage,
+        @Schema(description = "memory 사용량 입니다. 단위는 %입니다.")
         int memoryUsage,
+        @Schema(description = "storage 크기입니다. 단위는 GB입니다.")
         int storage,
         @JsonProperty("networks")
         List<FindVmResponseNetworkDTO> findVmResponseNetworkDTOList,
         LocalDateTime createAt,
         LocalDateTime updateAt,
+        @Schema(description = "가상머신이 가지는 private ip입니다.")
         String privateIp
 ) {
     private final static Random random = new Random();

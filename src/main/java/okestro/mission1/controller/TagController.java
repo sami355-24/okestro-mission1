@@ -1,5 +1,7 @@
 package okestro.mission1.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +23,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Validated
+@Tag(name = "Tag", description = "태그관련 CRUD API입니다.")
 public class TagController {
 
     static final String ERROR_TAG_NAME_EMPTY = "태그 명은 공백일 수 없습니다.";
@@ -28,6 +31,7 @@ public class TagController {
     TagService tagService;
 
     @GetMapping
+    @Operation(summary = "태그 전체조회", description = "저장되어 있는 모든 태그 정보를 조회합니다.")
     public ResponseEntity<ResponseTemplate<List<FindTagResponseDto>>> findAllTag() {
         return ResponseEntity.ok(ResponseTemplate.<List<FindTagResponseDto>>builder()
                 .metaData(MetaData.ofSuccess())
@@ -36,6 +40,7 @@ public class TagController {
     }
 
     @PostMapping
+    @Operation(summary = "태그 생성", description = "주어진 태그 명을 기반으로 새로운 태그를 생성합니다.")
     public ResponseEntity<ResponseTemplate<Integer>> createTag(@RequestParam @NotBlank(message = ERROR_TAG_NAME_EMPTY) String title) {
         return ResponseEntity.ok(ResponseTemplate.<Integer>builder()
                 .metaData(MetaData.ofSuccess())
@@ -44,6 +49,7 @@ public class TagController {
     }
 
     @DeleteMapping("/{tagId}")
+    @Operation(summary = "태그 삭제", description = "주어진 tag id를 기반으로 태그를 삭제합니다.")
     public ResponseEntity<ResponseTemplate<Void>> deleteTag(@PathVariable Integer tagId) {
         return ResponseEntity.ok(ResponseTemplate.<Void>builder()
                 .metaData(MetaData.ofSuccess())
@@ -52,6 +58,7 @@ public class TagController {
     }
 
     @PutMapping("/{tagId}")
+    @Operation(summary = "태그명 수정", description = "주어진 tag id와 tag title을 기반으로 태그명을 수정합니다.")
     public ResponseEntity<ResponseTemplate<Void>> updateTag(@PathVariable Integer tagId, @RequestParam @NotBlank(message = ERROR_TAG_NAME_EMPTY) String tagTitle) {
         return ResponseEntity.ok(ResponseTemplate.<Void>builder()
                 .metaData(MetaData.ofSuccess())
