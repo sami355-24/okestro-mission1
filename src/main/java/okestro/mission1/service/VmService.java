@@ -42,7 +42,7 @@ public class VmService {
         return new FindFilterVmResponseDto(filterVm);
     }
 
-    public boolean isDuplicate(String vmName) {
+    public Boolean isDuplicate(String vmName) {
         return vmRepository.existsByName(vmName);
     }
 
