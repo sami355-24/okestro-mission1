@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: mission1/db
+  cloud:
+    vault:
+      authentication: token
+      token: okestro1
+      uri: http://localhost:8200
+      enabled: true
+
+      kv:
+        enabled: true
+        backend: secret
+        default-context: mission1/db

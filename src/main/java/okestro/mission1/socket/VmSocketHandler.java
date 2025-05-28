@@ -35,7 +35,7 @@ public class VmSocketHandler extends TextWebSocketHandler {
     }
 
     private String getUserIdFromHeader(WebSocketSession session) {
-        String userId = session.getHandshakeHeaders().getFirst("userId");
+        String userId = session.getHandshakeHeaders().getFirst("memberId");
         if (userId == null) throw new NotExistException(ERROR_NOT_FOUND_MEMBER_IN_HEADER.getMessage());
         return userId;
     }
