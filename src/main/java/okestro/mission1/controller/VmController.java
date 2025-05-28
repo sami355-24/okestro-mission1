@@ -46,6 +46,14 @@ public class VmController {
                 .build());
     }
 
+    @GetMapping("/check-name}")
+    public ResponseEntity<ResponseTemplate<Boolean>> checkVmName(@RequestParam String vmName) {
+        return ResponseEntity.ok(ResponseTemplate.<Boolean>builder()
+                .metaData(MetaData.ofSuccess())
+                .result(vmService.isDuplicate(vmName))
+                .build());
+    }
+
     @GetMapping
     public ResponseEntity<ResponseTemplate<FindFilterVmResponseDto>> findFilterVms(
             @RequestParam(name = "page", defaultValue = "1") int page,
