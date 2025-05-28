@@ -23,7 +23,7 @@ public class VmEntityListener {
 
     @PostUpdate
     public void postUpdate(Vm vm) {
-        if (vm.getPreviousVmStatus() == vm.getVmStatus()) return;
+        if (vm.getPreviousVmStatus() == null || vm.getPreviousVmStatus() == vm.getVmStatus()) return;
         String message = SUCCESS_VM_LISTENER.getMessage().formatted(String.valueOf(vm.getPreviousVmStatus()), String.valueOf(vm.getVmStatus()), vm.getVmId());
         sendNotification(vm, message);
     }
@@ -33,7 +33,7 @@ public class VmEntityListener {
         log.info(message);
         try {
             VmSocketHandler vmSocketHandler = BeanUtils.getBean(VmSocketHandler.class);
-            vmSocketHandler.sendMessageToUser(String.valueOf(vm.getMember().getMemberId()), message);
+            vmSocketHandler.sendMessageToMember(String.valueOf(vm.getMember().getMemberId()), message);
         } catch (IOException e) {
             log.error(ERROR_WEBSOCKET.getMessage(), e);
         }

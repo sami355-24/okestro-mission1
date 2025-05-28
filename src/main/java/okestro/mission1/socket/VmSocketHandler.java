@@ -56,9 +56,9 @@ public class VmSocketHandler extends TextWebSocketHandler {
         log.info(SUCCESS_WEBSOCKET_DISCONNET.getMessage());
     }
 
-    public void sendMessageToUser(String userId, String message) throws IOException {
-        WebSocketSession userSession = memberSessions.get(userId);
-        if (userSession == null) return;
-        userSession.sendMessage(new TextMessage(message));
+    public void sendMessageToMember(String memberId, String message) throws IOException {
+        WebSocketSession memberSession = memberSessions.get(memberId);
+        if (memberSession == null) return;
+        memberSession.sendMessage(new TextMessage(message));
     }
 }

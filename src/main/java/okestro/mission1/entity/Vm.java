@@ -104,6 +104,7 @@ public class Vm extends TimestampEntity {
         this.privateIp = privateIp;
         this.vmTags = new ArrayList<>();
         this.member = member;
+        this.networks = new ArrayList<>();
     }
 
     @PostLoad
@@ -133,6 +134,7 @@ public class Vm extends TimestampEntity {
     }
 
     public void setTagsFrom(List<Tag> tags) {
+        if (tags.isEmpty()) return;
         this.vmTags.clear();
         tags.forEach(
                 tag -> {

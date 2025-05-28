@@ -29,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -54,10 +55,10 @@ public class VmController {
 
     @GetMapping("/check-name")
     @Operation(summary = "가상머신 이름 중복 체크", description = "vm name 기반으로 vm 이름 중복 체크를 수행합니다.")
-    public ResponseEntity<ResponseTemplate<Boolean>> checkVmName(@RequestParam(name = "vm-name") String vmName) {
-        return ResponseEntity.ok(ResponseTemplate.<Boolean>builder()
+    public ResponseEntity<ResponseTemplate<Map<String, Boolean>>> checkVmName(@RequestParam(name = "vm-name") String vmName) {
+        return ResponseEntity.ok(ResponseTemplate.<Map<String, Boolean>>builder()
                 .metaData(MetaData.ofSuccess())
-                .result(vmService.isDuplicate(vmName))
+                .result(Map.of("IsDuplicate",vmService.isDuplicate(vmName)))
                 .build());
     }
 
@@ -84,6 +85,7 @@ public class VmController {
     @PostMapping
     @Transactional
     @Operation(summary = "가상머신 생성", description = "body에 담긴 값을 바탕으로 vm을 생성합니다.")
+    @Parameter(name = "memberId", description = "멤버 id값입니다.", required = true, in = ParameterIn.HEADER, example = "1")
     public ResponseEntity<ResponseTemplate<Integer>> createVm(@Parameter(hidden = true) @RequestMember Member member, @RequestBody CreateVmRequestDto vmRequest) {
         networkService.validateNetworkId(vmRequest.networkIds());
         tagService.validateTagFrom(vmRequest.tagIds());

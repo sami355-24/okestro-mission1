@@ -29,6 +29,7 @@ public class TagService {
     }
 
     public List<Tag> findAllByTagIds(List<Integer> tagIds) {
+        if (tagIds == null) return List.of();
         return tagRepository.findAllById(tagIds);
     }
 
