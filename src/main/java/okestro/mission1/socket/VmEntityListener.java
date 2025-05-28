@@ -15,27 +15,23 @@ import static okestro.mission1.util.Message.*;
 @Component
 public class VmEntityListener {
 
-    @PostUpdate
     @PostPersist
-    public void postUpdate(Vm vm) {
-        if (vm.getPreviousVmStatus() == null) {
-            String message = SUCCESS_VM_CREATE.getMessage().formatted(String.valueOf(vm.getVmStatus()), String.valueOf(vm.getVmId()));
-            log.info(message);
-            sendNotification(vm, message);
-            return;
-        }
-
-        if (vm.getPreviousVmStatus() != vm.getVmStatus()) {
-            String message = SUCCESS_VM_LISTENER.getMessage().formatted(String.valueOf(vm.getPreviousVmStatus()), String.valueOf(vm.getVmStatus()), vm.getVmId());
-            log.info(message);
-            sendNotification(vm, message);
-        }
-
+    public void postPersist(Vm vm) {
+        String message = SUCCESS_VM_CREATE.getMessage().formatted(String.valueOf(vm.getVmStatus()), String.valueOf(vm.getVmId()));
+        sendNotification(vm, message);
     }
 
-    private void sendNotification(Vm vm, String messageFormat, Object... args) {
+    @PostUpdate
+    public void postUpdate(Vm vm) {
+        if (vm.getPreviousVmStatus() == vm.getVmStatus()) return;
+        String message = SUCCESS_VM_LISTENER.getMessage().formatted(String.valueOf(vm.getPreviousVmStatus()), String.valueOf(vm.getVmStatus()), vm.getVmId());
+        sendNotification(vm, message);
+    }
+
+
+    private void sendNotification(Vm vm, String message) {
+        log.info(message);
         try {
-            String message = String.format(messageFormat, args);
             VmSocketHandler vmSocketHandler = BeanUtils.getBean(VmSocketHandler.class);
             vmSocketHandler.sendMessageToUser(String.valueOf(vm.getMember().getMemberId()), message);
         } catch (IOException e) {
