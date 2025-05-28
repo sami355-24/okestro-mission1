@@ -24,6 +24,7 @@ import static okestro.mission1.util.Message.*;
 public class VmSocketHandler extends TextWebSocketHandler {
 
     static Map<String, WebSocketSession> userSessions = new ConcurrentHashMap<>();
+    String HEADER_NAME = "memberId";
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
@@ -35,7 +36,7 @@ public class VmSocketHandler extends TextWebSocketHandler {
     }
 
     private String getUserIdFromHeader(WebSocketSession session) {
-        String userId = session.getHandshakeHeaders().getFirst("memberId");
+        String userId = session.getHandshakeHeaders().getFirst(HEADER_NAME);
         if (userId == null) throw new NotExistException(ERROR_NOT_FOUND_MEMBER_IN_HEADER.getMessage());
         return userId;
     }
