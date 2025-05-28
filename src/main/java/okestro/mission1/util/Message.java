@@ -20,10 +20,11 @@ public enum Message {
      */
     ERROR_PAGE_SIZE("유효하지 않은 페이지 크기입니다. 5, 10, 20으로만 입력해주세요. 입력값 = %d"),
     ERROR_VALIDATE_ARGUMENT("요청 인자 검증에 실패했습니다."),
-    ERROR_DUPLICATE_TAG_NAME_MESSAGE("중복된 태그 이름입니다."),
-    ERROR_BLANK_TAG_NAME_MESSAGE("태그 이름이 공백입니다."),
+    ERROR_DUPLICATE_TAG_NAME("중복된 태그 이름입니다."),
+    ERROR_BLANK_TAG_NAME("태그 이름이 공백입니다."),
     ERROR_TAG_ID_IS_NULL("태그 id가 null입니다."),
     ERROR_DUPLICATE_VM_NAME("이미 존재한는 VM이름입니다."),
+    ERROR_BLANK_NETWORK_ID("네트워크 ID가 비어 있습니다."),
 
     /**
      * 그 외 서버 오류

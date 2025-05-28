@@ -72,11 +72,11 @@ public class TagService {
 
     private void checkBlankTagName(String tagName) {
         if (tagName.isBlank())
-            throw new BlankException(ERROR_BLANK_TAG_NAME_MESSAGE.getMessage());
+            throw new BlankException(ERROR_BLANK_TAG_NAME.getMessage());
     }
 
     private void checkDuplicateTagName(String tagName) {
         if (Boolean.TRUE.equals(tagRepository.existsByName(tagName)))
-            throw new DuplicateException(ERROR_DUPLICATE_TAG_NAME_MESSAGE.getMessage());
+            throw new DuplicateException(ERROR_DUPLICATE_TAG_NAME.getMessage());
     }
 }

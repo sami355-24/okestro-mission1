@@ -20,12 +20,14 @@ public class NetworkService {
     NetworkRepository networkRepository;
 
     public void validateNetworkId(List<Integer> networkIds) {
+        if(networkIds == null) return;
         int matchedIdCount = networkRepository.countMatchingIdsWithoutVm(networkIds);
         if(matchedIdCount == networkIds.size()) return;
         throw new NotExistException(ERROR_NOT_FOUND_NETWORK_IN_DB.getMessage());
     }
 
     public List<Network> findAllByNetworkIds(List<Integer> networkIds) {
+        if(networkIds == null) return null;
         return networkRepository.findAllById(networkIds);
     }
 }
