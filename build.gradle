@@ -57,7 +57,6 @@ dependencies {
     //Vault
     implementation 'org.springframework.cloud:spring-cloud-starter-vault-config'
     implementation("org.springframework.cloud:spring-cloud-starter-bootstrap")
-    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     //Swagger
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2")
 }
