@@ -5,3 +5,5 @@
 build/**
 
 .gradle/**
+
+/src/main/generated/**
