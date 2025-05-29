@@ -72,7 +72,7 @@ public class VmController {
             ) {
         tagService.validateTagFrom(tagIds);
         FindFilterVmResponseDto filterVmResponses = vmService.findFilterVms(
-                new FindFilterVmServiceDto(page, PageSize.convertToPageSize(pageSize), tagIds, OrderParams.from(orderParam))
+                new FindFilterVmServiceDto(page, PageSize.of(pageSize), tagIds, OrderParams.of(orderParam))
         );
         return ResponseEntity.ok(ResponseTemplate.<FindFilterVmResponseDto>builder()
                 .metaData(MetaData.ofSuccess())

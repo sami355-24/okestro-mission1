@@ -18,7 +18,7 @@ public enum PageSize {
 
     int value;
 
-    public static PageSize convertToPageSize(int size) {
+    public static PageSize of(int size) {
         return switch (size) {
             case 5 -> PageSize.FIVE;
             case 10 -> PageSize.TEN;

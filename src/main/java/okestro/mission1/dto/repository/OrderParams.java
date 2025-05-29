@@ -5,7 +5,7 @@ public enum OrderParams {
     CREATED_AT_ASC, CREATED_AT_DESC,
     UPDATED_AT_ASC, UPDATED_AT_DESC;
 
-    public static OrderParams from(String orderParam) {
+    public static OrderParams of(String orderParam) {
         if (orderParam == null || orderParam.isEmpty()) {
             return CREATED_AT_DESC;
         }
