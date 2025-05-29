@@ -41,10 +41,10 @@ public class TagController {
 
     @PostMapping
     @Operation(summary = "태그 생성", description = "주어진 태그 명을 기반으로 새로운 태그를 생성합니다.")
-    public ResponseEntity<ResponseTemplate<Integer>> createTag(@RequestParam @NotBlank(message = ERROR_TAG_NAME_EMPTY) String title) {
+    public ResponseEntity<ResponseTemplate<Integer>> createTag(@RequestParam @NotBlank(message = ERROR_TAG_NAME_EMPTY) String name) {
         return ResponseEntity.ok(ResponseTemplate.<Integer>builder()
                 .metaData(MetaData.ofSuccess())
-                .result(tagService.createTagFrom(title))
+                .result(tagService.createTagFrom(name))
                 .build());
     }
 

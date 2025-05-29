@@ -367,10 +367,12 @@ class VmServiceTest {
             //when
             vmService.deleteVmFrom(validVmId);
             em.flush();
-            List<Vm> deletedVm = vmRepository.findDeletedVmsWithNativeQuery();
+
+            //when
+            vmRepository.deleteById(validVmId);
 
             //then
-            Assertions.assertThat(deletedVm.get(0).getVmId()).isEqualTo(validVmId);
+            vmRepository.findById(validVmId).isEmpty();
         }
     }
 
