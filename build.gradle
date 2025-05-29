@@ -24,20 +24,64 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    //Web
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    //Validation
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    //Lombok
     compileOnly("org.projectlombok:lombok:1.18.24")
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
     annotationProcessor 'org.projectlombok:lombok'
+    //DB
+    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+    testImplementation 'com.h2database:h2'
+    //JPA
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    // querydsl
+    implementation "com.querydsl:querydsl-jpa:5.0.0:jakarta"
+    implementation "com.querydsl:querydsl-core"
+    implementation "com.querydsl:querydsl-collections"
+    annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
+    annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+    annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+    // websocket
+    implementation("org.springframework.boot:spring-boot-starter-websocket:3.5.0")
+    //Testing
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     testImplementation(platform("org.junit:junit-bom:5.10.2"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    //DevTools
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    //Vault
+    implementation 'org.springframework.cloud:spring-cloud-starter-vault-config'
+    implementation("org.springframework.cloud:spring-cloud-starter-bootstrap")
+    //Swagger
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2")
 }
 
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+def generated = 'src/main/generated'
+
+tasks.withType(JavaCompile) {
+    options.getGeneratedSourceOutputDirectory().set(file(generated))
+}
+
+sourceSets {
+    main.java.srcDirs += [ generated ]
+}
+
+clean {
+    delete file(generated)
+}
+
+dependencyManagement {
+    imports {
+        mavenBom 'org.springframework.cloud:spring-cloud-dependencies:2023.0.0'
+    }
+}
+
