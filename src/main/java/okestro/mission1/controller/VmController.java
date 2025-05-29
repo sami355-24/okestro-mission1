@@ -33,7 +33,7 @@ import java.util.Map;
 
 
 @RestController
-@RequestMapping("/vm")
+@RequestMapping("/vms")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Tag(name = "VM", description = "가상머신관련 CRUD API입니다.")
@@ -53,7 +53,7 @@ public class VmController {
                 .build());
     }
 
-    @GetMapping("/check-name")
+    @GetMapping("/check")
     @Operation(summary = "가상머신 이름 중복 체크", description = "vm name 기반으로 vm 이름 중복 체크를 수행합니다.")
     public ResponseEntity<ResponseTemplate<Map<String, Boolean>>> checkVmName(@RequestParam(name = "vm-name") String vmName) {
         return ResponseEntity.ok(ResponseTemplate.<Map<String, Boolean>>builder()
@@ -67,7 +67,7 @@ public class VmController {
     public ResponseEntity<ResponseTemplate<FindFilterVmResponseDto>> findFilterVms(
             @RequestParam(name = "page", defaultValue = "1") int page,
             @RequestParam(name = "size", defaultValue = "5") int pageSize,
-            @RequestParam(name = "tagIds", required = false) List<Integer> tagIds,
+            @RequestParam(name = "tags", required = false) List<Integer> tagIds,
             @RequestParam(name = "order-param", required = false) String orderParam
             ) {
         tagService.validateTagFrom(tagIds);

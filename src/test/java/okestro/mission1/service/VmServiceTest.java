@@ -188,9 +188,7 @@ class VmServiceTest {
                         page,
                         PageSize.FIVE,
                         List.of(),
-                        OrderParams.NAME_DESC,
-                        null,
-                        null
+                        OrderParams.NAME_DESC
                 );
 
                 //when

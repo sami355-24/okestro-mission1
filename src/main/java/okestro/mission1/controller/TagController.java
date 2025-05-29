@@ -19,7 +19,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/tag")
+@RequestMapping("/tags")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Validated
@@ -59,7 +59,7 @@ public class TagController {
 
     @PutMapping("/{tagId}")
     @Operation(summary = "태그명 수정", description = "주어진 tag id와 tag title을 기반으로 태그명을 수정합니다.")
-    public ResponseEntity<ResponseTemplate<Void>> updateTag(@PathVariable Integer tagId, @RequestParam @NotBlank(message = ERROR_TAG_NAME_EMPTY) String tagTitle) {
+    public ResponseEntity<ResponseTemplate<Void>> updateTag(@PathVariable Integer tagId, @RequestParam(name = "tag-name") @NotBlank(message = ERROR_TAG_NAME_EMPTY) String tagTitle) {
         return ResponseEntity.ok(ResponseTemplate.<Void>builder()
                 .metaData(MetaData.ofSuccess())
                 .result(tagService.updateTagFrom(tagId, tagTitle))
