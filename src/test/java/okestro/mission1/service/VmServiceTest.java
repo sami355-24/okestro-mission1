@@ -7,7 +7,7 @@ import okestro.mission1.dto.controller.request.CreateVmRequestDto;
 import okestro.mission1.dto.controller.request.PageSize;
 import okestro.mission1.dto.controller.request.UpdateVmRequestDto;
 import okestro.mission1.dto.controller.response.FindFilterVmResponseDto;
-import okestro.mission1.dto.repository.SortParam;
+import okestro.mission1.dto.repository.OrderParams;
 import okestro.mission1.dto.service.vm.FindFilterVmServiceDto;
 import okestro.mission1.dto.service.vm.UpdateVmServiceDto;
 import okestro.mission1.entity.*;
@@ -188,7 +188,7 @@ class VmServiceTest {
                         page,
                         PageSize.FIVE,
                         List.of(),
-                        SortParam.NAME_DESC,
+                        OrderParams.NAME_DESC,
                         null,
                         null
                 );

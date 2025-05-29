@@ -56,7 +56,7 @@ class TagServiceTest {
     @Nested
     class 태그를_생성시도시 {
         @Test
-        void 중복된_태그명일경우_태그_생성시_태그_생성에_실패한다() {
+        void 중복된_태그명일경우_예외가_발생한다() {
             //given
             String existingName = "EXISTING";
 
@@ -65,7 +65,7 @@ class TagServiceTest {
         }
 
         @Test
-        void 공백일경우_태그_생성에_실패한다() {
+        void 공백일경우_예외가_발생한다() {
             //given
             String blankName = " ";
 
@@ -105,12 +105,12 @@ class TagServiceTest {
 
 
         @Test
-        void 존재하지_않는_태그_Id가_주어진다면_삭제에_실패한다() {
+        void 존재하지_않는_태그_Id가_주어진다면_예외가_발생한다() {
             //given
             int notExistingTagId = -1;
 
             //when & then
-            Assertions.assertThatThrownBy(() -> tagService.deleteTagFrom(notExistingTagId)).isInstanceOf(NotExistException.class);
+            assertThatThrownBy(() -> tagService.deleteTagFrom(notExistingTagId)).isInstanceOf(NotExistException.class);
         }
     }
 
@@ -123,7 +123,7 @@ class TagServiceTest {
             String existingTitle = "PROD";
 
             //when & then
-            Assertions.assertThatThrownBy(() -> tagService.updateTagFrom(findTag.getId(), existingTitle)).isInstanceOf(DuplicateException.class);
+            assertThatThrownBy(() -> tagService.updateTagFrom(findTag.getId(), existingTitle)).isInstanceOf(DuplicateException.class);
         }
 
         @Test
@@ -133,7 +133,7 @@ class TagServiceTest {
             String blankTitle = " ";
 
             //when & then
-            Assertions.assertThatThrownBy(() -> tagService.updateTagFrom(findTag.getId(), blankTitle)).isInstanceOf(BlankException.class);
+            assertThatThrownBy(() -> tagService.updateTagFrom(findTag.getId(), blankTitle)).isInstanceOf(BlankException.class);
         }
 
         @Test
@@ -146,7 +146,7 @@ class TagServiceTest {
             tagService.updateTagFrom(findTag.getId(), newTitle);
 
             //then
-            Assertions.assertThat(tagRepository.findByName(newTitle)).isPresent();
+            assertThat(tagRepository.findByName(newTitle)).isPresent();
         }
     }
 }

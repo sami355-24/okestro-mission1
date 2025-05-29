@@ -16,7 +16,7 @@ import okestro.mission1.dto.controller.response.FindFilterVmResponseDto;
 import okestro.mission1.dto.controller.response.FindVmResponseDto;
 import okestro.mission1.dto.controller.response.template.MetaData;
 import okestro.mission1.dto.controller.response.template.ResponseTemplate;
-import okestro.mission1.dto.repository.SortParam;
+import okestro.mission1.dto.repository.OrderParams;
 import okestro.mission1.dto.service.vm.FindFilterVmServiceDto;
 import okestro.mission1.dto.service.vm.UpdateVmServiceDto;
 import okestro.mission1.entity.Member;
@@ -68,13 +68,11 @@ public class VmController {
             @RequestParam(name = "page", defaultValue = "1") int page,
             @RequestParam(name = "size", defaultValue = "5") int pageSize,
             @RequestParam(name = "tagIds", required = false) List<Integer> tagIds,
-            @RequestParam(name = "name", required = false) String name,
-            @RequestParam(name = "create-at", required = false, defaultValue = "create-at-desc") String createAt,
-            @RequestParam(name = "update-at", required = false) String updateAt
+            @RequestParam(name = "order-param", required = false) String orderParam
             ) {
         tagService.validateTagFrom(tagIds);
         FindFilterVmResponseDto filterVmResponses = vmService.findFilterVms(
-                new FindFilterVmServiceDto(page, PageSize.convertToPageSize(pageSize), tagIds, SortParam.from(name), SortParam.from(createAt), SortParam.from(updateAt))
+                new FindFilterVmServiceDto(page, PageSize.convertToPageSize(pageSize), tagIds, OrderParams.from(orderParam))
         );
         return ResponseEntity.ok(ResponseTemplate.<FindFilterVmResponseDto>builder()
                 .metaData(MetaData.ofSuccess())

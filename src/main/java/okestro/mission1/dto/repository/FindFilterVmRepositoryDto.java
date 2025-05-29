@@ -4,6 +4,6 @@ import java.util.List;
 
 public record FindFilterVmRepositoryDto(
         List<Integer> tagIds,
-        SortParam sortParam
+        OrderParams orderParam
 ) {
 }

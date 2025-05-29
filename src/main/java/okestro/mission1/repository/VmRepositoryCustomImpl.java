@@ -11,7 +11,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import okestro.mission1.dto.repository.FindFilterVmRepositoryDto;
-import okestro.mission1.dto.repository.SortParam;
+import okestro.mission1.dto.repository.OrderParams;
 import okestro.mission1.entity.Vm;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,7 +33,7 @@ public class VmRepositoryCustomImpl implements VmRepositoryCustom {
                 .select(vm.vmId)
                 .from(vm)
                 .where(generateWherePredicate(filterDto))
-                .orderBy(generateOrderSpecifier(filterDto.sortParam()))
+                .orderBy(generateOrderSpecifier(filterDto.orderParam()))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -44,7 +44,7 @@ public class VmRepositoryCustomImpl implements VmRepositoryCustom {
                     .selectFrom(vm)
                     .innerJoin(vm.vmTags, vmTag).fetchJoin()
                     .where(vm.vmId.in(vmIds))
-                    .orderBy(generateOrderSpecifier(filterDto.sortParam()))
+                    .orderBy(generateOrderSpecifier(filterDto.orderParam()))
                     .fetch();
         }
 
@@ -61,8 +61,8 @@ public class VmRepositoryCustomImpl implements VmRepositoryCustom {
         return filterDto.tagIds() != null ? vm.vmTags.any().tag.id.in(filterDto.tagIds()) : null;
     }
 
-    private OrderSpecifier<?> generateOrderSpecifier(SortParam sortParam) {
-        return switch (sortParam) {
+    private OrderSpecifier<?> generateOrderSpecifier(OrderParams orderParam) {
+        return switch (orderParam) {
             case NAME_ASC -> new OrderSpecifier<>(Order.ASC, vm.name);
             case NAME_DESC -> new OrderSpecifier<>(Order.DESC, vm.name);
             case CREATED_AT_ASC -> new OrderSpecifier<>(Order.ASC, vm.createAt);

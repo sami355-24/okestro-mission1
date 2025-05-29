@@ -37,7 +37,7 @@ public class VmService {
 
     public FindFilterVmResponseDto findFilterVms(FindFilterVmServiceDto findFilterVmServiceDto) {
         Pageable pageable = PageRequest.of(findFilterVmServiceDto.page()-1, findFilterVmServiceDto.size().getValue());
-        FindFilterVmRepositoryDto findFilterVmRepositoryDto = new FindFilterVmRepositoryDto(findFilterVmServiceDto.tagIds(), findFilterVmServiceDto.getSortParam());
+        FindFilterVmRepositoryDto findFilterVmRepositoryDto = new FindFilterVmRepositoryDto(findFilterVmServiceDto.tagIds(), findFilterVmServiceDto.orderParam());
         Page<Vm> filterVm = vmRepository.findFilterVm(findFilterVmRepositoryDto, pageable);
         return new FindFilterVmResponseDto(filterVm);
     }

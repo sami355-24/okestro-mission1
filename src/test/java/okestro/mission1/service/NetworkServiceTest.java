@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -90,7 +91,7 @@ class NetworkServiceTest {
             int notExistingNetworkId = -1;
 
             //when & then
-            Assertions.assertThatThrownBy(()-> networkService.validateNetworkId(List.of(notExistingNetworkId))).isInstanceOf(NotExistException.class);
+            assertThatThrownBy(()-> networkService.validateNetworkId(List.of(notExistingNetworkId))).isInstanceOf(NotExistException.class);
         }
 
         @Test
@@ -99,13 +100,13 @@ class NetworkServiceTest {
             int notExistingNetworkId = -1;
 
             //when & then
-            Assertions.assertThatThrownBy(()-> networkService.validateNetworkId(List.of(validNetworkId, notExistingNetworkId))).isInstanceOf(NotExistException.class);
+            assertThatThrownBy(()-> networkService.validateNetworkId(List.of(validNetworkId, notExistingNetworkId))).isInstanceOf(NotExistException.class);
         }
 
         @Test
         void 네트워크_id가_DB에_존재한다면_검증에_성공한다(){
             //when & then
-            Assertions.assertThatCode(()-> networkService.validateNetworkId(List.of(validNetworkId))).doesNotThrowAnyException();
+            assertThatCode(()-> networkService.validateNetworkId(List.of(validNetworkId))).doesNotThrowAnyException();
         }
     }
 
