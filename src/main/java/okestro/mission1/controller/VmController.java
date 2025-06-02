@@ -71,12 +71,11 @@ public class VmController {
             @RequestParam(name = "order-param", required = false) String orderParam
     ) {
         tagService.validateTagFrom(tagIds);
-        FindFilterVmResponseDto filterVmResponses = vmService.findFilterVms(
-                new FindFilterVmServiceDto(page, PageSize.of(pageSize), tagIds, OrderParams.of(orderParam))
-        );
         return ResponseEntity.ok(ResponseTemplate.<FindFilterVmResponseDto>builder()
                 .metaData(MetaData.ofSuccess())
-                .result(filterVmResponses)
+                .result(vmService.findFilterVms(
+                        new FindFilterVmServiceDto(page, PageSize.of(pageSize), tagIds, OrderParams.of(orderParam))
+                ))
                 .build());
     }
 
