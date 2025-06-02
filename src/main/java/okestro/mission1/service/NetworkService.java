@@ -3,7 +3,7 @@ package okestro.mission1.service;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import okestro.mission1.entity.Network;
-import okestro.mission1.exception.custom.NotExistException;
+import okestro.mission1.exception.NotExistException;
 import okestro.mission1.repository.NetworkRepository;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +21,7 @@ public class NetworkService {
 
     public void validateNetworkId(List<Integer> networkIds) {
         if(networkIds == null) return;
-        int matchedIdCount = networkRepository.countMatchingIdsWithoutVm(networkIds);
+        int matchedIdCount = networkRepository.countAllByNetworkIdInAndVmIsNull(networkIds);
         if(matchedIdCount == networkIds.size()) return;
         throw new NotExistException(ERROR_NOT_FOUND_NETWORK_IN_DB.getMessage());
     }

@@ -9,12 +9,5 @@ import java.util.List;
 
 public interface NetworkRepository extends JpaRepository<Network, Integer> {
 
-    @Query(value = """
-            SELECT COUNT(n)
-            FROM Network n
-            WHERE n.networkId IN :networkIds
-            AND n.vm IS NULL
-            """)
-    int countMatchingIdsWithoutVm(@Param("networkIds") List<Integer> networkIds);
-
+    int countAllByNetworkIdInAndVmIsNull(List<Integer> networkIds);
 }

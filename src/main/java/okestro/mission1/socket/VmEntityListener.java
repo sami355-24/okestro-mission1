@@ -2,9 +2,11 @@ package okestro.mission1.socket;
 
 import jakarta.persistence.PostPersist;
 import jakarta.persistence.PostUpdate;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import okestro.mission1.entity.Vm;
-import okestro.mission1.util.BeanUtils;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -13,7 +15,11 @@ import static okestro.mission1.util.Message.*;
 
 @Slf4j
 @Component
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@RequiredArgsConstructor
 public class VmEntityListener {
+
+    VmSocketHandler vmSocketHandler;
 
     @PostPersist
     public void postPersist(Vm vm) {
@@ -32,7 +38,6 @@ public class VmEntityListener {
     private void sendNotification(Vm vm, String message) {
         log.info(message);
         try {
-            VmSocketHandler vmSocketHandler = BeanUtils.getBean(VmSocketHandler.class);
             vmSocketHandler.sendMessageToMember(String.valueOf(vm.getMember().getMemberId()), message);
         } catch (IOException e) {
             log.error(ERROR_WEBSOCKET.getMessage(), e);

@@ -6,8 +6,25 @@ spring:
     resources:
       add-mappings: false
 
+  config:
+    import: vault://secret/mission1/db
+
+  cloud:
+    vault:
+      authentication: token
+      token: okestro1
+      uri: http://localhost:8200
+      enabled: true
+      fail-fast: true
+      
+      kv:
+        enabled: true
+        backend: secret
+        default-context: mission1/db
+
+
   datasource:
-    driver-class-name: ${driver-class-name}
+    driver-class-name: org.mariadb.jdbc.Driver
     username:  ${username}
     url: ${url}
     password: ${password}

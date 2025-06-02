@@ -4,9 +4,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import okestro.mission1.entity.Tag;
-import okestro.mission1.exception.custom.BlankException;
-import okestro.mission1.exception.custom.DuplicateException;
-import okestro.mission1.exception.custom.NotExistException;
+import okestro.mission1.exception.BlankException;
+import okestro.mission1.exception.DuplicateException;
+import okestro.mission1.exception.NotExistException;
 import okestro.mission1.repository.TagRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,19 +34,17 @@ public class TagService {
     }
 
     @Transactional
-    public Void deleteTagFrom(int tagId) {
+    public void deleteTagFrom(int tagId) {
         if (tagRepository.findById(tagId).isEmpty())
             throw new NotExistException(ERROR_NOT_EXIST_TAG_IN_DB.getMessage());
         tagRepository.deleteById(tagId);
-        return null;
     }
 
     @Transactional
-    public Void updateTagFrom(int existingTagId, String newTitle) {
+    public void updateTagFrom(int existingTagId, String newTitle) {
         Tag findTag = tagRepository.findById(existingTagId).orElseThrow(() -> new NotExistException(ERROR_NOT_EXIST_TAG_IN_DB.getMessage()));
         validateTagName(newTitle);
         findTag.setName(newTitle);
-        return null;
     }
 
     public void validateTagFrom(List<Integer> ids) {

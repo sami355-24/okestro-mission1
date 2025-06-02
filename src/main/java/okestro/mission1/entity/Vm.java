@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import okestro.mission1.dto.controller.request.CreateVmRequestDto;
 import okestro.mission1.dto.service.vm.UpdateVmServiceDto;
-import okestro.mission1.exception.custom.InvalidDataException;
+import okestro.mission1.exception.InvalidDataException;
 import okestro.mission1.socket.VmEntityListener;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.SQLDelete;

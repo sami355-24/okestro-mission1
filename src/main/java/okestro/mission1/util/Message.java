@@ -51,10 +51,6 @@ public enum Message {
         this.message = message;
     }
 
-    public String getMessage() {
-        return message;
-    }
-
     public String getMessage(int pageSize) {
         return String.format(message, pageSize);
     }

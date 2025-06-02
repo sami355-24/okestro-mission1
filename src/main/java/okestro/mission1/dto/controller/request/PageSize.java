@@ -4,7 +4,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
-import okestro.mission1.exception.custom.InvalidDataException;
+import okestro.mission1.exception.InvalidDataException;
 
 import static okestro.mission1.util.Message.ERROR_PAGE_SIZE;
 

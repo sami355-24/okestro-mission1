@@ -1,4 +1,4 @@
-package okestro.mission1.exception.custom;
+package okestro.mission1.exception;
 
 import org.springframework.dao.DuplicateKeyException;
 

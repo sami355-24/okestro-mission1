@@ -51,18 +51,20 @@ public class TagController {
     @DeleteMapping("/{tagId}")
     @Operation(summary = "태그 삭제", description = "주어진 tag id를 기반으로 태그를 삭제합니다.")
     public ResponseEntity<ResponseTemplate<Void>> deleteTag(@PathVariable Integer tagId) {
+        tagService.deleteTagFrom(tagId);
         return ResponseEntity.ok(ResponseTemplate.<Void>builder()
                 .metaData(MetaData.ofSuccess())
-                .result(tagService.deleteTagFrom(tagId))
+                .result(null)
                 .build());
     }
 
     @PutMapping("/{tagId}")
     @Operation(summary = "태그명 수정", description = "주어진 tag id와 tag title을 기반으로 태그명을 수정합니다.")
     public ResponseEntity<ResponseTemplate<Void>> updateTag(@PathVariable Integer tagId, @RequestParam(name = "tag-name") @NotBlank(message = ERROR_TAG_NAME_EMPTY) String tagTitle) {
+        tagService.updateTagFrom(tagId, tagTitle);
         return ResponseEntity.ok(ResponseTemplate.<Void>builder()
                 .metaData(MetaData.ofSuccess())
-                .result(tagService.updateTagFrom(tagId, tagTitle))
+                .result(null)
                 .build());
     }
 }

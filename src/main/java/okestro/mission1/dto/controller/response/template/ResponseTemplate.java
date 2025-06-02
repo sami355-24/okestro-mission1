@@ -14,5 +14,6 @@ import lombok.NoArgsConstructor;
 public class ResponseTemplate<T> {
 
     private MetaData metaData;
-    private T result;
+    @Builder.Default
+    private T result = null;
 }

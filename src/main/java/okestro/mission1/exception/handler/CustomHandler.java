@@ -5,9 +5,9 @@ import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import okestro.mission1.dto.controller.response.template.MetaData;
 import okestro.mission1.dto.controller.response.template.ResponseTemplate;
-import okestro.mission1.exception.custom.DuplicateException;
-import okestro.mission1.exception.custom.InvalidDataException;
-import okestro.mission1.exception.custom.NotExistException;
+import okestro.mission1.exception.DuplicateException;
+import okestro.mission1.exception.InvalidDataException;
+import okestro.mission1.exception.NotExistException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -26,8 +26,14 @@ import static okestro.mission1.util.Message.*;
 @Slf4j
 public class CustomHandler {
 
-    @ExceptionHandler({DuplicateException.class, NotExistException.class, InvalidDataException.class})
-    private ResponseEntity<ResponseTemplate<Void>> handleBusinessLogicException(Exception e) {
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(NotExistException.class)
+    private ResponseEntity<ResponseTemplate<Void>> handleNotExistException(NotExistException e) {
+        return createBadRequestResponse(e, e.getMessage());
+    }
+
+    @ExceptionHandler({DuplicateException.class, InvalidDataException.class})
+    private ResponseEntity<ResponseTemplate<Void>> handleValidateException(Exception e) {
         log.warn(e.getMessage());
         return createBadRequestResponse(e, e.getMessage());
     }
@@ -55,8 +61,7 @@ public class CustomHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
     private ResponseEntity<ResponseTemplate<Void>> handleUnexpectedException(Exception e) {
-        e.printStackTrace();
-        log.error(e.getMessage());
+        log.error(Arrays.toString(e.getStackTrace()));
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseTemplate.<Void>builder()
                 .metaData(MetaData.ofServerFailure(ERROR_INTERNAL_SERVER.getMessage()))
                 .build());

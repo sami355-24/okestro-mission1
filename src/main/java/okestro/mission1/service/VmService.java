@@ -9,8 +9,8 @@ import okestro.mission1.dto.service.vm.FindFilterVmServiceDto;
 import okestro.mission1.dto.service.vm.UpdateVmServiceDto;
 import okestro.mission1.entity.Member;
 import okestro.mission1.entity.Vm;
-import okestro.mission1.exception.custom.DuplicateException;
-import okestro.mission1.exception.custom.NotExistException;
+import okestro.mission1.exception.DuplicateException;
+import okestro.mission1.exception.NotExistException;
 import okestro.mission1.repository.VmRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -42,7 +42,7 @@ public class VmService {
         return new FindFilterVmResponseDto(filterVm);
     }
 
-    public Boolean isDuplicate(String vmName) {
+    public boolean isDuplicate(String vmName) {
         return vmRepository.existsByName(vmName);
     }
 
@@ -51,7 +51,7 @@ public class VmService {
         return vmRepository.save(new Vm(vmRequest, generateRandomIPv4(), requestMember));
     }
 
-    private String generateRandomIPv4() {
+    private static String generateRandomIPv4() {
         Random random = new Random();
         return random.nextInt(256) + "." +
                 random.nextInt(256) + "." +
@@ -65,23 +65,20 @@ public class VmService {
     }
 
     @Transactional
-    public Void updateVm(UpdateVmServiceDto updateVmServiceDto) {
+    public void updateVm(UpdateVmServiceDto updateVmServiceDto) {
         validateVmName(updateVmServiceDto.name());
         Vm findVm = vmRepository.findById(updateVmServiceDto.vmId()).orElseThrow(() -> new NotExistException(ERROR_NOT_FOUND_VM_IN_DB.getMessage()));
 
         findVm.updateVmFrom(updateVmServiceDto);
-        return null;
     }
 
     @Transactional
-    public Void deleteVmFrom(int vmId) {
+    public void deleteVmFrom(int vmId) {
         vmRepository.delete(vmRepository.findById(vmId).orElseThrow(() -> new IllegalArgumentException(ERROR_NOT_FOUND_VM_IN_DB.getMessage())));
-        return null;
     }
 
     @Transactional
-    public Void changeVmsStatus(Member member) {
+    public void changeVmsStatus(Member member) {
         vmRepository.findAllByMember(member).forEach(Vm::updateVmStatus);
-        return null;
     }
 }

@@ -6,11 +6,10 @@ import okestro.mission1.entity.Member;
 import okestro.mission1.entity.Network;
 import okestro.mission1.entity.Vm;
 import okestro.mission1.entity.VmStatus;
-import okestro.mission1.exception.custom.NotExistException;
+import okestro.mission1.exception.NotExistException;
 import okestro.mission1.repository.MemberRepository;
 import okestro.mission1.repository.NetworkRepository;
 import okestro.mission1.repository.VmRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -22,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional

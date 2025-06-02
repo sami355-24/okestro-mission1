@@ -58,7 +58,7 @@ public class VmController {
     public ResponseEntity<ResponseTemplate<Map<String, Boolean>>> checkVmName(@RequestParam(name = "vm-name") String vmName) {
         return ResponseEntity.ok(ResponseTemplate.<Map<String, Boolean>>builder()
                 .metaData(MetaData.ofSuccess())
-                .result(Map.of("IsDuplicate",vmService.isDuplicate(vmName)))
+                .result(Map.of("IsDuplicate", vmService.isDuplicate(vmName)))
                 .build());
     }
 
@@ -69,7 +69,7 @@ public class VmController {
             @RequestParam(name = "size", defaultValue = "5") int pageSize,
             @RequestParam(name = "tags", required = false) List<Integer> tagIds,
             @RequestParam(name = "order-param", required = false) String orderParam
-            ) {
+    ) {
         tagService.validateTagFrom(tagIds);
         FindFilterVmResponseDto filterVmResponses = vmService.findFilterVms(
                 new FindFilterVmServiceDto(page, PageSize.of(pageSize), tagIds, OrderParams.of(orderParam))
@@ -103,34 +103,39 @@ public class VmController {
         networkService.validateNetworkId(updateVmRequestDto.networkIds());
         tagService.validateTagFrom(updateVmRequestDto.tagIds());
 
+        vmService.updateVm(
+                new UpdateVmServiceDto(
+                        vmId,
+                        tagService.findAllByTagIds(updateVmRequestDto.tagIds()),
+                        networkService.findAllByNetworkIds(updateVmRequestDto.networkIds()),
+                        updateVmRequestDto
+                )
+        );
+
         return ResponseEntity.ok(ResponseTemplate.<Void>builder()
                 .metaData(MetaData.ofSuccess())
-                .result(vmService.updateVm(
-                        new UpdateVmServiceDto(
-                                vmId,
-                                tagService.findAllByTagIds(updateVmRequestDto.tagIds()),
-                                networkService.findAllByNetworkIds(updateVmRequestDto.networkIds()),
-                                updateVmRequestDto)
-                ))
+                .result(null)
                 .build());
     }
 
     @DeleteMapping("/{vmId}")
     @Operation(summary = "가상머신 삭제", description = "vm id를 기반으로 vm 삭제를 수행합니다.")
     public ResponseEntity<ResponseTemplate<Void>> deleteVm(@PathVariable int vmId) {
+        vmService.deleteVmFrom(vmId);
         return ResponseEntity.ok(ResponseTemplate.<Void>builder()
                 .metaData(MetaData.ofSuccess())
-                .result(vmService.deleteVmFrom(vmId))
+                .result(null)
                 .build());
     }
 
     @PatchMapping("/status")
     @Parameter(name = "memberId", description = "멤버 id값입니다.", required = true, in = ParameterIn.HEADER, example = "1")
     @Operation(summary = "가상머신의 상태를 수정합니다.", description = "가상머신 상태를 랜덤으로 수정합니다. 해당 API 호출하기 이전 socket 연결을 먼저 해주세요. 자세한 내용은 컨플루언스를 확인해주세요.")
-    public ResponseEntity<ResponseTemplate<Void>> changeVmStatus(@Parameter(hidden = true) @RequestMember Member member){
+    public ResponseEntity<ResponseTemplate<Void>> changeVmStatus(@Parameter(hidden = true) @RequestMember Member member) {
+        vmService.changeVmsStatus(member);
         return ResponseEntity.ok(ResponseTemplate.<Void>builder()
                 .metaData(MetaData.ofSuccess())
-                .result(vmService.changeVmsStatus(member))
+                .result(null)
                 .build());
     }
 }

@@ -1,11 +1,10 @@
 package okestro.mission1.service;
 
 import okestro.mission1.entity.Tag;
-import okestro.mission1.exception.custom.BlankException;
-import okestro.mission1.exception.custom.DuplicateException;
-import okestro.mission1.exception.custom.NotExistException;
+import okestro.mission1.exception.BlankException;
+import okestro.mission1.exception.DuplicateException;
+import okestro.mission1.exception.NotExistException;
 import okestro.mission1.repository.TagRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

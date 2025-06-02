@@ -5,7 +5,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import okestro.mission1.annotation.customannotaion.RequestMember;
-import okestro.mission1.exception.custom.NotExistException;
+import okestro.mission1.exception.NotExistException;
 import okestro.mission1.repository.MemberRepository;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
