@@ -31,25 +31,28 @@ public class VmEntityListener {
 
     @PostPersist
     public void postPersist(Vm vm) {
-        String message = SUCCESS_VM_CREATE.getMessage().formatted(String.valueOf(vm.getVmStatus()), String.valueOf(vm.getVmId()));
-        sendNotification(vm, message);
+        sendNotification(vm);
     }
 
     @PostUpdate
     public void postUpdate(Vm vm) {
         if (vm.getPreviousVmStatus() == null || vm.getPreviousVmStatus() == vm.getVmStatus()) return;
-        String message = SUCCESS_VM_LISTENER.getMessage().formatted(String.valueOf(vm.getPreviousVmStatus()), String.valueOf(vm.getVmStatus()), vm.getVmId());
-        sendNotification(vm, message);
+        sendNotification(vm);
     }
 
 
-    private void sendNotification(Vm vm, String message) {
-        log.info(message);
+    private void sendNotification(Vm vm) {
         try {
-            notiService.sendNotificationToMember(String.valueOf(vm.getMember().getMemberId()), new NotificationDto(message, vm.getVmId()));
+            notiService.sendNotificationToMember(
+                    String.valueOf(vm.getMember().getMemberId()),
+                    new NotificationDto(
+                            vm.getPreviousVmStatus().toString(),
+                            vm.getVmStatus().toString(),
+                            notiService.generateNotiState(vm.getPreviousVmStatus(), vm.getVmStatus()),
+                            vm.getVmId()
+                    ));
         } catch (Exception e) {
             log.error(ERROR_WEBSOCKET.getMessage(), e);
         }
     }
-
 }
