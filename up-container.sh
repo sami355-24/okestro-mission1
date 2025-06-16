@@ -20,20 +20,20 @@ else
   echo "Docker Compose 파일이 [$COMPOSE_FILE]에 존재하지 않습니다!"
 fi
 
-echo "Vault 서비스가 시작될 때까지 2초 대기..."
-sleep 2
-
-
-docker exec -it vault /bin/sh -c "export VAULT_ADDR='http://0.0.0.0:8200' && vault login okestro1"
-
-docker exec -it vault /bin/sh -c "export VAULT_ADDR='http://127.0.0.1:8200' && vault kv put secret/mission1/db \
-  url='jdbc:mariadb://localhost:3306/mission1?characterEncoding=UTF-8' \
-  username='root' \
-  password='okestro1' \
-  driver-class-name='org.mariadb.jdbc.Driver'"
-
-# 저장 확인
-docker exec -it vault /bin/sh -c "export VAULT_ADDR='http://127.0.0.1:8200' && vault kv get secret/mission1/db"
-
-echo "Vault 설정이 완료되었습니다."
+#echo "Vault 서비스가 시작될 때까지 2초 대기..."
+#sleep 2
+#
+#
+#docker exec -it vault /bin/sh -c "export VAULT_ADDR='http://0.0.0.0:8200' && vault login okestro1"
+#
+#docker exec -it vault /bin/sh -c "export VAULT_ADDR='http://127.0.0.1:8200' && vault kv put secret/mission1/db \
+#  url='jdbc:mariadb://localhost:3306/mission1?characterEncoding=UTF-8' \
+#  username='root' \
+#  password='okestro1' \
+#  driver-class-name='org.mariadb.jdbc.Driver'"
+#
+## 저장 확인
+#docker exec -it vault /bin/sh -c "export VAULT_ADDR='http://127.0.0.1:8200' && vault kv get secret/mission1/db"
+#
+#echo "Vault 설정이 완료되었습니다."
 
