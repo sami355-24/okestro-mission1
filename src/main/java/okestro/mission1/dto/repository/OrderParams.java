@@ -7,7 +7,7 @@ public enum OrderParams {
 
     public static OrderParams of(String orderParam) {
         if (orderParam == null || orderParam.isEmpty()) {
-            return CREATED_AT_DESC;
+            return NAME_ASC;
         }
 
         return switch (orderParam.toLowerCase()) {
