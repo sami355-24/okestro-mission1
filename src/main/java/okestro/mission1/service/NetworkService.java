@@ -18,6 +18,7 @@ import static okestro.mission1.util.Message.ERROR_NOT_FOUND_NETWORK_IN_DB;
 public class NetworkService {
 
     NetworkRepository networkRepository;
+    private final VmService vmService;
 
     public void validateNetworkId(List<Integer> networkIds) {
         if(networkIds == null) return;
@@ -29,5 +30,9 @@ public class NetworkService {
     public List<Network> findAllByNetworkIds(List<Integer> networkIds) {
         if(networkIds == null) return null;
         return networkRepository.findAllById(networkIds);
+    }
+
+    public List<Network> findByVmIdIsNull() {
+        return networkRepository.findByVmIsNull();
     }
 }

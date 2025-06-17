@@ -6,23 +6,6 @@ spring:
     resources:
       add-mappings: false
 
-  config:
-    import: vault://secret/mission1/db
-
-  cloud:
-    vault:
-      authentication: token
-      token: okestro1
-      uri: http://localhost:8200
-      enabled: true
-      fail-fast: true
-      
-      kv:
-        enabled: true
-        backend: secret
-        default-context: mission1/db
-
-
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
     username:  root
@@ -48,14 +31,3 @@ spring:
   jackson:
     time-zone: Asia/Seoul
     date-format: yyyy-MM-dd HH:mm:ss
-#
-#springdoc:
-#  swagger-ui:
-#    path: /swagger-ui.html
-#  api-docs:
-#    path: /v3/api-docs
-#  server:
-#    # 중요: 스웨거가 API 호출을 할 때 사용할 기본 URL을 설정합니다.
-#    # ngrok 사용 시 이 부분이 중요합니다.
-#    # 예: https://abcdef12345.ngrok-free.app
-#    url: https://97ff-220-76-193-80.ngrok-free.app/
