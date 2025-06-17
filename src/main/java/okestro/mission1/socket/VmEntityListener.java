@@ -46,7 +46,7 @@ public class VmEntityListener {
             notiService.sendNotificationToMember(
                     String.valueOf(vm.getMember().getMemberId()),
                     new NotificationDto(
-                            vm.getPreviousVmStatus().toString(),
+                            vm.getPreviousVmStatus() == null ? "" : vm.getPreviousVmStatus().toString(),
                             vm.getVmStatus().toString(),
                             notiService.generateNotiState(vm.getPreviousVmStatus(), vm.getVmStatus()),
                             vm.getVmId()

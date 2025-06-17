@@ -35,6 +35,7 @@ public class NotiService {
     }
 
     public String generateNotiState(VmStatus previousStatus, VmStatus currentStatus) {
+        if (vmStatusNotiStates == null) return "정상";
         for (VmStatusNotiState vmStatusNotiState : vmStatusNotiStates) {
             if (vmStatusNotiState.supports(previousStatus)) {
                 return vmStatusNotiState.of(currentStatus);

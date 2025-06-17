@@ -56,6 +56,8 @@ dependencies {
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     //Swagger
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2")
+
+    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0' // 최신 버전 확인
 }
 
 tasks.named('test') {

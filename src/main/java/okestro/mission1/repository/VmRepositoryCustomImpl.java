@@ -3,6 +3,7 @@ package okestro.mission1.repository;
 import static okestro.mission1.entity.QVm.*;
 import static okestro.mission1.entity.QVmTag.*;
 
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Predicate;
@@ -32,7 +33,7 @@ public class VmRepositoryCustomImpl implements VmRepositoryCustom {
         List<Integer> vmIds = jpaQueryFactory
                 .select(vm.vmId)
                 .from(vm)
-                .where(generateWherePredicate(filterDto))
+                .where(commonWherePredicate(filterDto))
                 .orderBy(generateOrderSpecifier(filterDto.orderParam()))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -42,7 +43,7 @@ public class VmRepositoryCustomImpl implements VmRepositoryCustom {
         if (!vmIds.isEmpty()) {
             vms = jpaQueryFactory
                     .selectFrom(vm)
-                    .innerJoin(vm.vmTags, vmTag).fetchJoin()
+                    .leftJoin(vm.vmTags, vmTag).fetchJoin()
                     .where(vm.vmId.in(vmIds))
                     .orderBy(generateOrderSpecifier(filterDto.orderParam()))
                     .fetch();
@@ -51,14 +52,22 @@ public class VmRepositoryCustomImpl implements VmRepositoryCustom {
         long totalCount = jpaQueryFactory
                 .select(vm.count())
                 .from(vm)
-                .where(generateWherePredicate(filterDto))
+                .where(commonWherePredicate(filterDto))
                 .fetchOne();
 
         return PageableExecutionUtils.getPage(vms, pageable, () -> totalCount);
     }
 
-    private Predicate generateWherePredicate(FindFilterVmRepositoryDto filterDto) {
-        return filterDto.tagIds() != null ? vm.vmTags.any().tag.id.in(filterDto.tagIds()) : null;
+    private Predicate commonWherePredicate(FindFilterVmRepositoryDto filterDto) {
+        BooleanBuilder builder = new BooleanBuilder();
+
+        builder.and(vm.deleted.eq(false));
+
+        if (filterDto.tagIds() != null && !filterDto.tagIds().isEmpty()) {
+            builder.and(vm.vmTags.any().tag.id.in(filterDto.tagIds()));
+        }
+
+        return builder;
     }
 
     private OrderSpecifier<?> generateOrderSpecifier(OrderParams orderParam) {
