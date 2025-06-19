@@ -78,4 +78,8 @@ public class TagService {
         if (Boolean.TRUE.equals(tagRepository.existsByName(tagName)))
             throw new DuplicateException(ERROR_DUPLICATE_TAG_NAME.getMessage());
     }
+
+    public boolean isExist(String name) {
+        return tagRepository.existsByName(name);
+    }
 }

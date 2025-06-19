@@ -67,4 +67,13 @@ public class TagController {
                 .result(null)
                 .build());
     }
+
+    @GetMapping("/validate")
+    public ResponseEntity<ResponseTemplate<Boolean>> validateTag(@RequestParam @NotBlank(message = ERROR_TAG_NAME_EMPTY) String name) {
+        boolean isExist = tagService.isExist(name);
+        return ResponseEntity.ok(ResponseTemplate.<Boolean>builder()
+                .metaData(MetaData.ofSuccess())
+                .result(!isExist)
+                .build());
+    }
 }
