@@ -43,4 +43,8 @@ public class Network extends TimestampEntity {
     @Min(value = 0, message = ERROR_VALUE_IS_HIGHER_THAN_MiN)
     @Max(value = 65535, message = ERROR_VALUE_IS_LOWER_THAN_MAX)
     int openPort;
+
+    public void detachVm() {
+        this.vm = null;
+    }
 }

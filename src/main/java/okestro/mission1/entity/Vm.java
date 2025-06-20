@@ -125,6 +125,11 @@ public class Vm extends TimestampEntity {
         setTagsFrom(updateVmServiceDto.tags());
     }
 
+    public void detachNetwork() {
+        this.networks.forEach(Network::detachVm);
+        this.networks.clear();
+    }
+
     public void setNetworksFrom(List<Network> networks) {
         if (networks == null) return;
         if (networks.isEmpty()) throw new InvalidDataException(ERROR_BLANK_NETWORK_ID.getMessage());

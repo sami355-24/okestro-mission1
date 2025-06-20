@@ -74,7 +74,9 @@ public class VmService {
 
     @Transactional
     public void deleteVmFrom(int vmId) {
-        vmRepository.delete(vmRepository.findById(vmId).orElseThrow(() -> new IllegalArgumentException(ERROR_NOT_FOUND_VM_IN_DB.getMessage())));
+        Vm findVm = vmRepository.findById(vmId).orElseThrow(() -> new NotExistException(ERROR_NOT_FOUND_VM_IN_DB.getMessage()));
+        findVm.detachNetwork();
+        vmRepository.delete(findVm);
     }
 
     @Transactional
