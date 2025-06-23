@@ -66,7 +66,9 @@ public class VmService {
 
     @Transactional
     public void updateVm(UpdateVmServiceDto updateVmServiceDto) {
-        validateVmName(updateVmServiceDto.name());
+        if(vmRepository.existsByNameAndVmIdNot(updateVmServiceDto.name(), updateVmServiceDto.vmId())) {
+            throw new NotExistException(ERROR_NOT_FOUND_VM_IN_DB.getMessage());
+        }
         Vm findVm = vmRepository.findById(updateVmServiceDto.vmId()).orElseThrow(() -> new NotExistException(ERROR_NOT_FOUND_VM_IN_DB.getMessage()));
 
         findVm.updateVmFrom(updateVmServiceDto);

@@ -121,6 +121,8 @@ public class Vm extends TimestampEntity {
         if (updateVmServiceDto.description() != null) this.description = updateVmServiceDto.description();
         if (updateVmServiceDto.vCpu() != null) this.vCpu = updateVmServiceDto.vCpu();
         if (updateVmServiceDto.memory() != null) this.memory = updateVmServiceDto.memory();
+        if (updateVmServiceDto.storage() != null) this.storage = updateVmServiceDto.storage();
+
         setNetworksFrom(updateVmServiceDto.networks());
         setTagsFrom(updateVmServiceDto.tags());
     }

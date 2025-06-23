@@ -3,8 +3,11 @@ package okestro.mission1.dto.controller.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
+import okestro.mission1.entity.Network;
+import okestro.mission1.entity.Tag;
 import okestro.mission1.entity.Vm;
 import okestro.mission1.entity.VmStatus;
+import okestro.mission1.entity.VmTag;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -30,7 +33,8 @@ public record FindVmResponseDto(
         LocalDateTime createAt,
         LocalDateTime updateAt,
         @Schema(description = "가상머신이 가지는 private ip입니다.")
-        String privateIp
+        String privateIp,
+        List<FindTagResponseDto> tags
 ) {
     private final static Random random = new Random();
 
@@ -48,7 +52,8 @@ public record FindVmResponseDto(
                 generateNetworkList(vm.getNetworks()),
                 vm.getCreateAt(),
                 vm.getUpdateAt(),
-                vm.getPrivateIp()
+                vm.getPrivateIp(),
+                vm.getVmTags().stream().map(VmTag::getTag).map(tag -> new FindTagResponseDto(tag.getId(), tag.getName())).toList()
         );
     }
 
@@ -56,13 +61,14 @@ public record FindVmResponseDto(
         return random.nextInt(80) + 1;
     }
 
-    private static List<FindVmResponseNetworkDTO> generateNetworkList(List<okestro.mission1.entity.Network> originNetworks) {
+    private static List<FindVmResponseNetworkDTO> generateNetworkList(List<Network> originNetworks) {
         return originNetworks
                 .stream()
-                .map(origin -> new FindVmResponseNetworkDTO(origin.getOpenIp(), origin.getOpenPort())).toList();
+                .map(origin -> new FindVmResponseNetworkDTO(origin.getNetworkId(), origin.getOpenIp(), origin.getOpenPort())).toList();
     }
 
     private record FindVmResponseNetworkDTO(
+            int id,
             String openIp,
             int openPort
     ) {

@@ -12,6 +12,8 @@ public record UpdateVmRequestDto(
         @Min(value = 1, message = ERROR_VALUE_IS_HIGHER_THAN_MiN) Integer vCpu,
         @Schema(description = "memory 크기입니다. 단위는 GB입니다.")
         @Min(value = 1, message = ERROR_VALUE_IS_HIGHER_THAN_MiN) Integer memory,
+        @Schema(description = "storage 크기입니다. 단위는 GB입니다.")
+        @Min(value = 1, message = ERROR_VALUE_IS_HIGHER_THAN_MiN) Integer storage,
         List<Integer> networkIds,
         List<Integer> tagIds
 ) {

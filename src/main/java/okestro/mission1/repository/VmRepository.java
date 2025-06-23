@@ -21,4 +21,6 @@ public interface VmRepository extends JpaRepository<Vm, Integer>, VmRepositoryCu
     List<Vm> findDeletedVmsWithNativeQuery();
 
     List<Vm> findAllByMember(Member member);
+
+    boolean existsByNameAndVmIdNot(String name, int vmId);
 }

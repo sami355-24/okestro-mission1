@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import okestro.mission1.annotation.customannotaion.RequestMember;
 import okestro.mission1.dto.controller.request.CreateVmRequestDto;
 import okestro.mission1.dto.controller.request.PageSize;
@@ -32,6 +33,7 @@ import java.util.List;
 import java.util.Map;
 
 
+@Slf4j
 @RestController
 @RequestMapping("/vms")
 @RequiredArgsConstructor
@@ -101,7 +103,6 @@ public class VmController {
     public ResponseEntity<ResponseTemplate<Void>> updateVm(@PathVariable int vmId, @RequestBody @Valid UpdateVmRequestDto updateVmRequestDto) {
         networkService.validateNetworkId(updateVmRequestDto.networkIds());
         tagService.validateTagFrom(updateVmRequestDto.tagIds());
-
         vmService.updateVm(
                 new UpdateVmServiceDto(
                         vmId,

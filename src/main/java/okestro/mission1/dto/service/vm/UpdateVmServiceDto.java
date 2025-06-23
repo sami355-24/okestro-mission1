@@ -13,9 +13,10 @@ public record UpdateVmServiceDto(
         String name,
         String description,
         Integer vCpu,
-        Integer memory
+        Integer memory,
+        Integer storage
 ) {
     public UpdateVmServiceDto(int vmId, List<Tag> findTags, List<Network> findNetworks, UpdateVmRequestDto request) {
-        this(vmId, findTags, findNetworks, request.name(), request.description(), request.vCpu(), request.memory());
+        this(vmId, findTags, findNetworks, request.name(), request.description(), request.vCpu(), request.memory(), request.storage());
     }
 }
