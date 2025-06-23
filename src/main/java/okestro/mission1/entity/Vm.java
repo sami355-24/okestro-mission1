@@ -141,7 +141,6 @@ public class Vm extends TimestampEntity {
     }
 
     public void setTagsFrom(List<Tag> tags) {
-        if (tags.isEmpty()) return;
         this.vmTags.clear();
         tags.forEach(
                 tag -> {
