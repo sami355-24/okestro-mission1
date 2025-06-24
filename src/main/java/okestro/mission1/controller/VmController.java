@@ -57,10 +57,10 @@ public class VmController {
 
     @GetMapping("/check")
     @Operation(summary = "가상머신 이름 중복 체크", description = "vm name 기반으로 vm 이름 중복 체크를 수행합니다.")
-    public ResponseEntity<ResponseTemplate<Map<String, Boolean>>> checkVmName(@RequestParam(name = "vm-name") String vmName) {
+    public ResponseEntity<ResponseTemplate<Map<String, Boolean>>> checkVmName(@RequestParam(name = "vm-name") String vmName, @RequestParam(name = "vm-id") Integer vmId) {
         return ResponseEntity.ok(ResponseTemplate.<Map<String, Boolean>>builder()
                 .metaData(MetaData.ofSuccess())
-                .result(Map.of("IsDuplicate", vmService.isDuplicate(vmName)))
+                .result(Map.of("IsDuplicate", vmService.isDuplicate(vmName, vmId)))
                 .build());
     }
 

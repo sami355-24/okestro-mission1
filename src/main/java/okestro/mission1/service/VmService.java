@@ -46,6 +46,10 @@ public class VmService {
         return vmRepository.existsByName(vmName);
     }
 
+    public boolean isDuplicate(String vmName, int vmId) {
+        return vmRepository.existsByNameAndVmIdNot(vmName, vmId);
+    }
+
     public Vm createVmFrom(CreateVmRequestDto vmRequest, Member requestMember) {
         validateVmName(vmRequest.name());
         return vmRepository.save(new Vm(vmRequest, generateRandomIPv4(), requestMember));
