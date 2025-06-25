@@ -101,7 +101,8 @@ public class VmController {
     @PatchMapping("/{vmId}")
     @Operation(summary = "가상머신 수정", description = "body에 담긴 값을 바탕으로 vm을 수정합니다.")
     public ResponseEntity<ResponseTemplate<Void>> updateVm(@PathVariable int vmId, @RequestBody @Valid UpdateVmRequestDto updateVmRequestDto) {
-        networkService.validateNetworkId(updateVmRequestDto.networkIds());
+        Vm tagetVm = vmService.findVm(vmId);
+        networkService.validateNetworkId(updateVmRequestDto.networkIds(), tagetVm.getNetworks());
         tagService.validateTagFrom(updateVmRequestDto.tagIds());
         vmService.updateVm(
                 new UpdateVmServiceDto(
